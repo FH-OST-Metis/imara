@@ -10,14 +10,14 @@ stages:
       size: 4310680
     - path: src/app/extract.py
       hash: md5
-      md5: c3daa5719c5c37488ce94da58c8ce437
-      size: 324
+      md5: 0a56e53caedfe51cdb677af1afdf9d0a
+      size: 365
     outs:
     - path: data/processed/extracted
       hash: md5
-      md5: d751713988987e9331980363e24189ce.dir
-      size: 0
-      nfiles: 0
+      md5: 8381bdbd671fd7fe504d5d5bd8b2974a.dir
+      size: 1214945
+      nfiles: 4
   chunk:
     cmd: python3 src/app/chunk.py \ --input data/processed/extracted \ --output 
       data/processed/chunks
