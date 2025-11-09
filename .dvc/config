@@ -1,0 +1,7 @@
+[core]
+    remote = supabase
+['remote "supabase"']
+    url = s3://imara
+    endpointurl = https://hjijyloqvddflojzrvcn.storage.supabase.co/storage/v1/s3
+    region = eu-north-1
+    profile = default

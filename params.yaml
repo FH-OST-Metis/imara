@@ -1,0 +1,11 @@
+chunk:
+  max_tokens: 512
+
+embed:
+  model: "sentence-transformers/all-mpnet-base-v2"
+
+graph:
+  similarity_threshold: 0.75
+
+eval:
+  top_k: 5
