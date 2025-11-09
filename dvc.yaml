@@ -1,56 +1,66 @@
 stages:
-  chunk:
-    cmd: python3 src/chunk.py \
-      --input data/raw/documents \
-      --output data/processed/chunks
+  extract:
+    cmd: python3 src/app/extract.py \
+      --input data/raw/documents/2206.01062v1.pdf \
+      --output data/processed/extracted
     deps:
-      - src/chunk.py
-      - data/raw/documents
+      - src/app/extract.py
+      - data/raw/documents/2206.01062v1.pdf
     outs:
-      - data/processed/chunks
+      - data/processed/extracted
 
-  embed:
-    cmd: python3 src/embed.py \
-      --input data/processed/chunks \
-      --output data/processed/embeddings
-    deps:
-      - src/embed.py
-      - data/processed/chunks
-    outs:
-      - data/processed/embeddings
+  # chunk:
+  #   cmd: python3 src/chunk.py \
+  #     --input data/raw/documents \
+  #     --output data/processed/chunks
+  #   deps:
+  #     - src/chunk.py
+  #     - data/raw/documents
+  #   outs:
+  #     - data/processed/chunks
 
-  graph_build:
-    cmd: python3 src/graph_build.py \
-      --chunks data/processed/chunks \
-      --embeddings data/processed/embeddings \
-      --output data/graph/graph.json
-    deps:
-      - src/graph_build.py
-      - data/processed/chunks
-      - data/processed/embeddings
-    outs:
-      - data/graph/graph.json
+  # embed:
+  #   cmd: python3 src/embed.py \
+  #     --input data/processed/chunks \
+  #     --output data/processed/embeddings
+  #   deps:
+  #     - src/embed.py
+  #     - data/processed/chunks
+  #   outs:
+  #     - data/processed/embeddings
 
-  graph_index:
-    cmd: python3 src/graph_index.py \
-      --graph data/graph/graph.json \
-      --output data/graph/index
-    deps:
-      - src/graph_index.py
-      - data/graph/graph.json
-    outs:
-      - data/graph/index
+  # graph_build:
+  #   cmd: python3 src/graph_build.py \
+  #     --chunks data/processed/chunks \
+  #     --embeddings data/processed/embeddings \
+  #     --output data/graph/graph.json
+  #   deps:
+  #     - src/graph_build.py
+  #     - data/processed/chunks
+  #     - data/processed/embeddings
+  #   outs:
+  #     - data/graph/graph.json
 
-  rag_retrieval_eval:
-    cmd: python3 src/rag_eval.py \
-      --embeddings data/processed/embeddings \
-      --graph data/graph/index \
-      --queries data/queries/test.json \
-      --output results/rag_eval.json
-    deps:
-      - src/rag_eval.py
-      - data/processed/embeddings
-      - data/graph/index
-      - data/queries/test.json
-    outs:
-      - data/results/rag_eval.json
+  # graph_index:
+  #   cmd: python3 src/graph_index.py \
+  #     --graph data/graph/graph.json \
+  #     --output data/graph/index
+  #   deps:
+  #     - src/graph_index.py
+  #     - data/graph/graph.json
+  #   outs:
+  #     - data/graph/index
+
+  # rag_retrieval_eval:
+  #   cmd: python3 src/rag_eval.py \
+  #     --embeddings data/processed/embeddings \
+  #     --graph data/graph/index \
+  #     --queries data/queries/test.json \
+  #     --output results/rag_eval.json
+  #   deps:
+  #     - src/rag_eval.py
+  #     - data/processed/embeddings
+  #     - data/graph/index
+  #     - data/queries/test.json
+  #   outs:
+  #     - data/results/rag_eval.json
