@@ -27,7 +27,7 @@ Optional, aber empfohlen:
 ### Repository klonen
 
 ```bash
-git clone git@github.com:FH-OST-Metis/imara.git
+git clone https://github.com/FH-OST-Metis/imara.git
 cd imara
 ```
 
