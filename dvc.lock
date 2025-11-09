@@ -24,9 +24,9 @@ stages:
     deps:
     - path: data/processed/extracted
       hash: md5
-      md5: 8126c4e89b2bebb0292e7bbc0dbe9eac.dir
-      size: 1177998
-      nfiles: 4
+      md5: 8822f4625cedc1bb8121a9a8bd310bce.dir
+      size: 55989
+      nfiles: 1
     - path: src/app/chunk.py
       hash: md5
       md5: 55cd3cc3a273ea470163d76fa3289c49
