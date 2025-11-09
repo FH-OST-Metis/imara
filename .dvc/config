@@ -1,5 +1,6 @@
 [core]
     remote = supabase
+    autostage = true
 ['remote "supabase"']
     url = s3://Imara
     endpointurl = https://hjijyloqvddflojzrvcn.storage.supabase.co/storage/v1/s3

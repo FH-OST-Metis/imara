@@ -19,15 +19,12 @@ stages:
     outs:
       - data/processed/chunks
 
-  # embed:
-  #   cmd: python3 src/embed.py \
-  #     --input data/processed/chunks \
-  #     --output data/processed/embeddings
-  #   deps:
-  #     - src/embed.py
-  #     - data/processed/chunks
-  #   outs:
-  #     - data/processed/embeddings
+  embed:
+    cmd: uv run python src/app/embed.py \
+      --input data/processed/chunks \
+    deps:
+      - src/app/embed.py
+      - data/processed/chunks
 
   # graph_build:
   #   cmd: python3 src/graph_build.py \
@@ -57,7 +54,7 @@ stages:
   #     --graph data/graph/index \
   #     --queries data/queries/test.json \
   #     --output results/rag_eval.json
-  #   deps:
+  #   deembeddingsps:
   #     - src/rag_eval.py
   #     - data/processed/embeddings
   #     - data/graph/index

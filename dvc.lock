@@ -19,21 +19,33 @@ stages:
       size: 1177998
       nfiles: 4
   chunk:
-    cmd: python3 src/app/chunk.py \ --input data/processed/extracted \ --output 
-      data/processed/chunks
+    cmd: uv run python src/app/chunk.py \ --input data/processed/extracted \ 
+      --output data/processed/chunks
     deps:
     - path: data/processed/extracted
       hash: md5
-      md5: d751713988987e9331980363e24189ce.dir
-      size: 0
-      nfiles: 0
+      md5: 8126c4e89b2bebb0292e7bbc0dbe9eac.dir
+      size: 1177998
+      nfiles: 4
     - path: src/app/chunk.py
       hash: md5
-      md5: 814e0e717fd147d25b9bd91068c51096
-      size: 318
+      md5: 55cd3cc3a273ea470163d76fa3289c49
+      size: 359
     outs:
     - path: data/processed/chunks
       hash: md5
-      md5: d751713988987e9331980363e24189ce.dir
-      size: 0
-      nfiles: 0
+      md5: 94cb35853c76c30cc3c5ee026c114e5b.dir
+      size: 130
+      nfiles: 1
+  embed:
+    cmd: uv run python src/app/embed.py \ --input data/processed/chunks \
+    deps:
+    - path: data/processed/chunks
+      hash: md5
+      md5: 94cb35853c76c30cc3c5ee026c114e5b.dir
+      size: 130
+      nfiles: 1
+    - path: src/app/embed.py
+      hash: md5
+      md5: 904176800833b58e9c2faf9ca92a6661
+      size: 98

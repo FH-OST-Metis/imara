@@ -1,5 +1,5 @@
 def main() -> None:
-    print("Hello from embed!")
+    print("Data embeded into Milvus")
 
 
 if __name__ == "__main__":
