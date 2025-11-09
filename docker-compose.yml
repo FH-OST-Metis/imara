@@ -1,0 +1,55 @@
+services:
+  mlflow:
+    image: ghcr.io/mlflow/mlflow:latest
+    container_name: mlflow-server
+    environment:
+      # Backend store URI built from vars
+      MLFLOW_BACKEND_STORE_URI: ${MLFLOW_BACKEND_STORE_URI}
+
+      # S3/MinIO settings
+      MLFLOW_S3_ENDPOINT_URL: ${MLFLOW_S3_ENDPOINT_URL}
+      AWS_ACCESS_KEY_ID: ${AWS_ACCESS_KEY_ID}
+      AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY}
+      AWS_DEFAULT_REGION: ${AWS_DEFAULT_REGION}
+
+      # Server host/port
+      MLFLOW_HOST: ${MLFLOW_HOST}
+      MLFLOW_PORT: ${MLFLOW_PORT}
+
+    command:
+      - /bin/bash
+      - -c
+      - |
+        pip install --no-cache-dir psycopg2-binary boto3 &&
+        mlflow server \
+          --backend-store-uri "$$MLFLOW_BACKEND_STORE_URI" \
+          --default-artifact-root "$$MLFLOW_DEFAULT_ARTIFACT_ROOT" \
+          --host "$$MLFLOW_HOST" \
+          --port "$$MLFLOW_PORT" \
+          --workers "1" \
+          --gunicorn-opts "--log-level debug --timeout 120"
+    ports:
+      - "${MLFLOW_PORT}:${MLFLOW_PORT}"
+    networks:
+      - mlflow-network
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "python",
+          "-c",
+          "import urllib.request; urllib.request.urlopen('http://localhost:${MLFLOW_PORT}/health')",
+        ]
+      interval: 10s
+      timeout: 5s
+      retries: 30
+
+networks:
+  mlflow-network:
+    enable_ipv6: true
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+        - subnet: 2001:db8:1::/64
+          gateway: 2001:db8:1::1

@@ -168,6 +168,54 @@ uv lock
 
 ## MLFlow
 
+### Docker Daemon (bzw. Docker Desktop) vorbereiten
+Der Free Tier von Supabase verwendet IPv6 only Adressen. Docker ist by default nicht gerade auf IPv6 optimiert.
+Deshalb müsst muss die Daemon Konfiguration hierfür angepasst werden.
+
+Auf Linux ändern oder hinzufügen: /etc/docker/daemon.json
 ```bash
-uv run start_mlflow.py
+{
+  "ipv6": true,
+  "experimental": true,
+  "fixed-cidr-v6": "fd00::/80",
+  "ip6tables": true,
+}
+```
+
+Auf Docker Desktop (Mac oder Windows) Setting => Docker Engine editieren. Beispiel:
+```bash
+{
+  "builder": {
+    "gc": {
+      "defaultKeepStorage": "20GB",
+      "enabled": true
+    }
+  },
+  "experimental": true,
+  "fixed-cidr-v6": "fd00::/80",
+  "ip6tables": true,
+  "ipv6": true
+}
+```
+
+HINWEIS: Euer Host muss natürlich auch eine IPv6 Adresse haben. Am besten kurz überprüfen vor dem Start.
+
+### .env File vorbereiten
+Folgende ENV Variabeln müssen in einem .env File vorhanden sein.
+```bash
+MLFLOW_BACKEND_STORE_URI=postgresql://postgres:<INSERT PW PLEASE>@db.hjijyloqvddflojzrvcn.supabase.co:5432/postgres
+MLFLOW_DEFAULT_ARTIFACT_ROOT=s3://Imara-mlflow/
+MLFLOW_HOST=0.0.0.0
+MLFLOW_PORT=5002
+
+AWS_ACCESS_KEY_ID=<INSERT KEY PLEASE>
+AWS_SECRET_ACCESS_KEY=<INSERT KEY PLEASE>
+AWS_DEFAULT_REGION=eu-north-1
+MLFLOW_S3_ENDPOINT_URL=https://hjijyloqvddflojzrvcn.storage.supabase.co/storage/v1/s3
+```
+
+### MLFlow starten
+Um MlFlow zu starten einfach folgenden Befehl ausführen und auf localhost mit konfiguriertem Port aufrufen.
+```bash
+docker compose up -d
 ```

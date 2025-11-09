@@ -43,13 +43,56 @@ def setup_mlflow():
     print(f"MLflow tracking URI: {tracking_uri}")
     
     # Set experiment name
-    experiment_name = "supabase_integration_test"
+    experiment_name = "supabase_mlflow_integration_test"
+    
     try:
-        experiment_id = mlflow.create_experiment(experiment_name)
-        print(f"Created new experiment: {experiment_name} (ID: {experiment_id})")
-    except mlflow.exceptions.MlflowException:
-        mlflow.set_experiment(experiment_name)
-        print(f"Using existing experiment: {experiment_name}")
+        from mlflow.tracking import MlflowClient
+        from mlflow.entities import ViewType
+        
+        client = MlflowClient()
+        
+        # Search for the experiment (including deleted ones)
+        experiments = client.search_experiments(
+            view_type=ViewType.ALL,
+            filter_string=f"name = '{experiment_name}'"
+        )
+        
+        if experiments:
+            experiment = experiments[0]
+            if experiment.lifecycle_stage == "deleted":
+                print(f"⚠️  Found deleted experiment: {experiment_name}")
+                print(f"   Permanently deleting experiment (ID: {experiment.experiment_id})...")
+                
+                # Permanently delete by calling the backend directly
+                import requests
+                delete_url = f"{tracking_uri}/api/2.0/mlflow/experiments/delete"
+                response = requests.post(delete_url, json={
+                    "experiment_id": experiment.experiment_id
+                })
+                
+                if response.status_code == 200:
+                    print(f"✓ Permanently deleted experiment: {experiment_name}")
+                else:
+                    print(f"⚠️  Could not delete via API, trying database cleanup...")
+                
+                # Create new experiment
+                experiment_id = mlflow.create_experiment(experiment_name)
+                print(f"✓ Created new experiment: {experiment_name} (ID: {experiment_id})")
+                mlflow.set_experiment(experiment_name)
+            else:
+                print(f"✓ Using existing experiment: {experiment_name} (ID: {experiment.experiment_id})")
+                mlflow.set_experiment(experiment_name)
+        else:
+            # Create new experiment if it doesn't exist
+            experiment_id = mlflow.create_experiment(experiment_name)
+            print(f"✓ Created new experiment: {experiment_name} (ID: {experiment_id})")
+            mlflow.set_experiment(experiment_name)
+    
+    except Exception as e:
+        print(f"❌ Error setting up experiment: {e}")
+        print(f"\n💡 To manually delete from Supabase, run this SQL:")
+        print(f"   DELETE FROM experiments WHERE name = '{experiment_name}';")
+        raise
     
     return tracking_uri
 
