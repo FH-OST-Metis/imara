@@ -7,7 +7,7 @@ stages:
       - src/app/extract.py
       - data/raw/documents/2206.01062v1.pdf
     outs:
-      - data/processed/extracted
+      - data/processed/
 
   # chunk:
   #   cmd: python3 src/chunk.py \
