@@ -9,15 +9,15 @@ stages:
     outs:
       - data/processed/extracted
 
-  # chunk:
-  #   cmd: python3 src/chunk.py \
-  #     --input data/raw/documents \
-  #     --output data/processed/chunks
-  #   deps:
-  #     - src/chunk.py
-  #     - data/raw/documents
-  #   outs:
-  #     - data/processed/chunks
+  chunk:
+    cmd: python3 src/app/chunk.py \
+      --input data/processed/extracted \
+      --output data/processed/chunks
+    deps:
+      - src/app/chunk.py
+      - data/processed/extracted
+    outs:
+      - data/processed/chunks
 
   # embed:
   #   cmd: python3 src/embed.py \
