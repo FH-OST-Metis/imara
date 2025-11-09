@@ -51,7 +51,7 @@ Pre-commit wird danach automatisch bei jedem Commit ausgeführt.
 
 ---
 
-## S3-Authentifizierung
+### S3-Authentifizierung
 
 1. Erstelle einen neuen Access Key im
    [https://supabase.com/dashboard/project/hjijyloqvddflojzrvcn/storage/s3](https://supabase.com/dashboard/project/hjijyloqvddflojzrvcn/storage/s3)
@@ -128,4 +128,24 @@ dvc push
 
 ```bash
 dvc add data/raw/documents/sample.pdf
+```
+
+## uv
+
+### Pakete hinzufügen
+
+```bash
+uv add <paketname>
+```
+
+### Lokale Umgebung aktualisieren
+
+```bash
+uv sync
+```
+
+### Lokfile aktualisieren
+
+```bash
+uv lock
 ```

@@ -53,4 +53,4 @@ stages:
       - data/graph/index
       - data/queries/test.json
     outs:
-      - results/rag_eval.json
+      - data/results/rag_eval.json
