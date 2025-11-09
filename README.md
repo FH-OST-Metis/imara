@@ -64,7 +64,17 @@ Pre-commit wird danach automatisch bei jedem Commit ausgeführt.
 
 3. Fülle `access_key_id` und `secret_access_key` aus Schritt 1 in `.dvc/config.local` ein.
 
-Hinweis: Die Datei `.dvc/config.local` wird **nicht** versioniert.
+   Hinweis: Die Datei `.dvc/config.local` wird **nicht** versioniert.
+
+4. Kopiere das Template und erstelle deine lokale Config:
+
+   ```bash
+   cp env-template env
+   ```
+
+5. Fülle `AWS_ACCESS_KEY_ID` und `AWS_SECRET_ACCESS_KEY` aus Schritt 1 in `env` ein und ersetze `[DB_PASSWORD]`.
+
+   Hinweis: Die Datei `env` wird **nicht** versioniert.
 
 ### Dokumente herunterladen
 
