@@ -1,6 +1,6 @@
 stages:
   chunk:
-    cmd: python src/chunk.py \
+    cmd: python3 src/chunk.py \
       --input data/raw/documents \
       --output data/processed/chunks
     deps:
@@ -10,7 +10,7 @@ stages:
       - data/processed/chunks
 
   embed:
-    cmd: python src/embed.py \
+    cmd: python3 src/embed.py \
       --input data/processed/chunks \
       --output data/processed/embeddings
     deps:
@@ -20,7 +20,7 @@ stages:
       - data/processed/embeddings
 
   graph_build:
-    cmd: python src/graph_build.py \
+    cmd: python3 src/graph_build.py \
       --chunks data/processed/chunks \
       --embeddings data/processed/embeddings \
       --output data/graph/graph.json
@@ -32,7 +32,7 @@ stages:
       - data/graph/graph.json
 
   graph_index:
-    cmd: python src/graph_index.py \
+    cmd: python3 src/graph_index.py \
       --graph data/graph/graph.json \
       --output data/graph/index
     deps:
@@ -42,7 +42,7 @@ stages:
       - data/graph/index
 
   rag_retrieval_eval:
-    cmd: python src/rag_eval.py \
+    cmd: python3 src/rag_eval.py \
       --embeddings data/processed/embeddings \
       --graph data/graph/index \
       --queries data/queries/test.json \
