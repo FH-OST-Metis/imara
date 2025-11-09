@@ -165,3 +165,9 @@ uv sync
 ```bash
 uv lock
 ```
+
+## MLFlow
+
+```bash
+uv run start_mlflow.py
+```
