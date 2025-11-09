@@ -1,0 +1,20 @@
+schema: '2.0'
+stages:
+  extract:
+    cmd: python3 src/app/extract.py \ --input 
+      data/raw/documents/2206.01062v1.pdf \ --output data/processed/extracted
+    deps:
+    - path: data/raw/documents/2206.01062v1.pdf
+      hash: md5
+      md5: d1a7bef8653663d15ab83a8f32e02151
+      size: 4310680
+    - path: src/app/extract.py
+      hash: md5
+      md5: d41d8cd98f00b204e9800998ecf8427e
+      size: 0
+    outs:
+    - path: data/processed/extracted
+      hash: md5
+      md5: d751713988987e9331980363e24189ce.dir
+      size: 0
+      nfiles: 0
