@@ -1,7 +1,7 @@
 schema: '2.0'
 stages:
   extract:
-    cmd: python3 src/app/extract.py \ --input 
+    cmd: uv run python src/app/extract.py \ --input 
       data/raw/documents/2206.01062v1.pdf \ --output data/processed/extracted
     deps:
     - path: data/raw/documents/2206.01062v1.pdf
@@ -10,13 +10,13 @@ stages:
       size: 4310680
     - path: src/app/extract.py
       hash: md5
-      md5: 0a56e53caedfe51cdb677af1afdf9d0a
+      md5: 22599de95f54ca5ef158691f726a45ad
       size: 365
     outs:
     - path: data/processed/extracted
       hash: md5
-      md5: 8381bdbd671fd7fe504d5d5bd8b2974a.dir
-      size: 1214945
+      md5: 8126c4e89b2bebb0292e7bbc0dbe9eac.dir
+      size: 1177998
       nfiles: 4
   chunk:
     cmd: python3 src/app/chunk.py \ --input data/processed/extracted \ --output 
