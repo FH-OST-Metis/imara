@@ -15,9 +15,9 @@ stages:
     outs:
     - path: data/processed/extracted
       hash: md5
-      md5: 8126c4e89b2bebb0292e7bbc0dbe9eac.dir
-      size: 1177998
-      nfiles: 4
+      md5: 8822f4625cedc1bb8121a9a8bd310bce.dir
+      size: 55989
+      nfiles: 1
   chunk:
     cmd: uv run python src/app/chunk.py \ --input data/processed/extracted \ 
       --output data/processed/chunks
