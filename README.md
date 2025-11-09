@@ -66,6 +66,12 @@ Pre-commit wird danach automatisch bei jedem Commit ausgeführt.
 
 Hinweis: Die Datei `.dvc/config.local` wird **nicht** versioniert.
 
+### Dokumente herunterladen
+
+```bash
+dvc pull
+```
+
 ---
 
 ## CI/CD Tools
