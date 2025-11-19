@@ -1,0 +1,713 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8"/>
+<title>2401.05713v1</title>
+<meta name="generator" content="Docling HTML Serializer"/>
+<style>
+    html {
+        background-color: #f5f5f5;
+        font-family: Arial, sans-serif;
+        line-height: 1.6;
+    }
+    body {
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 2rem;
+        background-color: white;
+        box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    h1, h2, h3, h4, h5, h6 {
+        color: #333;
+        margin-top: 1.5em;
+        margin-bottom: 0.5em;
+    }
+    h1 {
+        font-size: 2em;
+        border-bottom: 1px solid #eee;
+        padding-bottom: 0.3em;
+    }
+    table {
+        border-collapse: collapse;
+        margin: 1em 0;
+        width: 100%;
+    }
+    th, td {
+        border: 1px solid #ddd;
+        padding: 8px;
+        text-align: left;
+    }
+    th {
+        background-color: #f2f2f2;
+        font-weight: bold;
+    }
+    figure {
+        margin: 1.5em 0;
+        text-align: center;
+    }
+    figcaption {
+        color: #666;
+        font-style: italic;
+        margin-top: 0.5em;
+    }
+    img {
+        max-width: 100%;
+        height: auto;
+    }
+    pre {
+        background-color: #f6f8fa;
+        border-radius: 3px;
+        padding: 1em;
+        overflow: auto;
+    }
+    code {
+        font-family: monospace;
+        background-color: #f6f8fa;
+        padding: 0.2em 0.4em;
+        border-radius: 3px;
+    }
+    pre code {
+        background-color: transparent;
+        padding: 0;
+    }
+    .formula {
+        text-align: center;
+        padding: 0.5em;
+        margin: 1em 0;
+        background-color: #f9f9f9;
+    }
+    .formula-not-decoded {
+        text-align: center;
+        padding: 0.5em;
+        margin: 1em 0;
+        background: repeating-linear-gradient(
+            45deg,
+            #f0f0f0,
+            #f0f0f0 10px,
+            #f9f9f9 10px,
+            #f9f9f9 20px
+        );
+    }
+    .page-break {
+        page-break-after: always;
+        border-top: 1px dashed #ccc;
+        margin: 2em 0;
+    }
+    .key-value-region {
+        background-color: #f9f9f9;
+        padding: 1em;
+        border-radius: 4px;
+        margin: 1em 0;
+    }
+    .key-value-region dt {
+        font-weight: bold;
+    }
+    .key-value-region dd {
+        margin-left: 1em;
+        margin-bottom: 0.5em;
+    }
+    .form-container {
+        border: 1px solid #ddd;
+        padding: 1em;
+        border-radius: 4px;
+        margin: 1em 0;
+    }
+    .form-item {
+        margin-bottom: 0.5em;
+    }
+    .image-classification {
+        font-size: 0.9em;
+        color: #666;
+        margin-top: 0.5em;
+    }
+</style>
+</head>
+<body>
+<div class='page'>
+<h2>Super-hedging-pricing formulas and Immediate-Profit arbitrage for market models under random horizon</h2>
+<p>Tahir Choulli</p>
+<p>Mathematical and Statistical Sciences Dept. University of Alberta, Edmonton, Canada</p>
+<p>Emmanuel Lepinette</p>
+<p>Ceremade, UMR CNRS 7534, Paris Dauphine University, PSL National Research, Place du Mar´ echal De Lattre De Tassigny, 75775 Paris cedex 16, France and Gosaef, Faculty of Sciences of Tunis, Tunisia. Email: emmanuel.lepinette@ceremade.dauphine.fr</p>
+<p>January 12, 2024</p>
+<h2>Abstract</h2>
+<p>In this paper, we consider the discrete-time setting, and the market model described by ( S, F , τ ). Herein F is the 'public' flow of information which is available to all agents overtime, S is the discounted price process of d -tradable assets, and τ is an arbitrary random time whose occurrence might not be observable via F . Thus, we consider the larger flow G which incorporates F and makes τ an observable random time. This framework covers the credit risk theory setting, the life insurance setting and the setting of employee stock option valuation. For the stopped model ( S τ , G ) and for various vulnerable claims, based on this model, we address the super-hedging pricing valuation problem and its intrinsic Immediate-Profit arbitrage (IP hereafter for short). Our first main contribution lies in singling out the impact of change of prior and/or information on conditional essential supremum , which is a vital tool in super-hedging pricing. The second main contribution consists of describing as explicit as possible how the set of super-hedging prices expands under the stochasticity of τ and its risks, and we address the IP arbitrage for ( S τ , G ) as well. The third main contribution resides in elaborating as explicit as possible pricing formulas for vulnerable claims, and singling out the various informational risks in the prices' dynamics. Random horizon default/death time vulnerable claims/options progressive enlargement of filtration super-hedging pricing conditional essential supremumImmediate-profit arbitrage.</p>
+<h2>1 Introduction</h2>
+<p>In this paper, we consider a general initial discrete-time model represented by the pair ( S, F ) and an arbitrary random horizon τ . Herein, S is the assets' price process and F is the 'public' flow of information which is available to all agents overtime, while the random time τ might not be observable via the flow F . This random time represents the default of a firm in credit risk theory, the death time of an insured in life insurance, the job's termination time of an employee-stock-option 's holder (called ESO hereafter) in finance, ..., etcetera. Hence, our current setting covers these three aforementioned</p>
+<p>frameworks, and for more about these we refer the reader to [3, 5, 28, 29, 30, 31, 26] and the references therein to cite a few. As a random time can not be observable before its occurrence, the progressive enlargement approach of F with τ seems the tailor-fit method for our setting in modelling mathematically the large flow of information which incorporates both F and τ . This larger flow will be denoted throughout the paper by G and will be defined more precisely in the next section. Therefore, our main objective lies in addressing the evaluation problem for the stopped financial model ( S τ , G , P ), and focus on the super-hedging pricing approach and its intrinsic arbitrage called immediate-profit .</p>
+<p>The super-hedging price of the financial claim/asset C is the infinimum amount required to initiate a hedging strategy for C . The super-hedging pricing concept was introduced in Bensaid et al. in [4] for the binomial framework with transaction costs. Afterwards, the characterization and/or computation of the super-hedging price became a central problem in mathematical finance, and we refer the reader to [17, 25] and the references therein to cite a few. These studies were carried out under the main assumption of no-arbitrage using the fundamental theorem of asset pricing theorem (FTAP hereafter). Using this FTAP, the main results on the super-hedging pricing consist of establishing a dual formulation for the price using martingale measures or deflators, see [16, 27, 18] and the references therein.</p>
+<p>Recently in [6], the authors consider the discrete-time model without transaction costs and addressed this super-hedging pricing issue differently and without any non-arbitrage assumption. As a result, the authors discovered that this infimum price is in fact a price if and only if the model fulfills a weaker form of non-arbitrage, called Absence of Immediate Profit (AIP hereafter for short). This novel notion of non-arbitrage is weaker than the classical non-arbitrage concepts which all coincide in discrete-time setting. Besides the AIP concept, using the conditional essential supremum as their main mathematical tool, the authors derived a backward equation/algorithm for calculating the superhedging price process ̂ P = ( P t ) t =0 ,...,T as follows</p>
+<p>Here ̂ P t,t +1 ( · ) is the one-period super-hedging pricing operator for the period t , which can also be seen as the concave envelop of the payoff relatively to the convex envelop of the conditional support. The conditional essential supremum notion was introduced in [2], [23] and developed in [15], [1], [6], [24] and the references therein to cite a few.</p>
+<div class="formula-not-decoded">Formula not decoded</div>
+<p>What are our achievements? In this informational setting, generated by the random horizon τ , we describe explicitly the expansion of the set of super-hedging prices for various vulnerable claims. This expansion is quantified using processes under F and/or super-hedging prices of models under the flow F . Besides, this shows how τ affect the valuation process, which is an important step towards addressing Immediate-Profit arbitrage for the stopped model ( S τ , G ). Precisely, we connect oneto-one the G -Immediate-Profit arbitrage for the latter model to the Immediate-Profit arbitrage for ( T r ( S ) , F , ̂ Q ), where T r ( S ) is a transformed model of S and ̂ Q is a probability measure quantifying the correlation risks generated by τ and F . In this spirit, we show that the impact of τ on classical arbitrage differs tremendously from its impact on immediate-profit arbitrage. Our last achievement resides in determining the pricing formulas for vulnerable claims, in different manners. On the one hand, we show that for any vulnerable claim H G , there exists a unique pair ( f ( t, ω, x ) , H F ) such that the super-hedging price process of this claim coincide on [ [0 , τ [ [ with the solution of the following backward stochastic differential equations</p>
+<div class="formula-not-decoded">Formula not decoded</div>
+<p>Here f ( t, ω, x ) is an F -adapted functional intimately associated to the payment's policy of the claim and τ , and it is not linear in x in general. This extends the Carassus-Lepinette's pricing formula (1.1) to more complex situation, and shows that (1.1) remains valid for a subclass of vulnerable options only. On the other hand, we describe the dynamics of the super-hedging price process of the vulnerable claim and single out precisely the various induced informational risks. This latter decomposition formula is vital for risk management in the extended markets, in particular for the securitization of mortality and/or longevity risks in life insurance. All these aforementioned results rely essentially on understanding how conditional essential supremum behave under additional information and/or change of priors.</p>
+<p>The paper has five sections including the current introductory section. The second section presents the economical and mathematical model and gives some preliminaries. The third section addresses the essential supremum under change of probability and/or change of filtration. The fourth section discusses the super-hedging prices' set and the immediate-profit arbitrage, while the fifth section derives the pricing formulas for various vulnerable claims.</p>
+<h2>2 The mathematical model and preliminaries</h2>
+<p>Throughout the paper, we suppose given a complete probability space (Ω , G , P ) and a fixed investment horizon T ∈ (0 , ∞ ). On this space, we suppose given the pair ( S, F ). F := ( F t ) t =0 , ··· ,T is a filtration, which represents the flow of information available to all agents through time. S = ( S t ) t =0 ,...,T is a d -dimensional and F -adapted process with values in R d + = [0 , ∞ ) d , and represents the (discounted) prices of d -risky assets. Besides S , we suppose that there exists a bond whose (discounted) price is B t = 1. Throughout the paper, the triplet ( S, F , P ) will be called the initial model . Throughout the paper, L 0 ( E, H ) denotes the set of random variables having values in E and are H -measurable, for any set E and any subσ -algebra H . When E = I R, we simply write L 0 ( H ), while L 0 + ( H ) denotes its subset of nonnegative random variables.</p>
+<h2>2.1 Random horizon and its parametrization</h2>
+<p>Besides the initial model, we consider an arbitrary random time τ , which might not be seen via F when it occurs. Thus, in order to take into account the occurrence of this random time, we consider the progressive enlargement of F with τ , and this yields to a larger flow G given by</p>
+<div class="formula-not-decoded">Formula not decoded</div>
+<p>The agent endowed with the flow F can see the occurrence of τ through the pair ( G, ˜ G ) of two processes, called Az´ ema supermatingales, given by</p>
+<p>The following lemma is a direct consequence of [22, Lemma 4.6], see also [8, (2.7)], and is useful throughout the paper.</p>
+<div class="formula-not-decoded">Formula not decoded</div>
+<p>Lemma 2.1. For any t ∈ { 1 , ..., T } , for any positive integer n , we have</p>
+<div class="formula-not-decoded">Formula not decoded</div>
+<p>The following lemma characterizes inequalities in G using inequalities in F .</p>
+<p>Lemma 2.2. Let t ∈ { 1 , ..., T } and ( X t , K t ) ∈ L 0 ( F t ) × L 0 ( F t ) . Then we have:</p>
+<div class="formula-not-decoded">Formula not decoded</div>
+<div class="formula-not-decoded">Formula not decoded</div>
+<div class="formula-not-decoded">Formula not decoded</div>
+<div class="formula-not-decoded">Formula not decoded</div>
+<p>Proof. It is clear that assertion (a) follows immediately due to ( τ = t ) ⊂ ( ˜ G t &gt; G t ), while assertion (b) is due to ( τ &gt; t ) ⊂ ( G t &gt; 0). Also, { τ ≥ t } ⊆ { ˜ G t &gt; 0 } hence (c) holds. Thus the rest of the proof focuses on proving assertion (d). To this end, we notice that X t I { τ ≥ t } ≥ K t I { τ = t } P -a.s. iff X t I { τ = t } ≥ K t I { τ = t } P -a.s. and X t I { τ&gt;t } ≥ 0, P -a.s.. Thus, by combining these with assertions (a) and (b), we conclude that X t I { τ ≥ t } ≥ K t I { τ = t } iff X t I { G t &gt; 0 } ≥ 0 P -a.s. and X t I { ˜ G t &gt;G t } ≥ K t I { ˜ G t &gt;G t } P .a.s.. Furthermore, it is easy to check that X t I { ˜ G t &gt;G t } ≥ K t I { ˜ G t &gt;G t } and X t I { G t &gt; 0 } ≥ 0 P -a.s. if and only if X t 1 { ˜ G t &gt; 0 } ≥ K t 1 { ˜ G t &gt;G t =0 } + K + t 1 { ˜ G t &gt;G t &gt; 0 } P -a.s.. This completes the proof of assertion (d), and ends the proof of the lemma.</p>
+<h2>2.2 Super-hedging prices and Immediate-profit</h2>
+<p>In this subsection, we consider an arbitrary market model ( X, H ) defined on (Ω , G , P ), where H is a filtration and X is an H -adapted process.</p>
+<p>The following proposition states the existence of the conditional supremum and infimum of any family of random variables, as shown in [23, Section 5.3.1].</p>
+<p>Proposition 2.3. Let H ⊆ F be two sub σ -algebras. For any family of random variables Γ ⊆ L 0 ([ -∞ , ∞ ] , F ) , there exists a unique (up to a negligible set) H -measurable random variable γ H ∈ L 0 ([ -∞ , ∞ ] , H ) such that γ H ≥ γ , for all γ ∈ Γ , and if γ 1 H ∈ L 0 ([ -∞ , ∞ ] , H ) is such that γ 1 H ≥ γ for all γ ∈ Γ , then γ 1 H ≥ γ H a.s..We call γ H the conditional supremum of Γ knowing H and we denote it by ess sup H (Γ) . Similarly, we define ess inf H (Γ) = -ess sup H ( -Γ) .</p>
+<p>When H = G in the proposition above, we write ess sup H (Γ) = ess sup(Γ). Let P a (P) be the set of all absolutely continuous probability measures w.r.t. P.</p>
+<p>Lemma 2.4. Let H 1 ⊆ H 2 ⊆ G be subσ -algebras and let Γ ⊆ L 0 ([ -∞ , ∞ ] , G ) be a family of random variables. Then the following properties hold.</p>
+<div class="formula-not-decoded">Formula not decoded</div>
+<p>Lemma 2.5. If H ⊆ G is a subσ -algebra and Γ ⊆ L 0 (( -∞ , ∞ ] , G ) , then</p>
+<div class="formula-not-decoded">Formula not decoded</div>
+<p>Proof. Note that the first equality in (2.4) can easily be shown, and hence its proof will be omitted. From ess sup H (Γ) ≥ Y P -a.s. for any Y ∈ Γ, we get ( ess sup H (Γ) ) -≤ Y -P -a.s., and hence ( ess sup H (Γ) ) -≤ ess inf H (Γ -). Then remark that ess inf H (Γ -) ≤ Y -yields Y + -ess inf H (Γ -) ≥ Y + -Y -. Thus, ess sup H (Γ + ) -ess inf H (Γ -) ≥ Y , and ess sup H (Γ + ) -ess inf H (Γ -) ≥ ess sup H (Γ). By the first</p>
+<p>equality in (2.4), ess sup</p>
+<p>H</p>
+<p>(</p>
+<p>ess sup</p>
+<p>H</p>
+<p>)</p>
+<p>H</p>
+<p>(Γ</p>
+<p>+</p>
+<p>) =</p>
+<p>(Γ)</p>
+<p>so we deduce that</p>
+<p>-</p>
+<p>ess inf</p>
+<p>(Γ</p>
+<p>-</p>
+<p>)</p>
+<p>≥ - ess sup</p>
+<p>(Γ)</p>
+<p>H</p>
+<p>and, finally ess inf H (Γ -) ≤ ( ess sup H (Γ) ) -. Then the second equality in (2.4) follows, and the proof is complete.</p>
+<p>This lemma can be extended easily to increasing and decreasing functions.</p>
+<p>Recall that a self-financing portfolio process in discrete-time is a stochastic process ( V t ) T t =0 satisfying ∆ V t := V t -V t -1 = θ t -1 ∆ X t for some θ t -1 ∈ L 0 ( R d , H t -1 ). We denote by A t,u := R t,u -L 0 + ( H u ), t ≤ u ≤ T , the set of all attainable claims at time u when starting a self-financing portfolio process from the zero initial endowment at time t . By definition, V t,u ∈ R t,u if and only if V t,u = ∑ u r = t +1 θ r -1 ∆ S r for some θ r ∈ L 0 ( R d , H r ), r = t, · · · , u -1.</p>
+<p>For any payoff ξ ∈ L 0 ( H T ), we associate the pair ( P t ( ξ ) , Π ∗ t ( ξ )) of the set of all super-hedging prices and the infimum price, for t = 0 , 1 , ..., T -1 , given by</p>
+<p>Thus, it is easy to check that P t (0) = ( -A t,T ) ∩ L 0 ( H t ).</p>
+<div class="formula-not-decoded">Formula not decoded</div>
+<p>Definition 2.6. For a model ( X, H := ( H t ) T t =0 ) , a probability Q , two dates t 1 , t 2 such that 0 ≤ t 1 &lt; t 2 , and a payoff ξ ∈ L 0 ( H t 2 ) , we denote by P ( X, H ,Q ) t 1 ,t 2 ( ξ ) the set of all super-hedging prices at time t 1 of the payoff ξ . The infimum price of ξ , denoted by P ( X, H ,Q ) t 1 ,t 2 ( ξ ) is given by</p>
+<p>When Q = P , we omit the probability in the notation, and write P ( X, H ) t 1 ,t 2 ( ξ ) and ̂ P ( X, H ) t 1 ,t 2 ( ξ ) instead. Below, we recall, from [6], the mathematical definition of the AIP concept.</p>
+<div class="formula-not-decoded">Formula not decoded</div>
+<p>Definition 2.7. We say that the condition AIP holds at time t ≤ T -1 if A t,T ∩ L 0 + ( F t ) = { 0 } . We say that AIP holds if it holds at any time t ≤ T -1 .</p>
+<p>Similarly, as for the classical non-arbitrage condition in discrete-time, the AIP concept can be checked step-by-step and in various manners. This is the aim of the following proposition.</p>
+<p>Proposition 2.8. Let H = ( H t ) t =0 ,..,T be a filtration, and X be an H -adapted process. Then the following assertions are equivalent.</p>
+<ul>
+<li>(a) The model ( X, H ) satisfies AIP.</li>
+<li>(b) For t ∈ { 1 , ..., T } and θ ∈ L 0 ( R d , H t -1 ) , ess sup ( θ ∆ X t ) ≥ 0 P -a.s..</li>
+</ul>
+<p>t</p>
+<p>H</p>
+<p>-</p>
+<ul>
+<li>(c) For any t ∈ { 1 , ..., T } , P ( X, H ) t -1 ,t (0) ⊆ L 0 + ( H t -1 ) .</li>
+</ul>
+<p>(d) For any t ∈ { 1 , ..., T } , ̂ P ( X, H ) t -1 ,t (0) = 0 , P -a.s.. Proof. By [6, Proposition 2.11], a model ( X, ( H t ) T t =0 ) satisfies AIP at time t -1 ≥ 0 if and only if, 0 belongs to the closed convex hull of ¯ D t -1 = supp H t -1 (∆ X t ), the random conditional support of ∆ X t . By the Hahn-Banach separation theorem for convex sets, this is equivalent to the property that σ ¯ D t -1 ( x ) ≥ 0, for all x ∈ R d , a.s.( ω ), where σ ¯ D t -1 ( x ) = sup z ∈ ¯ D t -1 ( -xz ). Note that, by [15, Theorem 3.4], σ ¯ D t -1 ( x ) = ess sup H t -1 ( -x ∆ X t ). Therefore, a model ( X, ( H t ) T t =0 ) satisfies AIP at time t -1 ≥ 0 iff</p>
+<p>1</p>
+<p>+</p>
+<p>(</p>
+<p>)</p>
+<p>-</p>
+<p>ess sup H t -1 ( -x ∆ X t ) ≥ 0 for x ∈ R d , a.s.. Hence, we get ess sup H t -1 ( θ t -1 ∆ X t ) ≥ 0 for θ t -1 ∈ L 0 ( R d , H t -1 ). Indeed, the inequality ess sup H t -1 ( θ t -1 ∆ X t ) ≥ 0 is immediate by the previous reasoning if AIP holds. Reciprocally, if ess sup H t -1 ( θ t -1 ∆ X t ) ≥ 0 for θ t -1 ∈ L 0 ( R d , H t -1 ), then ess sup H t -1 ( -x ∆ X t ) ≥ 0 for all x ∈ R d , a.s.. To see it, we argue by contradiction and, by a measurable selection, it is possible to get ess sup H t -1 ( θ t -1 ∆ X t ) &lt; 0 on a non null set, for some θ t -1 ∈ L 0 ( R d , H t -1 ), i.e. a contradiction. This ends the proof of the proposition.</p>
+<h2>3 Essential supremum under change of priors or information</h2>
+<p>Herein, we derive novel properties on conditional essential supremum, which are very useful throughout the paper. In fact, we investigate how the conditional essential supremum behaves under a change of probability and change of information (filtration). To this end, we start with the easy but crucial lemma, which conveys that conditional essential supremum or infinimum of indicators is always an indicator.</p>
+<p>Lemma 3.1. Let H 1 ⊆ H be two subσ -algebras, and H ∈ H . Then the following assertions hold. (a) There exists H 1 ∈ H 1 satisfying</p>
+<div class="formula-not-decoded">Formula not decoded</div>
+<p>and it is the largest H 1 -measurable set contained in H .</p>
+<p>(b) There exists H 2 ∈ H 1 such that</p>
+<div class="formula-not-decoded">Formula not decoded</div>
+<p>and it is the smallest H 1 -measurable set containing H .</p>
+<p>Proof. Remark that assertion (a) follows immediately from assertion (b) applied to H := Ω \ H ∈ H , and the easy fact that ess sup H 1 ( I H ) = 1 -ess inf H 1 ( I H ). Thus, the rest of this proof focuses on assertion (b). To this end, we put which belongs to H 1 . In virtue of the definition of conditional essential supremum, we always have ess sup H 1 ( I H ) ≥ I H P -a.s., and hence I H ≤ I H 2 , P -a.s.. Therefore, we get</p>
+<div class="formula-not-decoded">Formula not decoded</div>
+<div class="formula-not-decoded">Formula not decoded</div>
+<p>As a result of this, we obtain</p>
+<div class="formula-not-decoded">Formula not decoded</div>
+<p>and (3.2) follows immediately.</p>
+<p>This ends the proof of the lemma.</p>
+<p>Theorem 3.2. Let H i , i = 1 , 2 be two subσ -algebras of G such that H 1 ⊆ H 2 , and Z ∈ L + ( H 2 ) with E [ Z ] = 1 , and put</p>
+<div class="formula-not-decoded">Formula not decoded</div>
+<p>Consider Γ ⊂ L 0 ( H 2 ) , and denote by</p>
+<div class="formula-not-decoded">Formula not decoded</div>
+<div class="formula-not-decoded">Formula not decoded</div>
+<p>Then the following assertions hold. (a) If X ∈ L 0 + ( H 2 ) and Y := E [ X ∣ ∣ ∣ H 1 ] , then P -a.s. we have</p>
+<ul>
+<li>(b) We always have</li>
+<li>˜ ˜ ˜ (c) We have ˜ γ Q = ˜ γ , Q -a.s. on ( ˜ γ Q ≥ 0) ( i.e. ˜ γ Q I { ˜ γ Q ≥ 0 } = ˜ γI { ˜ γ Q ≥ 0 } Q -a.s.). (d) If we denote Γ + := { γ + : γ ∈ Γ } , then we get</li>
+</ul>
+<div class="formula-not-decoded">Formula not decoded</div>
+<div class="formula-not-decoded">Formula not decoded</div>
+<ul>
+<li>(e) On ( P ( Z = 0 | H 1 ) = 0) , we have</li>
+</ul>
+<div class="formula-not-decoded">Formula not decoded</div>
+<p>(f) If ˜ γ Q ≥ 0 Q -a.s., then γ ≥ 0 P -a.s.. Furthermore, we have</p>
+<p>In particular, ˜ γ Q &gt; 0 Q -a.s. if and only if ˜ γ &gt; 0 Q -a.s.. (g) For P -almost surely, we have and</p>
+<p>˜ ˜ It worths mentioning that similar results for essential infimum can be obtained easily. In fact, thanks to the fact that ess inf H 1 ( -Γ) = -ess sup H 1 (Γ) for any Γ ⊂ L 0 ( H 2 ), the following corollary can be easily proved.</p>
+<div class="formula-not-decoded">Formula not decoded</div>
+<div class="formula-not-decoded">Formula not decoded</div>
+<div class="formula-not-decoded">Formula not decoded</div>
+<p>Corollary 3.3. Consider the notations of Theorem 3.2. Then the following assertions hold. (a) Suppose Γ ⊂ L 0 ( H 2 , P ) . Then we have</p>
+<div class="formula-not-decoded">Formula not decoded</div>
+<div class="formula-not-decoded">Formula not decoded</div>
+<div class="formula-not-decoded">Formula not decoded</div>
+<p>The last two assertions in Theorem 3.2 clearly describes how the sign of ˜ γ Q is related to the sign of ˜ γ . This fact is very important, as the sign of conditional essential supremum plays a crucial role in arbitrage. In fact, the equality (3.8) conveys that the two essential supremums, ˜ γ Q and ˜ γ , have different signs if and only if they do not coincide. However, the two essential supremums coincide when they have same sign, see (3.9) and assertion (c).</p>
+<p>The converse of the first statement in assertion (f) is not true in general. In the following, we illustrate an example to support this claim.</p>
+<p>Example 3.4. Consider Q such that P ( Z = 0 &lt; Z H 1 ) &gt; 0 , and for some /epsilon1 ∈ (0 , ∞ ) put Γ := { -/epsilon1I { P ( Z =0 |H 1 ) &gt; 0 } } . Then direct calculations yield</p>
+<div class="formula-not-decoded">Formula not decoded</div>
+<p>and Q ( P ( Z = 0 |H 1 ) &gt; 0) = E [ Z H 1 1 { P ( Z =0 |H 1 ) &gt; 0 } ] &gt; 0 by assumption. Therefore, for this choice of Γ , these latter statements prove that we have ess sup H 1 (Γ I { Z&gt; 0 } ) ≥ 0 P -a.s. and Q ( Q ess sup H 1 (Γ) &lt; 0 ) &gt; 0 . Similar conclusion holds for Γ := { -/epsilon1I { P ( Z =0 |H 1 ) &gt; 0 } + /epsilon1I { P ( Z =0 |H 1 )=0 } } .</p>
+<div class="formula-not-decoded">Formula not decoded</div>
+<p>Proof. of Theorem 3.2. On the one hand, by combining assertions (f) and (d), we deduce that ˜ γ Q = ˜ γ Q -a.s. as soon as ˜ γ Q ≥ 0 Q -a.s.. On the other hand, in order to prove assertion (c), we apply the latter claim to Γ ′ := Γ I { ˜ γ Q ≥ 0 } , which satisfies Q ess sup H 1 (Γ ′ ) = ( ˜ γ Q ) + ≥ 0 Q -a.s., and get</p>
+<p>This ends the proof of assertion (c), and the rest of this proof focuses on assertions (a), (b), (d), (e), (f) and (g) in three parts.</p>
+<div class="formula-not-decoded">Formula not decoded</div>
+<p>Part 1. Hereto we prove assertion (a). Let X ∈ L 0 + ( H 2 ), put X n := min( n, X ) and Y n := E [ X n ∣ ∣ H 1 ], and remark that both X n and Y n increase to X and Y respectively, and</p>
+<p>Thus, it is enough to prove the assertion for bounded X ∈ L 0 + ( H 2 ), and without loss of generality we assume that ‖ X ‖ ∞ = 1. On the one hand, it is clear that we always have ( Y = 0) ⊂ ( X = 0), or equivalently I { X&gt; 0 } ≤ I { Y &gt; 0 } P -a.s., which yields</p>
+<div class="formula-not-decoded">Formula not decoded</div>
+<p>On the other hand, we have X = XI { X&gt; 0 } ≤ I { X&gt; 0 } ≤ ess sup H 1 ( I { X&gt; 0 } ) P -a.s., and hence by taking conditional expectation, we get Y ≤ ess sup H 1 ( I { X&gt; 0 } ), P -a.s.. This clearly implies that { Y &gt; 0 } ⊂ { ess sup H 1 ( I { X&gt; 0 } ) &gt; 0 } , and by combining this with Lemma 3.1-(b), we deduce that</p>
+<div class="formula-not-decoded">Formula not decoded</div>
+<p>Therefore, by combining this latter inequality with (3.12), the first equality in (3.4) follows immediately, while the fourth equality is a direct consequence of the first equality and</p>
+<div class="formula-not-decoded">Formula not decoded</div>
+<p>Similarly, remark that the second equality in (3.4) is a direct consequence of the third equality. To prove the third equality, we remark that</p>
+<div class="formula-not-decoded">Formula not decoded</div>
+<p>Then by taking conditional expectations on both sides, we get</p>
+<div class="formula-not-decoded">Formula not decoded</div>
+<p>On the one hand, this clearly yields</p>
+<div class="formula-not-decoded">Formula not decoded</div>
+<p>On the other hand, due to the easy fact that ( X = 0) ⊂ ( P ( X = 0 |H 1 ) &gt; 0), which is equivalent to I { X =0 } ≤ I { P ( X =0 |H 1 ) &gt; 0 } P -a.s., we get</p>
+<div class="formula-not-decoded">Formula not decoded</div>
+<p>Thus, by combining this last inequality with (3.13) and again Lemma 3.1, the third equality in (3.4) follows immediately. This proves assertion (a).</p>
+<p>Part 2. This part proves assertions (b) and (d). To this end, we consider Γ ⊂ L 0 ( H 2 ), Q /lessmuch P with density Z := dQ/dP , and Z H 1 := E [ Z ∣ H 1 ]. Then it is clear that</p>
+<p>This is equivalent to</p>
+<p>˜ γ ≥ γ Q -a.s. , for any γ ∈ Γ , and I { Z=0 } ˜ γ ≥ 0 P-a.s. (3.14) Hence, on the one hand, the first inequality above yields the first inequality in (3.5) (i.e. ˜ γ ≥ ˜ γ Q Q -a.s.). On the other hand, the second inequality in (3.14) is equivalent to I { Z =0 } ≤ I { ˜ γ ≥ 0 } P -a.s.. Then by taking conditional essential supremum and using assertion (a), the second inequality in (3.5) follows. This ends the proof of assertion (b). To prove assertion (d), on the one hand, we notice that the first equality in (3.6) is due to Lemma 2.5. On the other hand, we suppose that ˜ γ ≥ 0 P -a.s. and thanks to assertion (b) (see (3.5)) we get</p>
+<div class="formula-not-decoded">Formula not decoded</div>
+<div class="formula-not-decoded">Formula not decoded</div>
+<p>Furthermore, thanks to assertion (a), the definition of essential supremum, and Lemma 2.5, we get for any γ ∈ Γ,</p>
+<div class="formula-not-decoded">Formula not decoded</div>
+<p>Hence, by taking conditional essential supremum, we obtain</p>
+<div class="formula-not-decoded">Formula not decoded</div>
+<div class="formula-not-decoded">Formula not decoded</div>
+<p>Therefore, by combining this latter inequality with (3.15), (3.6) holds under the assumption ˜ γ ≥ 0 P -a.s.. To prove (3.6) in general, we put Γ ′ := Γ I { ˜ γ ≥ 0 } and derive</p>
+<p>Thus, in particular we have ess sup H 1 (Γ ′ I { Z&gt; 0 } ) ≥ 0 P -a.s., and hence we can apply (3.6) to Γ ′ and derive</p>
+<p>The first equality follows from ( ˜ γ Q ≥ 0) ⊂ ( ˜ γ ≥ 0) Q -a.s., which is due to assertion (b). This proves assertion (d), and ends part 2.</p>
+<div class="formula-not-decoded">Formula not decoded</div>
+<p>Part 3. Herein, we prove assertions (e), (f) and (g). For assertion (e), we use Σ := ( P ( Z = 0 |H 1 ) = 0) ⊂ ( Z &gt; 0) ⊂ ( Z H 1 &gt; 0), and obtain ˜ γI Σ = ess sup H 1 (Γ I Σ ∩{ Z =0 } ) = ess sup H 1 (Γ) and</p>
+<p>I Σ Q ess sup H 1 (Γ) = I Σ ess sup H 1 (Γ). Thus, assertion (e) follows immediately from these equalities.</p>
+<p>To prove assertion (f), we start by noticing that due to assertion (b), the inequality ˜ γ Q ≥ 0 Q -a.s. implies that ˜ γ ≥ 0 Q -a.s., and this is equivalent to ˜ γ ≥ 0 P -a.s. on ( Z H 1 &gt; 0). Furthermore, thanks to ( Z H 1 = 0) ⊂ ( Z = 0) P -a.s., it is clear that ˜ γ = 0 P -a.s. on ( Z H 1 = 0). Thus, we get ˜ γ ≥ 0 P -a.s., and the first claim in assertion (f) is proved.</p>
+<p>It is obvious that the first property in (3.7) follows immediately from (3.6). To prove the second property in (3.7), we use ess sup (Γ I { Z =0 } ) ≥ γI { Z =0 } P -a.s. for any γ ∈ Γ, and hence we get</p>
+<p>1</p>
+<p>H</p>
+<p>ess sup H 1 (Γ I { Z =0 } ) ≥ 0 Q -a.e.. This proves the third claim in assertion (f), and completes the proof of assertion (f).</p>
+<p>To prove assertion (g), we derive ( ˜ γ &lt; 0) ⊂ ( P ( Z = 0 |H 1 ) = 0) ∩ ( ˜ γ Q &lt; 0) due to assertion (b), while ( P ( Z = 0 |H 1 ) = 0) ∩ ( ˜ γ Q &lt; 0) ⊂ ( ˜ γ &lt; 0) follows immediately from assertion (e). This proves (3.9). Remark that ( ˜ γ Q &lt; ˜ γ ) ⊂ ( ˜ γ Q &lt; 0), in virtue of assertion (c), and due to assertion (e) we have ( ˜ γ Q &lt; ˜ γ ) ⊂ ( P ( Z = 0 |H 1 ) &gt; 0). Thus, by combining these latter two remarks and the second property of assertion (b), we obtain</p>
+<p>( ˜ γ Q &lt; ˜ γ ) ⊂ ( ˜ γ Q &lt; 0) ∩ ( P ( Z = 0 |H 1 ) &gt; 0) ⊂ ( ˜ γ Q &lt; 0) ∩ ( ˜ γ ≥ 0) ⊂ ( ˜ γ Q &lt; ˜ γ ) . This proves (3.8) and ends the proof of assertion (g). Hence, the proof of the theorem is complete.</p>
+<p>Corollary 3.5. For any t ∈ { 0 , 1 , ..., T } , the following equalities hold.</p>
+<div class="formula-not-decoded">Formula not decoded</div>
+<div class="formula-not-decoded">Formula not decoded</div>
+<div class="formula-not-decoded">Formula not decoded</div>
+<div class="formula-not-decoded">Formula not decoded</div>
+<ul>
+<li>Proof. 1) By considering X = 1 { τ ≥ t } (respectively X = 1 { τ&gt;t } ), H 2 = G t , H 1 = F t and Y = E [ X |F t ] = ˜ G t (respectively Y = G t ), we conclude that both (3.16) and (3.17) follow from Theorem 3.2-(a). 2) By considering X = ˜ G t , H 2 = F t , H 1 = F t -1 and Y = E [ X |F t -1 ] = G t -1 , we deduce that (3.18) follows immediately from Theorem 3.2-(a). 3) Thanks to Lemma 2.4 and both (3.16) and (3.18), we derive</li>
+</ul>
+<div class="formula-not-decoded">Formula not decoded</div>
+<p>This proves the first equality in (3.19), while the second equality follows from similar reasoning. This ends the proof of the corollary.</p>
+<p>The following lemma, which is borrowed from Choulli/Deng[7], plays a central role in the rest of the paper.</p>
+<p>Lemma 3.6. The following assertions hold.</p>
+<ul>
+<li>(a) For any t ∈ { 1 , ..., T } , we have</li>
+</ul>
+<div class="formula-not-decoded">Formula not decoded</div>
+<p>(b) The process Z F = ( Z F t ) t =0 ,...,T , defined by Z F 0 = 1 and</p>
+<div class="formula-not-decoded">Formula not decoded</div>
+<div class="formula-not-decoded">Formula not decoded</div>
+<p>is an F -martingale, and hence ˜ Q := Z F T · P is a well defined probability measure. Corollary 3.7. Let Γ t be a family of F t -measurable random variables, ˜ Q be the probability measure defined in Lemma 3.6, and</p>
+<p>Then the following assertions hold.</p>
+<p>(a) If I { G t -1 &gt; 0 } ˜ γ ˜ Q t ≥ 0 P -a.s., then ˜ γ t ≥ 0 P -a.s., and</p>
+<p>(b) If ˜ γ t ≥ 0 P -a.s., then we have</p>
+<div class="formula-not-decoded">Formula not decoded</div>
+<div class="formula-not-decoded">Formula not decoded</div>
+<p>Proof. To prove assertion (a), we apply Theorem 3.2-(c) to (Γ , Q, H 1 , H 2 ) = ( I { G t -1 &gt; 0 } Γ t , ˜ Q, F t -1 , F t ), ˜ Q = Z F t · P on F t , and we derive</p>
+<div class="formula-not-decoded">Formula not decoded</div>
+<p>As ( Z F t &gt; 0) ∩ ( G t -1 &gt; 0) = ( ˜ G t &gt; 0), we deduce that (3.23) holds on the set ( Z F t -1 &gt; 0). Due to ( Z F t -1 &gt; 0) ∩ ( G t -1 &gt; 0) = ( G t -1 &gt; 0), we conclude that ( Z F t -1 = 0) ⊂ ( G t -1 = 0). Thus, the two sides of (3.23) vanish on ( Z F t -1 = 0), and the conclusion follows. Note that the first statement of (a) is immediate from (3.23), and the proof of assertion (a) is complete.</p>
+<p>To prove assertion (b), we suppose that ˜ γ t ≥ 0 P -a.s., and we apply Theorem 3.2-(g) to the (Γ , Q, H 1 , H 2 ) = (Γ t , ˜ Q, F t -1 , F t ) afterwards. As a result, we get</p>
+<p>Therefore, assertion (b) follows immediately from combining this latter inclusion with (3.20) and ( G t -1 &gt; 0) ∩ ( Z F t = 0) = ( ˜ G t = 0 &lt; G t -1 ), which can be easily proved. This ends the proof of the corollary.</p>
+<div class="formula-not-decoded">Formula not decoded</div>
+<p>In the remaining part of this subsection, we elaborate the relationship between G -conditional essential supremum and the F -conditional essential supremum.</p>
+<p>Theorem 3.8.</p>
+<p>If Γ ⊆ L 0 ( G T ) , then the following assertions hold.</p>
+<ul>
+<li>(a) For any t ≤ T , we have P -a.s.</li>
+</ul>
+<div class="formula-not-decoded">Formula not decoded</div>
+<div class="formula-not-decoded">Formula not decoded</div>
+<div class="formula-not-decoded">Formula not decoded</div>
+<p>(c) If Γ ⊆ L 0 + ( G T ) P -a.s. and t ≤ T , then P -a.s. on ( τ ≥ t ) we have</p>
+<div class="formula-not-decoded">Formula not decoded</div>
+<ul>
+<li>(d) For any t ≤ T , P -a.s. we have</li>
+</ul>
+<div class="formula-not-decoded">Formula not decoded</div>
+<p>The theorem clearly singles out fully the relationship between essential supremum under G and that under F . In fact, in (3.24) the theorem states that F -essential supremum is nonnegative on the set ( G t -1 &lt; 1), while it is always an upper bound for G -essential supremum. Thus, we conclude that P -a.s. on ( G t -1 &lt; 1) ∩ (ess sup G t -1 ( Y I { τ ≥ t } ) &lt; 0) we have</p>
+<div class="formula-not-decoded">Formula not decoded</div>
+<p>Proof. of Theorem 3.8. The proof of the theorem is divided into four parts, where we prove the four assertions respectively.</p>
+<p>Part 1. Hereto, we prove assertion (a). To this end, we first consider the case where Γ = { Y } is a singleton. We use the definition of essential supremum, and deduce that ess sup F t -1 ( Y I { τ ≥ t } ) ∈</p>
+<div class="formula-not-decoded">Formula not decoded</div>
+<div class="formula-not-decoded">Formula not decoded</div>
+<p>Thus, the first inequality in (3.24) follows immediately from the above inequality and the definition of essential supremum again. To prove the second inequality in (3.24), we combine its first inequality with the fact that ess sup G t -1 ( Y I { τ ≥ t } ) = I { τ ≥ t } ess sup G t -1 ( Y ) and get I { τ&lt;t } ess sup F t -1 ( Y I { τ ≥ t } ) ≥ 0 , P -a.s..</p>
+<p>This is equivalent to I { τ&lt;t } ≤ I { ess sup F t -1 ( Y I { τ ≥ t } ) ≥ 0 } , P -a.s .. Then by taking conditional expectation on both sides of the latter inequality, we derive</p>
+<div class="formula-not-decoded">Formula not decoded</div>
+<p>Therefore, the second inequality in (3.24) is a direct consequence of this inequality. This proves (3.24). For the general case, it suffices to observe that ess sup F t -1 (Γ I { τ ≥ t } ) = ess sup Y ∈ Γ ess sup F t -1 ( Y I { τ ≥ t } ) to obtain the same inequalities. This ends the proof of assertion (a).</p>
+<p>2) This part gives the proof of assertion (b). Thanks to Lemma 2.1 when n = 1, we deduce the existence of γ t -1 ∈ L 0 ( F t -1 ) such that</p>
+<div class="formula-not-decoded">Formula not decoded</div>
+<p>As a result, we get (ess sup G t -1 (Γ1 { τ ≥ t } ) ≥ 0) = ( τ ≥ t ) ∩ ( γ t -1 ≥ 0) ∪ ( τ &lt; t ), and hence the first equality in (3.25) is equivalent to prove the equality on ( τ ≥ t ) ∩ ( γ t -1 ≥ 0) P -a.s. instead. Indeed, the equality is trivial on the set ( τ &lt; t ). To this end, we combine (3.28), the tower property of Lemma 2.4, and Corollary 3.5 and conclude that P -a.s. on ( γ t -1 ≥ 0) we have</p>
+<div class="formula-not-decoded">Formula not decoded</div>
+<p>Then by multiplying both sides with I { τ ≥ t } , and using ( τ ≥ t ) ⊂ ( G t -1 &gt; 0) afterwards, we obtain the first equality in (3.25). To prove the second equality in (3.25), we notice that in virtue of (3.28), we have</p>
+<div class="formula-not-decoded">Formula not decoded</div>
+<p>Hence, the second equality in (3.25) reduces</p>
+<div class="formula-not-decoded">Formula not decoded</div>
+<p>Taking the essential supremum knowing F t -1 on both sides of (3.28), we deduce by Corollary 3.5 that P -a.s. on ( γ t -1 &lt; 0) we have</p>
+<div class="formula-not-decoded">Formula not decoded</div>
+<p>As ess sup G t -1 (Γ I { τ ≥ t } ) = γ t -1 I { τ ≥ t } and I { τ ≥ t } I { G t -1 =1 } = I { G t -1 =1 } , the second equality in (3.25) is a direct consequence of (3.29). This ends the proof of assertion (b).</p>
+<ol>
+<li style="list-style-type: '3) ';">Herein, we prove assertion (c). To this end we suppose that Γ ⊆ L 0 + ( G T ), and remark that ess sup G t -1 (Γ I { τ ≥ t } ) ≥ ess inf G t -1 (Γ I { τ ≥ t } ) ≥ 0 P -a.s.. Then, in virtue of assertion (b), the first equality</li>
+</ol>
+<p>in (3.26) follows immediately from the first equality in (3.25), while the second equality of (3.26) is also a direct consequence of the first equality of (3.25) applied to ess inf G t -1 (Γ I { τ ≥ t } ) instead of Γ. This completes the proof of assertion (c).</p>
+<ol>
+<li style="list-style-type: '4) ';">This part deals with assertion (d). Thanks to Lemma 2.5, we derive</li>
+</ol>
+<div class="formula-not-decoded">Formula not decoded</div>
+<p>Thus, by combining this latter equality with assertions (b) and (c), assertion (d) follows immediately. This ends the proof of theorem.</p>
+<p>The second equality in (3.26) and its proof convey the following interesting identity.</p>
+<p>Corollary 3.9. For any t ∈ { 1 , .., T } and any Y ∈ L 0 + ( G t -1 ) , we have</p>
+<div class="formula-not-decoded">Formula not decoded</div>
+<div class="formula-not-decoded">Formula not decoded</div>
+<p>Or equivalently</p>
+<p>This corollary gives more insight about the second equality in Lemma 2.1, using essential supremum instead of conditional expectation, for any nonnegative random variable.</p>
+<h2>4 Super-hedging prices' set and Immediate-Profit arbitrage</h2>
+<p>In this section we will address the pricing method adopted in Carassus-Lepinette [6] for vulnerable claims. We call vulnerable claims, any claim H that involves the occurrence random time τ somehow, and hence it is a G T -measurable random variable and is characterized by a pair of F -adapted processes ( C,R ). Here C is the payoff process of the claim and R is the recovery process, while the binding relationship between ( C,R ) and H is dictated by the recovery policy . The rest of this section is divided into two subsections. The first subsection discusses the pricing set of one-step super-hedging prices for vulnerable claims, while the second subsection elaborates the IP arbitrage results.</p>
+<h2>4.1 Super-hedging prices' sets for vulnerable claims</h2>
+<p>Throughout the rest of the paper, we consider ( S, F ) and ( S, F ) given by</p>
+<p>Furthermore, it is easy to see that S t := S 0 + ∑ t s =1 I { ˜ G s &gt; 0 } ∆ ˜ S s . The following theorem constitutes our main result of this subsection, and it explains how the set of super-hedging prices for various vulnerable claims expands under the effect of the randomness borne in τ .</p>
+<div class="formula-not-decoded">Formula not decoded</div>
+<p>Theorem 4.1. Let t ∈ { 1 , .., T } , ξ ∈ L 0 ( G t ) , ( g s ) s =0 ,...,T and ( K s ) s =0 ,....,T be two F -adapted processes, and consider the triplet ( g, κ (0) , κ ( g ) ) given by</p>
+<p>̂ Then the following assertions hold.</p>
+<div class="formula-not-decoded">Formula not decoded</div>
+<p>(a) If ξ = g t 1 { τ&gt;t } , then we have</p>
+<p>(b) If ξ = g t I { τ ≥ t } , then we have</p>
+<div class="formula-not-decoded">Formula not decoded</div>
+<div class="formula-not-decoded">Formula not decoded</div>
+<p>(c) If ξ = K τ I { τ ≤ t } , then</p>
+<div class="formula-not-decoded">Formula not decoded</div>
+<p>(d) If ξ = g t I { τ&gt;t } + K τ I { τ ≤ t } , then</p>
+<div class="formula-not-decoded">Formula not decoded</div>
+<p>No matter what is the vulnerable claim, Theorem 4.1 shows that this expansion after τ , i.e. on the set ( τ &lt; t ), consists of adding arbitrary nonnegative price, and hence this will have no effect when taking the infinimum. However, for the part before or at τ , i.e. on the set ( τ ≥ t ), and again no matter what the vulnerable claim considered, the expansion mechanism of the super-hedging prices' set is obtained, by expanding the set of claims intrinsic to the interplay between F and τ described by the pair ( ˜ G,G ). Besides this expansion of claims due to the correlation risks generated by τ , we describe precisely the F -risks which the vulnerable claim entails, and how the set of prices are related. This precise relationship, of quantifying F -risks for the vulnerable claims, is established using the two F -models ( S, F , P ) and ( S, F , Q ).</p>
+<p>˜ ˜ Proof. of Theorem 4.1. The proof of the theorem is divided into three parts, where we prove assertions (a)-(b), (c) and (d) respectively.</p>
+<p>Part 1: Herein, we prove assertions (a) and (b). On the one hand, x G t -1 belongs to P ( S τ , G ) t -1 ,t ( ξ ) if and only if there exists θ G t -1 ∈ L 0 (I R d , G t -1 ) such that</p>
+<div class="formula-not-decoded">Formula not decoded</div>
+<div class="formula-not-decoded">Formula not decoded</div>
+<div class="formula-not-decoded">Formula not decoded</div>
+<p>or equivalently</p>
+<p>On the other hand, in virtue of Lemma 2.1, there exists ( x F t -1 , θ F t -1 ) which belongs to L 0 ( F t -1 ) × L 0 (I R d , F t -1 ) satisfying</p>
+<p>Therefore, by inserting the above equality in (4.8), we deduce that x G t -1 belongs to P ( S τ , G ) t -1 ,t ( ξ ) iff there exists ( x F t -1 , θ F t -1 ) ∈ L 0 ( F t -1 ) × L 0 (I R d , F t -1 ) such that</p>
+<div class="formula-not-decoded">Formula not decoded</div>
+<p>Thanks to Lemma 2.2, the last two equalities above are equivalent to</p>
+<p>Clearly, these can be rewritten into the following equivalent form of</p>
+<div class="formula-not-decoded">Formula not decoded</div>
+<div class="formula-not-decoded">Formula not decoded</div>
+<p>for some δ t -1 ∈ L 0 ( F t -1 ). Hence, we conclude that x G t -1 ∈ P ( S τ , G ) t -1 ,t ( ξ ) if and only if there exists an F t -1 -measurable triplet ( x F t -1 , θ F t -1 , δ t -1 ) such that</p>
+<div class="formula-not-decoded">Formula not decoded</div>
+<p>Or equivalently there exists ( x F t -1 , δ t -1 ) ∈ P ( S, F ) t -1 ,t ( ξ F t ) × L 0 ( F t -1 ) such that</p>
+<div class="formula-not-decoded">Formula not decoded</div>
+<p>Therefore, the first equality in (4.3) follows immediately. To prove the second equality, we combine (4.9), Lemma 2.2 again, ( τ ≥ t ) ⊂ ( G t -1 &gt; 0) and the fact that ˜ Q ( ˜ G t = 0 &lt; G t -1 ) = 0, and conclude that x G t -1 ∈ P ( S τ , G ) t -1 ,t ( ξ ) iff there exists ( x F t -1 , θ F t -1 ) ∈ L 0 ( F t -1 ) × L 0 (I R d , F t -1 ) such that</p>
+<div class="formula-not-decoded">Formula not decoded</div>
+<p>˜ ̂ ˜ This proves the second equality and ends the proof of assertion (a). The proof of assertion (b) mimics exactly the proof of assertion (a) and will be omitted.</p>
+<p>Part 2: Here we prove assertion (c). Suppose that ξ t = K τ 1 { τ ≤ t } . Then x G t -1 ∈ P ( S τ , G ) t -1 ,t ( ξ t ) if and only if there exists θ G t -1 ∈ L 0 (I R d , G t -1 ) such that x G t -1 + θ G t -1 ∆ S τ t ≥ K τ 1 { τ ≤ t } . Again thanks to Lemma 2.1, we deduce the existence of a pair ( x F t -1 , θ F t -1 ) ∈ L 0 ( F t -1 ) × L 0 (I R d , F t -1 ) such that</p>
+<div class="formula-not-decoded">Formula not decoded</div>
+<p>Hence, we deduce that x G t -1 ∈ P ( S τ , G ) t -1 ,t ( ξ t ) is equivalent to</p>
+<div class="formula-not-decoded">Formula not decoded</div>
+<p>Thus, on the one hand, the second inequality in (4.14) is equivalent to</p>
+<div class="formula-not-decoded">Formula not decoded</div>
+<p>On the other hand, in virtue of Lemma 2.2, the first inequality in (4.14) is equivalent to x F t -1 + θ F t -1 ∆ S t ≥ κ (0) t + x F t -1 I { ˜ G t =0 } , or equivalently</p>
+<div class="formula-not-decoded">Formula not decoded</div>
+<p>Therefore, by combining this last fact with (4.15) and (4.14), the first equality in (4.5) follows immediately, while the proof for the second equality mimics the proof of the second equality in assertion (a) (see part 1). This ends the proof of assertion (c).</p>
+<p>Part 3. Hereto, we prove assertion (d). Thus, consider ξ = g t I { τ&gt;t } + K τ I { τ ≤ t } . Then x G t -1 ∈ P ( S τ , G ) t -1 ,t ( ξ ) iff there exists θ G t -1 ∈ L 0 (I R d , G t -1 ) such that</p>
+<div class="formula-not-decoded">Formula not decoded</div>
+<p>On the one hand, due to Lemma 2.1, there exists a pair ( x F t -1 , θ F t -1 ), which belongs to L 0 ( F t -1 ) × L 0 (I R d , F t -1 ) and satisfies</p>
+<div class="formula-not-decoded">Formula not decoded</div>
+<p>By inserting these in (4.16), we conclude that x G t -1 ∈ P ( S τ , G ) t -1 ,t ( ξ ) iff P -a.s. x G t -1 I { τ ≤ t -1 } ≥ K τ I { τ ≤ t -1 } and ( x F t -1 + θ F t -1 ∆ S t ) I { τ ≥ t } ≥ g t I { τ&gt;t } + K τ 1 { τ ≤ t } . Or equivalently P -a.s. we have</p>
+<div class="formula-not-decoded">Formula not decoded</div>
+<p>Thanks to Lemma 2.2-(a)-(b), this equivalent to P -a.s.</p>
+<div class="formula-not-decoded">Formula not decoded</div>
+<p>Furthermore, it is easy to check that the two last inequalities above are equivalent to ( x F t -1 + θ F t -1 ∆ S t ) I { ˜ G t &gt; 0 } ≥ κ ( g ) t 1 { ˜ G t &gt; 0 } P -a.s.,or equivalently</p>
+<div class="formula-not-decoded">Formula not decoded</div>
+<p>By combining all these facts, the first equality in (4.6) follows, while the proof of the second equality mimics exactly the proof of the second equality of assertion (a). This proves assertion (d), and ends the proof of theorem.</p>
+<h2>4.2 The Immediate-Profit arbitrage under random horizon</h2>
+<p>This section analyzes the impact of random horizon on the absence-of-immediate-profit arbitrage (called AIP hereafter), in many aspects.</p>
+<p>The following theorem is our first main result of this subsection, and it fully charaterizes the AIP for the model ( S τ , G , P ) using the model ( S, F , Q ).</p>
+<ul>
+<li>(b) ( ˜ S, F , ˜ Q ) fulfills the AIP condition (c) ( S, F , P ) satisfies the AIP condition. Then (a) ⇐⇒ (b) and (b) = ⇒ (c).</li>
+</ul>
+<p>˜ ˜ Theorem 4.2. Let ( S, F , P ) and ( ˜ S, F , ˜ Q ) be the models given by (4.1) and (3.21)-(4.1) respectively, and consider the following assertions. (a) ( S τ , G , P ) satisfies the AIP condition</p>
+<p>Proof. of Theorem 4.2. The proof of the theorem will be given in two parts, where we prove (a) ⇐⇒ (b) and (b) = ⇒ (c) respectively.</p>
+<p>Part 1. Hereto, we prove (a) ⇐⇒ (b). To this end, we suppose that assertion (a) holds. Thus, in virtue of Proposition 2.8-(b), assertion (a) is equivalent to</p>
+<div class="formula-not-decoded">Formula not decoded</div>
+<p>Thus, thanks to Theorem 4.1-(a), these inclusions imply that for t ∈ { 1 , ..., T } ,</p>
+<div class="formula-not-decoded">Formula not decoded</div>
+<p>Taking conditional expectation knowing F t -1 , we get P ( ˜ S, F , ˜ Q ) t -1 ,t (0) G t -1 ≥ 0. Therefore, by combining these with P ( ˜ S, F , ˜ Q ) t -1 ,t (0) I { G t -1 =0 } ⊆ L 0 + ( F t -1 ), we deduce that P ( ˜ S, F , ˜ Q ) t -1 ,t (0) ⊆ L 0 + ( F t -1 ) ⊆ L 0 + ( F t -1 , ˜ Q ), and assertion (b) follows. This proves (a)= ⇒ (b). To prove the reverse, we assume that assertion (b) holds. In virtue of Proposition 2.8-(b), this assumption is equivalent to P ( ˜ S, F , ˜ Q ) t -1 ,t (0) ⊆ L 0 + ( F t -1 , ˜ Q ). Then, thanks to Theorem 4.1, we derive</p>
+<div class="formula-not-decoded">Formula not decoded</div>
+<p>where the last equality is a consequence of Lemma 2.1. This ends part 1.</p>
+<p>Part 2. This part proves (b) = ⇒ (c). Thus, we suppose that assertion (b) holds. Then, in virtue of Proposition 2.8-(c), this is equivalent to</p>
+<div class="formula-not-decoded">Formula not decoded</div>
+<p>that 1 { G t -1 &gt; 0 } ˜ Q ess sup F t -1 ( θ t -1 ∆ ˜ S t ) ≥ 0 and Corollary 3.7-(a) applies. Therefore, for any ( t, θ t -1 ) ∈ { 1 , ..., T } × L 0 (I R d , F t -1 ), we obtain</p>
+<p>We deduce that Z F t -1 ˜ Q ess sup F t -1 ( θ t -1 ∆ ˜ S t ) ≥ 0. As ( Z F t -1 &gt; 0) ∩ ( G t -1 &gt; 0) = ( G t -1 &gt; 0), we get</p>
+<div class="formula-not-decoded">Formula not decoded</div>
+<p>Thus, assertion (b) follows from combining this inequality with Proposition 2.8-(c). This ends the second part, and completes the proof of the theorem.</p>
+<p>Theorem 4.2 gives a complete and full characterization of AIP for the stopped model ( S τ , G ) using the model ( ˜ S, F , ˜ Q ), and shows that this is sufficient for the AIP fulfillment of the model ( S, F , P ). However, in general and in contrast to the classical non-arbitrage (called NA afterwards), the AIP of ( S, F , P ) does not give enough information about the AIP for the stopped model. This shows how the impact of τ can deepen the difference between AIP and NA, which is pointed out in [6, Section 2.4].</p>
+<p>Corollary 4.3. If the pair ( S, τ ) satisfies</p>
+<p>/negationslash then the three assertions of Theorem 4.2 are equivalent. More precisely,</p>
+<p>/negationslash</p>
+<div class="formula-not-decoded">Formula not decoded</div>
+<p>/negationslash</p>
+<p>/negationslash</p>
+<div class="formula-not-decoded">Formula not decoded</div>
+<p>( ˜ S, F , ˜ Q ) fulfills AIP iff ( S, F , P ) fulfills AIP iff ( S τ , G , P ) satisfies AIP . Proof. Thanks to Theorem 4.2, the proof of this corollary boils down to prove that, under (4.20), the AIP of ( S, F , P ) implies the AIP of ( ˜ S, F , ˜ Q ). To this end, note that ∆ ˜ S t = I { G t -1 &gt; 0 } ∆ S t = I { G t -1 &gt; 0 } ∆ S t I { ∆ S t =0 } . By assumption, I { G t -1 &gt; 0 } I { ∆ S t =0 } = I { ∆ S t =0 } 1 { G t -1 &gt; 0 } I { ˜ G t &gt; 0 } . Due to ( ˜ G t &gt; 0) ⊆ ( G t -1 &gt; 0), we get ∆ ˜ S t = I { ˜ G t &gt; 0 } ∆ S t = ∆ S t , i.e. ˜ S = S . Thus, by combining this with the fact that ˜ Q is equivalent to P on ( G t -1 &gt; 0) which is due to ( Z F t -1 &gt; 0) ∩ ( G t -1 &gt; 0) = ( G t -1 &gt; 0), we easily derive for any θ ∈ L 0 (I R d , F t -1 ). Therefore, the conclusion follows immediately from these equalities.</p>
+<p>Remark 4.4. (a) If the random time τ satisfies</p>
+<div class="formula-not-decoded">Formula not decoded</div>
+<p>then there exist models for S such that ( S, F ) satisfies AIP, while ( S τ , G ) violates it. In fact, consider and derive, by Theorem 3.2, the following</p>
+<div class="formula-not-decoded">Formula not decoded</div>
+<div class="formula-not-decoded">Formula not decoded</div>
+<p>Thus, it is clear that, the first inequality above proves that ( S, F ) fulfills AIP, while the second and third equalities prove that both ( ˜ S, F , ˜ Q ) and ( S τ , G , P ) violate AIP respectively. (b) Suppose that τ satisfies (4.21), and consider the model for S given by ∆ S t := I { ˜ G t =0 } , t ∈ { 1 , ..., T } and S 0 = 1 . Then ( S, F ) violates the AIP and hence violates NA also, due to</p>
+<div class="formula-not-decoded">Formula not decoded</div>
+<p>Furthermore, we have S τ = S 0 and hence ( S τ , G ) fulfills AIP and NA.</p>
+<p>(c) Suppose that τ satisfies (4.21), and consider S given by ∆ S t := I { ˜ G t =0 &lt;G t -1 } , t ∈ { 1 , ..., T } and S 0 = 1 . Therefore, one can check that ( S, F ) fulfills AIP and violates NA. In fact, there exists no positive F -martingale Z such that</p>
+<div class="formula-not-decoded">Formula not decoded</div>
+<p>for any θ ∈ L 0 + ( F t -1 ) . However, we have S τ = S 0 and, as a consequence, ( S τ , G ) fulfils NA and hence it satisfies AIP also.</p>
+<p>Our second main theorem, of this subsection, describes the models of τ for which the AIP condition is unaffected after stopping.</p>
+<p>Theorem 4.5. The following assertions are equivalent.</p>
+<ul>
+<li>(a) For any ( X, F , P ) satisfying AIP, the model ( X τ , G , P ) fulfills AIP.</li>
+</ul>
+<p>(c) The probability ˜ Q defined in (3.21) coincides with P , i.e. Z F ≡ 1 . The proof of this theorem is based on the following simple but useful lemma.</p>
+<ul>
+<li>(b) For any t ∈ { 1 , ..., T } , we have { G t -1 = 0 } = { ˜ G t = 0 } P -a.s..</li>
+</ul>
+<p>Lemma 4.6. Consider any model ( X, H := ( H t ) t =0 ,...,T ) . Then the following assertions hold.</p>
+<ul>
+<li>(a) Suppose that X is H -predictable. Then ( X, H ) satisfies AIP if and only if X is a constant process, i.e., X t = X 0 , P -a.s. for any t = 1 , ..., T .</li>
+<li>(b) ( X, H ) satisfies AIP if and only if ( ψ · X, H ) fulfills AIP, for any H -predictable and bounded process ψ , where ψ · X t := ∑ t s =1 ψ s ∆ X s , t ∈ { 1 , ..., T } .</li>
+</ul>
+<p>Proof. 1) If X is a constant process, then it is clear that P ( X, H ) t (0) = L 0 + ( H t ). This implies that P ( X, H ) t (0) ∩ L 0 -( H t ) = { 0 } , or equivalently AIP holds for ( X, H ). To prove the reverse sense, we</p>
+<p>suppose P ( X, H ) t (0) ∩ L 0 -( H t ) = { 0 } , and consider any t ∈ { 1 , .., T } and θ ∈ L 0 ( H t -1 ). Therefore, by combining all these properties, we derive</p>
+<div class="formula-not-decoded">Formula not decoded</div>
+<p>Thus, as θ t -1 is arbitrary, we conclude that θ t -1 ∆ X t = 0 P -a.s., for any θ t -1 ∈ L 0 ( H t -1 ). This implies that ∆ X t = 0 P -.a.s., and the proof of assertion (a) is complete.</p>
+<p>2) If ( ψ · X, H ) fulfills AIP, for any H -predictable and bounded process ψ , then by taking ψ = 1 we deduce that ( X -X 0 , H ) satisfies AIP or equivalently ( X, H ) satisfies AIP. The reverse sense is a direct consequence from combining Proposition 2.8-(b) and the fact that, for any t ∈ { 1 , ..., T } and any H -predictable process ψ , we have</p>
+<div class="formula-not-decoded">Formula not decoded</div>
+<p>This ends the proof of the lemma.</p>
+<p>Proof. of Theorem 4.5. The equivalence between assertion (b) and (c) can be found in Choulli/Deng [7], and for the sake of completeness we reproduce it here. Thus, remark that Z F ≡ 1 -i.e. for any t ∈ { 1 , ..., T } we have Z F t /Z F t -1 = 1 P -a.s.- is equivalent to or equivalently,</p>
+<div class="formula-not-decoded">Formula not decoded</div>
+<div class="formula-not-decoded">Formula not decoded</div>
+<p>Suppose that assertion (b) holds. Then we get ( X, H , P ) = ( ˜ X, H , P ) and it satisfies AIP for any model ( X, H ) satisfying AIP, see Lemma 4.6 (b). Thus, in virtue of Theorem 4.2 , ( X τ , G ) satisfies AIP. This proves the implication (b) = ⇒ (a). To prove the reverse, assume assertion (a) holds, and consider</p>
+<p>Therefore, this is equivalent to { P ( ˜ G t &gt; 0 |F t -1 ) = 1 } = { ˜ G t &gt; 0 } , while the latter equality holds if and only if { G t -1 &gt; 0 } = { G t &gt; 0 } . Hence, (b) ⇐⇒ (c) is proved, and the rest of this proof proves (b) ⇐⇒ (a).</p>
+<div class="formula-not-decoded">Formula not decoded</div>
+<div class="formula-not-decoded">Formula not decoded</div>
+<p>Then it is clear that ( X, F ) satisfies NA and a fortiori AIP due to Carassus-Lepinette [6]. Due to assertion (a), the AIP for ( X τ , G ) follows, and due to ( τ ≥ s ) ∩ ( ˜ G s = 0) = ∅ , we get X τ = -∑ t s =1 I { s ≤ τ } P ( ˜ G s = 0 ∣ ∣ F s -1 ) and hence it is G -predictable. Thus, in virtue of Lemma 4.6-(a), we conclude that X τ is a null process, or equivalently for any t ∈ { 1 , ..., T }</p>
+<p>By taking conditional expectation with respect to F t -1 on both sides of this equality, we get G t -1 P ( ˜ G t = 0 ∣ ∣ F t -1 ) = 0 , P -a.s., for any t ∈ { 1 , ..., T } . This yields ( G t -1 &gt; 0) ∩ ( ˜ G t = 0) = ∅ , P -a.s. for any t ∈ { 1 , ..., T } and assertion (b) follows immediately. This ends the proof of the theorem.</p>
+<h2>5 Pricing formulas for vulnerable claims</h2>
+<p>In this section, we elaborate super-hedging-pricing formulas for several vulnerable claims. Our pricing formulas relies on [6, Lemma 3.1], which we recall below, and which elaborates a backward equation for the super-hedging prices for an arbitrary model ( X, H , Q ).</p>
+<p>Lemma 5.1. Let ( X, H , Q ) be an arbitrary model satisfying AIP and defined on the probability space (Ω , G , P ) , T ∈ (0 , ∞ ) is a fixed investment horizon, and ξ ∈ L 0 ( H T ) is a claim. Then the super-hedging price process for ξ , denoted by P H , is given by the following backward formula.</p>
+<p>̂ The vulnerable claims that we address herein can be classified into two main classes. The first class consists of vulnerable claims that do not have recovery, or equivalently there is no payment at the random time. The second class of vulnerable claims is those claims which involve payment at the random time in a way or another. In virtue of Lemma 5.1, an important step in describing the G -price process for vulnerable claims lies in addressing the impact of τ on the one-step pricing operator ̂ P ( X, H ,Q ) t,t +1 ( · ), defined in (2.6), for any model ( X, H , Q ).</p>
+<div class="formula-not-decoded">Formula not decoded</div>
+<p>The remaining part of this section is divided into three subsections. In the first subsection, we outline the main results on the one-step pricing operators. The second subsection elaborates the general pricing formulas, while the last subsection proves the main theorems of the second subsection.</p>
+<h2>5.1 The one-step pricing formulas</h2>
+<p>In this subsection, we address the one-step-pricing operator under the random horizon τ in many aspects. Precisely, following the same spirit as in arbitrage theory, we aim to understand how the one-step-pricing under G can be described using F -observable processes and pricing-operators.</p>
+<p>Theorem 5.2. Let t ∈ { 1 , .., T } , ξ ∈ L 0 ( G t ) , ( g s ) s =0 ,...,T and ( K s ) s =0 ,....,T be two F -adapted processes, and consider ( g, κ (0) , κ ( g ) , g ) given by (4.2).Then the following assertions hold.</p>
+<p>̂ (a) If ξ = g t I { τ&gt;t } , then we have</p>
+<p>(b) If ξ = g t I { τ ≥ t } , then we have</p>
+<div class="formula-not-decoded">Formula not decoded</div>
+<div class="formula-not-decoded">Formula not decoded</div>
+<div class="formula-not-decoded">Formula not decoded</div>
+<p>(d) If ξ = g t I { τ&gt;t } + K τ I { τ ≤ t } , then</p>
+<div class="formula-not-decoded">Formula not decoded</div>
+<div class="formula-not-decoded">Formula not decoded</div>
+<div class="formula-not-decoded">Formula not decoded</div>
+<p>This theorem quantifies the one-step-pricing operator for ( S τ , G ) in terms of pricing operators for both models ( S, F , P ) and ( ˜ S, F , ˜ Q ). However, the latter model is the one that gives us full F -characterization. Assertion (a) addresses the first class of vulnerable claims, where there is no recovery at all (i.e. no payment at the random time τ when it occurs). In life insurance, this claim belongs to the class when benefit is paid upon survival only. Assertion (c) deals with vulnerable claims that have payments at the random time only, and this also has a meaning in life insurance, which consists of getting benefit when the insured dies and nothing in case of survival. Assertion (d) treats another vulnerable claim with recovery, as it combines both previous cases by paying benefits in both situation when the insured survives and when she dies. The claim addressed in assertion (b) is somehow in between the two classes. On the one hand, mathematically, it belongs to the second class by choosing K = g T I ] ] T [ [ as there is payment at τ which coincides with the payment upon survival. On the other hand, its pricing formula in (5.3) tells us that this claim falls into the first class immediately after the one-step-pricing.</p>
+<p>Remark 5.3. (i) Assertion (a) conveys that the one-step super-hedging price of the claim having no recovery (i.e. no payment at τ at all) has literally the same form. This is due to the fact that ( τ ≥ t ) = ( τ &gt; t -1) . In other words, by denoting ̂ P one-step ( · ) the one-step super-hedging pricing operator, then P one-step ( Class1 ) ⊆ Class1, and P one-step ( claim-of-assertion-(b) ) ∈ Class1.</p>
+<p>̂ ̂ (ii) Assertion (d) proves that the one-step super-hedging price of the claim has exactly the same form as the claim, while the one-step super-hedging pricing for the claim of assertion (c) transforms the claim into the claim of assertion (d). In other words, even though there is no payment upon the survival, after one-step super-hedging pricing the claim will have payment upon survival.</p>
+<p>Theorem 5.2 conveys also, via the formulas, that the one-step pricing operators for ( ˜ S, F , ˜ Q ) and ( S, F , P ) might differ in general, while the resulting prices for any claim are comparable. In the following remark, we discuss these points in details.</p>
+<p>Remark 5.4. (a) For any δ ∈ L 0 ( F t -1 ) , the following inequalities hold</p>
+<div class="formula-not-decoded">Formula not decoded</div>
+<p>(b) For Y ∈ { ̂ g, ˜ g, g, κ } , and any t ∈ { 1 , ..., T } , we have</p>
+<p>As a result, this gives us another proof for Theorem 4.2 using this inequality and Proposition 2.8-(d).</p>
+<p>In most of applications, K represents the recovery process and it is usually nonnegative. Thus, as a particular case, we consider the case of vulnerable options where both payoff process g and recovery process K are nonnegative.</p>
+<div class="formula-not-decoded">Formula not decoded</div>
+<p>Corollary 5.5. Consider the notation of Theorem 5.2, and assume that both processes g and K are nonnegative. Then the following assertions hold. (1) (2)</p>
+<p>(a) If ξ := g t I { τ&gt;t } and ξ := g t I { τ ≥ t } , then we have</p>
+<div class="formula-not-decoded">Formula not decoded</div>
+<p>(b) If ξ = K τ I { τ ≤ t } , then</p>
+<p>(c) If ξ = g t I { τ&gt;t } + K τ I { τ ≤ t } , then</p>
+<div class="formula-not-decoded">Formula not decoded</div>
+<p>̂ P ( S τ , G ) t -1 ,t ( ξ ) = K τ I { τ ≤ t -1 } + ̂ P ( ˜ S, F , ˜ Q ) t -1 ,t ( max( g t I { G t &gt; 0 } , K t I { ˜ G t &gt;G t } ) ) I { τ ≥ t } . (5.10) The proof of the corollary follows from previous results, and will be omitted.</p>
+<p>Proof. of Theorem 5.2. The proof of the theorem will be achieved in three parts. The first and second parts prove two roughly general claims, while the third part outlines the proof for the theorem. To this end, we fix t ∈ { 1 , ..., T } , and we consider a triplet (Ξ , ξ G , ξ F ) ∈ L 0 ( G t -1 ) × L 0 ( G t ) × L 0 ( F t ) such that ξ F I { ˜ G t =0 } = 0 P -a.s..</p>
+<p>Part 1. Herein, we prove that the equality</p>
+<div class="formula-not-decoded">Formula not decoded</div>
+<p>always implies</p>
+<p>To this end, we remark that (5.11) implies that</p>
+<div class="formula-not-decoded">Formula not decoded</div>
+<div class="formula-not-decoded">Formula not decoded</div>
+<p>for any δ ∈ L 0 ( F t -1 ). Hence, after taking essential infimum, this inclusion implies that</p>
+<div class="formula-not-decoded">Formula not decoded</div>
+<p>On the other hand, again due to (5.11), for any x G ∈ P ( S τ , G ) t -1 ,t ( ξ G ), we deduce the existence of ( x t -1 , δ ) ∈ P ( S, F ) t -1 ,t ( ξ F + δI { ˜ G t =0 } ) × L 0 ( F t -1 ), such that P -a.s.,</p>
+<div class="formula-not-decoded">Formula not decoded</div>
+<p>As a result, this implies that</p>
+<div class="formula-not-decoded">Formula not decoded</div>
+<p>and by combining this with (5.13), we get (5.12). This ends the first part. Part 2. This part proves that, for (Ξ , ξ G , ξ F ) ∈ L 0 ( G t -1 ) × L 0 ( G t ) × L 0 ( F t ),</p>
+<div class="formula-not-decoded">Formula not decoded</div>
+<p>To this end we suppose that the left hand side of this implication holds. On the one hand, we notice</p>
+<div class="formula-not-decoded">Formula not decoded</div>
+<p>and hence by taking essential infinimum on both sides we get</p>
+<div class="formula-not-decoded">Formula not decoded</div>
+<p>On the other hand, for any p G ∈ P ( S τ , G ) t -1 ,t ( ξ G ), there exists p F ∈ P ( ˜ S, F , ˜ Q ) t -1 ,t ( ξ F ) such that</p>
+<div class="formula-not-decoded">Formula not decoded</div>
+<p>Therefore, by taking essential infimum in the above inequality and combining the resulting inequality with (5.15), the claim (5.14) follows immediately.This ends the second part.</p>
+<p>Part 3. Hereto, we summarize the proof of the theorem. In fact, in order to prove assertion (a), we appeal to Theorem 4.1-(a). Then the proof of the first equality in (5.2) is a direct combination of the first equality in (4.3) and Part 1 applied to ( ξ G , Ξ , ξ F ) = ( g t I { τ&gt;t } , 0 , ̂ g t ). The second equality in (5.2) follows from combining the second equality in (4.3) and Part 2 applied to ( ξ G , Ξ , ξ F ) = ( g t I { τ&gt;t } , 0 , ̂ g t ). Similarly, the first (respectively the second) equality in (5.3) is a direct consequence of the first (respectively the second) equality in (4.4) and Part 1 (respectively Part 2) applied to ( ξ G , Ξ , ξ F ) = ( g t I { τ ≥ t } , 0 , g t ). Assertion (c) follows from combining (4.5) and Part 1 and 2 applied ( ξ G , Ξ , ξ F ) = ( K τ I { τ ≤ t } , K τ I { τ ≤ t -1 } , κ (0) t ). Finally, assertion (d) is direct consequence from combining (4.6) and Parts 1 and 2 applied to ( ξ G , Ξ , ξ F ) = ( g t I { τ&gt;t } + K τ I { τ ≤ t } , K τ I { τ ≤ t -1 } , κ ( g ) t ). This completes the proof of theorem.</p>
+<h2>5.2 The general pricing formulas and the prices' dynamics</h2>
+<p>Hereto, we fully describe the pricing formulas for the three kind of vulnerable claims, and afterwards we single out the various risks in their dynamics as well. To this end, throughout the rest of the paper, for any two processes X and Y , we denote by X · Y -the stochastic integral of X with respect to Y -, [ X,Y ], and 〈 X,Y 〉 -when it exists- the processes given by</p>
+<div class="formula-not-decoded">Formula not decoded</div>
+<p>We recall the triplet ( m,N G , D o, F ) associated to τ , which plays central roles in quantifying the various risks generated by τ , as follows, where the convention ∑ ∅ = 0 will be used throughout the paper. For further notation and definitions about stochastic calculus in discrete-time, we refer the reader to [21] and [19].</p>
+<div class="formula-not-decoded">Formula not decoded</div>
+<p>The process m is an F -martingale which is a BMO martingale, see [22] for more details about this fact. Herein, m quantifies the correlation risk resulting from the interaction of τ with the flow F , see [9, 11, 12, 13] for more about this. The process N G is a G -martingale which was introduced in [9] and called the main generator of pure-default-martingales of type 1. This process N G quantifies the main generator of the pure-default-risk borne in the random time, see [9, 10, 12, 13] for more details and related works and results. The process D o, F is an nondecreasing process F -adapted and is the F -optional dual projection of D := 1 ] ] τ, ∞ ] ] . We refer the reader to [10], for the role of D o, F in quantifying correlation risks resulting from the interplay between τ and the benefit policy in life insurance. The risks in G , which are mainly coming from F , are represented by a transform operator T , defined for any process M by</p>
+<div class="formula-not-decoded">Formula not decoded</div>
+<p>̂ by Definition 2.6, which we recall below</p>
+<p>Herein, if M is an F -martingale, the T ( M ) is a G -martingale. For more details about these and related properties, we refer the reader to [9, Theorem 2.14] and the references therein. Throughout the remaining part of the paper, we use the one-period-pricing operator P ( ˜ S, ˜ Q ) t,t +1 ( · ), given</p>
+<div class="formula-not-decoded">Formula not decoded</div>
+<p>and we will use the following notational abreviation</p>
+<div class="formula-not-decoded">Formula not decoded</div>
+<p>Furthermore, for any recovery process R , we introduce an important functional f R ( t, x ) = f R ( t, ω, x ), which is B (I R) ⊗O ( F )-measurable, and is given by</p>
+<div class="formula-not-decoded">Formula not decoded</div>
+<p>for any ( t, x ) ∈ { 0 , ..., T, } × I R.</p>
+<p>Theorem 5.6. Suppose ( ˜ S, F , ˜ Q ) fulfills AIP. Consider g T ∈ L 1 ( F T ) and the pair of vulnerable claim and its associated F -claim ( ξ ( G , 1) , ξ ( F , 1) ) which belongs to { ( g T I { τ&gt;T } , g T I { G T &gt; 0 } ) , ( g T I { τ ≥ T } , g T I { ˜ G T &gt; 0 } ) } . Let ̂ P ( G , 1) be the super-hedging price process for ξ ( G , 1) under ( S τ , G , P ) , and f 0 be the functional defined in (5.21) for the zero-recovery. Then the following assertions hold. (a) The price process ̂ P ( G , 1) is given by P ( G , 1) = P ( F , 1) I ] ]0 ,τ ] ] and</p>
+<div class="formula-not-decoded">Formula not decoded</div>
+<p>(b) The price process P ( G , 1) can be decomposed into</p>
+<p>Here G -:= G ·-1 and the quadruplet ( M (1) , N (1) , N (1) , ˜ V (1) ) is given by</p>
+<div class="formula-not-decoded">Formula not decoded</div>
+<div class="formula-not-decoded">Formula not decoded</div>
+<p>The theorem claims that the super-hedging price process of the vulnerable claim with payoff ξ ( G , 1) , which does not involve payment after the occurrence of τ , is given by the super-hedging price process under the model ( ˜ S, F , ˜ Q ) for a corresponding F -claim The theorem presents two cases of this class of vulnerable claims depending whether there is payment at τ or not. These two cases differ slightly in the vulnerable claim's payoff and hence in its corresponding F -claim and subsequently in the superhedging price process of this latter claim. However, both G -super-hedging prices of these two cases have the same structures before τ , and the same risk decomposition structure. The decomposition (5.23) of the dynamics' of the price process of the vulnerable claim is important in the securitization and/or hedging as it singles out the various risks and their origins.</p>
+<p>Below, we discuss some particular cases of the pair ( τ, F ) which are frequently addressed in the credit risk and life insurance literatures.</p>
+<p>Remark 5.7. (a) The case of immersion, which is equivalent to the martingale m being constant (i.e. m t = m 0 P -a.s. for any t ∈ { 1 , ..., T } ). If immersion holds, then</p>
+<div class="formula-not-decoded">Formula not decoded</div>
+<ul>
+<li>(b) The case of independence between τ and F . This is a particular case of immersion, and furthermore</li>
+</ul>
+<p>in this case we have</p>
+<p>The statements in the remark follows directly from Theorem 5.6, and hence their proofs will be omitted herein. The second main result of this subsection deals with vulnerable claims that involve payment at τ , and these claims take two forms depending whether there is payment before the occurrence of τ or not. In life insurance, these vulnerable claims are known as policies where the beneficiaries receive payments at the moment of death, and for which there are two types of policies depending whether there is benefit upon survival or not. Below, we start with the case where there is no benefit upon survival.</p>
+<div class="formula-not-decoded">Formula not decoded</div>
+<p>Theorem 5.8. Let the recovery process K be an F -adapted and integrable process, f K given by (5.21), ξ G , 2 = K τ I { τ ≤ T } be the vulnerable claim's payoff, and ̂ P ( ˜ S, ˜ Q ) t,t +1 ( · ) be the one-period-pricing operator given by (5.19). Suppose that ( ˜ S, F , ˜ Q ) fulfills AIP (equivalently ( S τ , G ) fulfills AIP ) and denote by ̂ P ( G , 2) the super-hedging price process for the claim ξ G , 2 . Then the following assertions hold. (a) The process ̂ P ( G , 2) is given by ̂ P ( G , 2) = K τ I ] ] τ, ∞ ] ] + ̂ P ( F , 2) I ] ]0 ,τ ] ] and</p>
+<p>(b) The dynamics of P ( G , 2) can be decomposed</p>
+<div class="formula-not-decoded">Formula not decoded</div>
+<div class="formula-not-decoded">Formula not decoded</div>
+<p>Here, the quadruplet ( M (2) , A (2) , N (2) , V (2) ) is given by</p>
+<p>Below, we treat the case where there are both benefits, upon survival and at the moment of death τ .</p>
+<div class="formula-not-decoded">Formula not decoded</div>
+<p>Theorem 5.9. Let g T ∈ L 1 ( F T ) , the recovery process K be integrable and F -adapted, f K be the functional given by (5.21), ξ ( G , 3) := g T I { τ&gt;T } + K τ I { τ ≤ T } be the vulnerable claim's payoff. If ( ˜ S, F , ˜ Q ) fulfills AIP and ̂ P ( G , 3) denotes the super-hedging price for ξ ( G , 3) , then the following assertions hold. (a) The process ̂ P ( G , 3) is given by ̂ P ( G , 3) = K τ I ] ] τ, ∞ ] ] + ̂ P ( F , 3) I ] ]0 ,τ ] ] and</p>
+<div class="formula-not-decoded">Formula not decoded</div>
+<div class="formula-not-decoded">Formula not decoded</div>
+<div class="formula-not-decoded">Formula not decoded</div>
+<div class="formula-not-decoded">Formula not decoded</div>
+<p>We end this subsection by illustrating the main results of Theorems 5.6, 5.8 and 5.9 on the case of vulnerable options with and/or without recovery.</p>
+<p>Theorem 5.10. Suppose that g T ∈ L 0 + ( F T ) , and the recovery process K be nonnegative integrable and F -adapted. Let ξ ( F , 1) ∈ { g T I { G T &gt; 0 } , g T I { ˜ G T &gt; 0 } } and put K := KI { ˜ G&gt;G } . Then the three processes ̂ P ( F ,i ) , i = 1 , 2 , 3 , given in Theorems 5.6, 5.8 and 5.9 respectively, satisfy the following</p>
+<p>Proof. For any nonnegative process R and any x ∈ I R + , consider f R ( t, x ) defined in (5.21) and derive</p>
+<div class="formula-not-decoded">Formula not decoded</div>
+<div class="formula-not-decoded">Formula not decoded</div>
+<p>Therefore, the proof of the three equalities in (5.33) follow immediately from combining this last equality in (5.34), and assertion (a) for Theorems 5.6, 5.8 and 5.9 respectively. This ends the proof of the theorem.</p>
+<p>Remark 5.11. Under the assumptions of Theorem 5.10, the following hold</p>
+<h2>5.3 Proofs of Theorems 5.6, 5.8 and 5.9</h2>
+<div class="formula-not-decoded">Formula not decoded</div>
+<p>These proofs rely on the following three technical lemmas, which are interesting in themselves.</p>
+<p>Lemma 5.12. Suppose that ( ˜ S, F , ˜ Q ) satisfies the AIP condition, and let ̂ P ( F , 3) Then</p>
+<p>The proof of this lemma will be omitted herein.</p>
+<p>be defined in (5.30).</p>
+<div class="formula-not-decoded">Formula not decoded</div>
+<p>Lemma 5.13. For any F -martingale M and F -predictable process V , we have and</p>
+<div class="formula-not-decoded">Formula not decoded</div>
+<div class="formula-not-decoded">Formula not decoded</div>
+<p>The proof of this lemma will be omitted herein.</p>
+<p>Lemma 5.14. Let ( X, H , Q ) be a model defined on the probability space (Ω , G , P ) , and satisfying AIP. Consider H ∈ L 0 ( H T ) and a functional f ( t, ω, x ) such that for x ∈ R , ( f ( t, x )) t =0 ,...,T is H -adapted. Then the following backward stochastic equation has a unique solution.</p>
+<div class="formula-not-decoded">Formula not decoded</div>
+<p>The proof of this lemma is immediate and will be omitted herein. The rest of this subsection is devoted to the proof of the three theorems. To this end, and for the sake of simplifying the notation, throughout the proofs we put</p>
+<p>˜ P (1) := ̂ P ( F , 1) , ˜ P (2) := ̂ P ( F , 2) , ˜ P (3) := ̂ P ( F , 3) . Proof. of Theorems 5.6, 5.8 and 5.9: Throughout this proof, we assume that ( ˜ S, F , ˜ Q ) fulfills AIP and consider g T ∈ L 1 ( F T ) and an F -adapted and integrable process K . The rest of this proof is divided into three parts, where we prove Theorems 5.6, 5.8 and 5.9 respectively.</p>
+<p>Part 1. This part addresses Theorem 5.6, and proves it using Theorem 5.9.</p>
+<p>1) Suppose that ( ξ ( G , 1) , ξ ( F , 1) ) = ( g T I { τ&gt;T } , g T I { G T &gt; 0 } ), and put K ≡ 0 in the second equality of (5.30). Then we deduce that</p>
+<div class="formula-not-decoded">Formula not decoded</div>
+<ul>
+<li>we derive the following</li>
+</ul>
+<p>˜ Hence, by combining this with Lemma 5.14, we conclude that ˜ P (3) = ˜ P (1) , and hence ̂ P ( G , 3) = ̂ P ( G , 1) follows immediately as well. This proves assertion (a) for the pair of claims ( g T I { τ&gt;T } , g T I { G T &gt; 0 } ). 2) Suppose ( ξ ( G , 1) , ξ ( F , 1) ) = ( g T I { τ ≥ T } , g T I { ˜ G T &gt; 0 } ). By combining Lemma 5.1 and Theorem 5.2-(b),</p>
+<div class="formula-not-decoded">Formula not decoded</div>
+<p>̂ P ( G , 3) T -1 = ̂ P ( ˜ S, F , ˜ Q ) T -1 ,T ( g T ) I { τ ≥ T } = ̂ P ( ˜ S, F , ˜ Q ) T -1 ,T ( ˜ P (1) T ) I { τ&gt;T -1 } = ˜ P (1) T -1 I { τ&gt;T -1 } . (5.42) Thus, on the one hand, this latter equality proves (5.22) for t = T -1. On the other hand, as we stated in Remark 5.3-(a), this equality tells us that after this one-step we fall into the setting of the first claim, i.e. the case of g t I { τ&gt;t } with t = T -1 and g T -1 = ˜ P (1) T -1 instead. Thus, thanks to step 1 above, we deduce that (5.22) holds for any t ∈ { 0 , ..., T -1 } , and the proof of assertion for the pair of claims ( g T I { τ ≥ T } , g T I { ˜ G T &gt; 0 } ) is complete.</p>
+<p>Then, in virtue of ( τ &gt; T -1) = ( τ ≥ T ) and ˜ P (1) T = g T I { ˜ G T &gt; 0 } , we obtain</p>
+<p>3) Thanks to steps 1 and 2 above, we deduce that when K ≡ 0 we get ( ̂ P ( G , 3) , ˜ P (3) ) = ( ̂ P ( G , 1) , ˜ P (1) ). Then by combining this with Theorem 5.9-(b), where we put K = 0, we conclude that the quadruplets ( M (3) , N (3) , N (3) , ˜ V (3) ) and ( M (1) , N (1) , N (1) , ˜ V (1) ) coincide, and hence assertion (b) follows immediately. This ends the proof of Theorem 5.6.</p>
+<p>Part 2. Hereto, we prove Theorem 5.8 using again Theorem 5.9. In fact, in this case we put g T = 0 in Theorem 5.9, and get</p>
+<div class="formula-not-decoded">Formula not decoded</div>
+<p>Hence, by combining these with Lemma 5.14, we obtain ˜ P (3) = ˜ P (2) and ̂ P ( G , 3) = ̂ P ( G , 2) . Therefore, the proof of Theorem 5.8-(a) follows immediately, and both quadruplets ( M (3) , N (3) , N (3) , ˜ V (3) ) and ( M (2) , N (2) , N (2) , ˜ V (2) ) coincide. This yields assertion (b) of Theorem 5.8 and completes its proof. Part 3. This part proves Theorem 5.9. To this end, we start proving (5.30). By applying Lemma 5.1 to ( S τ , G ) for the claim ξ G , and using Theorem 5.2-(d) afterwards, we derive</p>
+<div class="formula-not-decoded">Formula not decoded</div>
+<p>This proves the equality (5.30) for t = T -1. Thus, to prove this equlity for t = T -2, we apply again Lemma 5.1 and Theorem 5.2-(d) afterwards for the pair ( K, P (3) ) instead of ( K,g ), and write</p>
+<p>Therefore, we obtain the equality (5.30) for t = T -2. Thus, we can prove the equality (5.30) for any t by backward induction. In fact, we suppose that (5.30) holds for t +1, and we will prove it holds for t . To this end, we apply then Lemma 5.1 and Theorem 5.2-(d) afterwards and get</p>
+<div class="formula-not-decoded">Formula not decoded</div>
+<div class="formula-not-decoded">Formula not decoded</div>
+<div class="formula-not-decoded">Formula not decoded</div>
+<p>Hence, the equality (5.30) holds for t , and hence it holds for any t ∈ { 0 , ..., T -1 } . This completes the proof of (5.30), while the rest of this part addresses (5.31). By combining (5.30) and the two facts XI ] ]0 ,τ ] ] = X τ -X τ D and X τ D = X τ I ] ] τ, ∞ ] ] = X 0 I { τ =0 } + X · D , which hold for any process X , we get ̂ P ( G , 3) 0 = K 0 I { τ =0 } + ˜ P (3) 0 ) I { τ&gt; 0 } and</p>
+<div class="formula-not-decoded">Formula not decoded</div>
+<p>˜ The last equality is due to D = N G + ˜ G -1 I [ [0 ,τ [ [ · D o, F , see (5.17) for details. Thanks to (5.32), it is clear that M (3) 0 = A (3) 0 = 0 and</p>
+<div class="formula-not-decoded">Formula not decoded</div>
+<div class="formula-not-decoded">Formula not decoded</div>
+<p>˜ The last equality is due to I { ˜ G =0 } · D o, F = 0. Thus, direct calculations yields</p>
+<div class="formula-not-decoded">Formula not decoded</div>
+<p>This ends the proof of assertion (b), and the proof of the theorem is complete.</p>
+<h2>References</h2>
+<ol>
+<li style="list-style-type: '[1] ';">Baptiste, J., Carassus, L. and Lepinette, E. Pricing without martingale measure. To appear in 'ESAIM Proceedings MAS 2022', 2023.</li>
+<li style="list-style-type: '[2] ';">Barron, E.N., Cardaliaguet, P. and Jensen, R. Conditional essential suprema with applications. Applied Mathematics and Optimization, 48, 229-253, 2003.</li>
+<li style="list-style-type: '[3] ';">B´ elanger, A., Shreve, S. E. and Wong, D. A general framework for pricing credit risk. Mathematical Finance, 14(3), 317-350, 2004.</li>
+<li style="list-style-type: '[4] ';">Bensaid, J.P., Lesne, H. and Pag` es, H., and Scheinkman, J. Derivatives asset pricing with transaction costs. Math. Finance, 2, 63-86, 1992.</li>
+<li style="list-style-type: '[5] ';">Bielecki, T. and Rutkowski, M. Credit Risk. Modeling, Valuation and Hedging. Berlin: Springer Finance, 2002.</li>
+<li style="list-style-type: '[6] ';">Carassus, L. and Lepinette, E. Pricing without no-arbitrage condition in discrete-time. Journal of Mathematical Analysis and Applications, 505, 1, 125441, 2022.</li>
+<li style="list-style-type: '[7] ';">Choulli, T. and Deng, J. No-arbitrage for informational discrete-time market models. Stochastics, 89, 3-4, 628-653, 2017.</li>
+</ol>
+<ol>
+<li style="list-style-type: '[8] ';">Choulli, T. and Deng, J. Structure Conditions under Progressively Added Information. Theory Probab. Appl., 65, 3, 418-453, 2020.</li>
+<li style="list-style-type: '[9] ';">Choulli, T., Daveloose, C. and Vanmaele, M. A martingale representation theorem and valuation of defaultable securities. Mathematical Finance, 30, 4, 1527-1564, 2020.</li>
+<li style="list-style-type: '[10] ';">Choulli, T., Daveloose, C. and Vanmaele, M. Mortality/Longevity Risk-Minimization with or without Securitization. Mathematics 2021, 9, 1629, 2021.</li>
+<li style="list-style-type: '[11] ';">Choulli, T. and Yansori, S. Log-optimal portfolio without NFLVR: existence, complete characterization, and duality. Theory Probab. Appl. , 67, 2 229-245, 2022.</li>
+<li style="list-style-type: '[12] ';">Choulli, T. and Yansori, S. Log-optimal and num´ eraire portfolios for market models stopped at a random time. Finance and Stochastics, 26, 535-585, 2022.</li>
+<li style="list-style-type: '[13] ';">Choulli, T. and Yansori, S. Explicit description of all deflators for market models under random horizon with applications to NFLVR. Stochastic Processes and their Applications 151, 230-264, 2022.</li>
+<li style="list-style-type: '[14] ';">Dellacherie, C. and Meyer, P-A. Probabilit´ e et Potentiel, Th´ eorie des martingales. Chapter V-VIII. Hermann, 1980.</li>
+<li style="list-style-type: '[15] ';">El Mansour, M. and Lepinette, E. Conditional interior and conditional closure of a random sets. Journal of Optimization Theory and Applications, 187, 356-369, 2020.</li>
+<li style="list-style-type: '[16] ';">Fernholz, R. and Karatzas, I. Stochastic portfolio theory: An overview. A Bensoussan, Q Zhang (Eds.), Handbook in Numerical analysis: Mathematical modelling and Numerical Methods in Finance, 89-167, 2009.</li>
+<li style="list-style-type: '[17] ';">F¨ ollmer, H. and Schied, A. Stochastic Finance: An introduction in Discrete Time. 2nd ed., De Gruyter Studies in Mathematics, Walter de Gruyter, Berlin-New York, 2004.</li>
+<li style="list-style-type: '[18] ';">F¨ ollmer, H. and Kramkov, D. Optional decompositions under constraints. Probab. Theory Relat. Fields, 109, 1-25, 1997.</li>
+<li style="list-style-type: '[19] ';">He, S.W., Wang, J.G. and Yan, J.A. Semimartingale Theory and Stochastic Calculus. Kexue Chubanshe (Science Press)/CRC Press, Beijing/Boca Raton, 1992.</li>
+<li style="list-style-type: '[20] ';">Jacod, J. Calcul stochastique et probl` emes de martingale, 714, Springer, 1979.</li>
+<li style="list-style-type: '[21] ';">Jacod, J. and Shiryaev, A.N. Limit theorems for stochastic processes. Grundlehren der mathematischen Wissenschaften 288, a series of comprehensive studies in mathematics. Springer-Verlag Berlin, Heidelberg, 2003.</li>
+<li style="list-style-type: '[22] ';">Jeulin, T. Semi-martingales et grossissement de filtration. Springer-Verlag, 833, Lecture Notes in Mathematics, Berlin, Heidelberg, New York, 1980.</li>
+<li style="list-style-type: '[23] ';">Kabanov, Y. and Safarian, M. Markets with transaction costs. Mathematical Theory. SpringerVerlag, 2009.</li>
+<li style="list-style-type: '[24] ';">Kabanov, Y. and Lepinette, E. Essential supremum with respect to a random partial order. Journal of Mathematical Economics, 49, 6, 478-487, 2013.</li>
+<li style="list-style-type: '[25] ';">Karatzas, I. and Shreve, S. Method of Mathematical Finance. Springer-Verlag, 1988.</li>
+</ol>
+<ol>
+<li style="list-style-type: '[26] ';">Kladivko, K. and Zervos, M. Mean-variance hedging of contingent claims with random maturity. Mathematical Finance, 33, 4, 977-1411, 2023.</li>
+<li style="list-style-type: '[27] ';">Schal, M. Martingale measures and hedging in discrete time financial markets. Math. Oper. Res., 24, 509-528, 1999.</li>
+<li style="list-style-type: '[28] ';">Szimayer, A. A reduced form model for ESO valuation modelling the effects of employee departure and takeovers on the value of employee share options. Mathematical Methods of Operation Research, 59, 111-128, 2004.</li>
+<li style="list-style-type: '[29] ';">Sircar, R and Xiong, W. A general framework for evaluating executive stock options. Journal of Economic Dynamics and Control, 31, 2317-2349, 2007.</li>
+<li style="list-style-type: '[30] ';">Carr, P. and Linetsky, V. The valuation of executive stock options in an intensity-based framework. European Finance Review, 4, 211-230, 2000.</li>
+<li style="list-style-type: '[31] ';">Leung, T. and Sircar, R. Accounting for risk aversion, vesting, job termination risk and multiple exercises in valuation of employee stock options. Mathematical Finance, 19, 99-128, 2009.</li>
+</ol>
+</div>
+</body>
+</html>

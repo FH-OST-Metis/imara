@@ -1,0 +1,757 @@
+<doctag><page_header><loc_15><loc_131><loc_30><loc_369>arXiv:2401.03342v3  [math.CV]  20 Aug 2025</page_header>
+<section_header_level_1><loc_99><loc_60><loc_403><loc_84>HARTOGS AND OPEN EMBEDDINGS, PROPER MAPS, COMPACTIFICATIONS, COHOMOLOGIES</section_header_level_1>
+<section_header_level_1><loc_231><loc_118><loc_271><loc_124>S. Feklistov</section_header_level_1>
+<section_header_level_1><loc_226><loc_150><loc_273><loc_157>ABSTRACT</section_header_level_1>
+<text><loc_88><loc_160><loc_413><loc_202>In these (not-completed) notes, we study the Hartogs extension phenomenon for holomorphic sections of holomorphic vector bundles over complex analytic varieties. Namely, we study properties of the Hartogs extension phenomenon with respect to the open embeddings, proper maps, compactifications, relations with the compact supports first cohomology, and the Lefschetz type property for sections of sheaves. As an application, we get a convex-geometric criterion of the Hartogs phenomenon for complex almost homogeneous algebraic G-varieties, where G is a semiabelian variety.</text>
+<section_header_level_1><loc_59><loc_213><loc_96><loc_220>Contents</section_header_level_1>
+<otsl><loc_58><loc_230><loc_442><loc_443><fcel>1 Introduction<lcel><lcel><fcel>2<nl><fcel>2 Historical review<lcel><lcel><fcel>4<nl><fcel>3 Hartogs extension phenomenon<lcel><lcel><fcel>5<nl><ecel><fcel>3.1<fcel>Hartogs and open embeddings . . . . . . . . . . . . . . . . . . . .<fcel>8<nl><ecel><fcel>3.2<fcel>Hartogs and proper surjective holomorphic maps . . . . . . . . . .<fcel>10<nl><ecel><fcel>3.3<fcel>Reduction to the case of holomorphic line bundles . . . . . . . . . .<fcel>13<nl><fcel>4 ( b,σ ) -Compactified pairs<lcel><lcel><fcel>17<nl><ecel><fcel>4.1<fcel>Fibered categories . . . . . . . . . . . . . . . . . . . . . . . . . . .<fcel>17<nl><ecel><fcel>4.2<fcel>Fibered categories which are considered and ( b,σ ) -compactified pairs<fcel>17<nl><ecel><fcel>4.3<fcel>On ( b,σ ) -compactifiable varieties . . . . . . . . . . . . . . . . . .<fcel>19<nl><ecel><fcel>4.4<fcel>Almost homogeneous algebraic G-manifolds . . . . . . . . . . . . .<fcel>19<nl><fcel>5 Hartogs for (1 ,σ ) -compactified pairs<lcel><lcel><fcel>20<nl><ecel><fcel>5.1<fcel>Case of (1 ,σ ) -compactifiability of ( X, F ) . . . . . . . . . . . . . .<fcel>21<nl><ecel><fcel>5.2<fcel>Case of ( b,σ ) -compactifiability of ( X, O X ) , b > 1 . . . . . . . . .<fcel>23<nl><fcel>6<fcel>Almost homogeneous algebraic G -varieties<lcel><fcel>24<nl><ecel><fcel>6.1<fcel>Calculations for Γ( Z, O X ′ | Z ) . . . . . . . . . . . . . . . . . . . .<fcel>24<nl><ecel><fcel>6.2<fcel>Case of semiabelian variety G . . . . . . . . . . . . . . . . . . . .<fcel>24<nl><ecel><fcel>6.3<fcel>Example . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .<fcel>26<nl></otsl>
+<page_break>
+<page_header><loc_123><loc_22><loc_378><loc_29>Hartogs and open embeddings, proper maps, compactifications, cohomologies</page_header>
+<section_header_level_1><loc_59><loc_47><loc_126><loc_53>1 Introduction</section_header_level_1>
+<text><loc_59><loc_63><loc_440><loc_77>The classical Hartogs extension theorem states that for every domain W ⊂ C n ( n > 1) and a compact set K ⊂ W such that W \ K is a connected set, the restriction homomorphism Γ( W, O ) → Γ( W \ K, O ) is an isomorphism.</text>
+<text><loc_59><loc_80><loc_442><loc_101>A natural question arises: is this true for general complex analytic spaces? This phenomenon has been extensively studied in many situations, including Stein manifolds and spaces, ( n -1) -complete normal complex spaces, and so on (see, for instance, [24, 1, 6, 25, 34, 36, 37, 32, 16, 31, 40]).</text>
+<text><loc_59><loc_104><loc_441><loc_118>In this paper, we use classical homological algebra methods (see, for instance, [35, 23]). For instance, we often use [23, Propositions 1.5.6, 1.8.7, 1.8.8.], facts from [23, Chapter II], and the diagram chasing.</text>
+<text><loc_59><loc_122><loc_443><loc_198>In Section 3, we introduce the notion of the Hartogs sheaves (Definition 3.1). It is convenient to give this in more general settings. Using the Andreotti-Hill trick [1, corollary 4.3], we get for the case of normal complex analytic varieties that the finiteness of H 1 c ( X, O X ) implies that O X is Hartogs (Proposition 3.1). For any locally free O X -module of finite rank F , we obtain that the vanishing of H 1 c ( X, F ) implies that F is Hartogs (Lemma 3.2). Note that the Andreotti-Hill trick does not apply to arbitrary locally free O X -modules of finite rank. So, we have a natural question: is it true that the condition dim C H 1 c ( X, F ) < ∞ implies that F is Hartogs? This problem can be reduced to the case of holomorphic line bundles associated with effective Cartier divisors (Section 3.3). We solved this problem (Theorem 3.3) for the case of complex analytic manifolds X with the following additional assumption: X \ K admits non-constant holomorphic functions for a sufficiently large compact set K ⊂ X , and each irreducible divisor of X with compact support is F -removable (Definition 3.2). For example, each exceptional irreducible divisor is F -removable for any locally free O X -module of finite rank F (Example 3.6).</text>
+<text><loc_58><loc_201><loc_442><loc_244>With some additional conditions, we may prove that the sheaf is Hartogs if and only if it is Hartogs over each domain (Corollary 3.4, Proposition 3.2). If a complex analytic variety has only one topological end, then we obtain the necessary and sufficient conditions of the Hartogs property (Theorem 3.1, Theorem 3.2). For example, each locally free O X -module of finite rank over a cohomological ( n -1) -complete complex manifold is Hartogs (Example 3.2), and for any domain X with connected boundary of a complex manifold X ′ with H 1 ( X ′ , O X ′ ) = 0 , we have that H 1 c ( X, O X ) = 0 implies that O X is Hartogs (Example 3.4).</text>
+<text><loc_59><loc_246><loc_442><loc_294>The Hartogs property has a nice behavior with respect to the proper surjective holomorphic maps (Propositions 3.3, 3.4, 3.5). In particular, if X is a holomorphically convex noncompact normal complex analytic variety, R : X → Y is the corresponding Remmert reduction, and F ∈ V ect ( O X ) , then F is Hartogs if and only if dim Y > 1 (Corollary 3.1). More examples of noncompact holomorphically convex varieties can be obtained the following way: let X ′ be a normal complex projective variety, D be an effective basepoint-free Cartier divisor with connected support Supp( D ) , then X ′ \ Supp( D ) is holomorphically convex; moreover, the Remmert reduction induced by the holomorphic map associated with the complete linear system | D | (Example 3.5).</text>
+<text><loc_59><loc_297><loc_443><loc_387>In Section 4, we consider very specific open embeddings. Namely, we consider ( b, σ ) -compactified pairs (Definition 4.2). Roughly speaking, the pair ( X, F ) (here X is a complex analytic variety, F is a sheaf of C -vector spaces) is ( b, σ ) -compactified if X admits a nice compactification X ′ such that X ′ \ X is a proper analytic set which has only b connected components, and the sheaf F extends to a sheaf F ′ over X ′ such that dim C H 1 ( X ′ , F ′ ) = σ . For pairs of the form ( X, O X ) , we have some facts on numbers ( b, σ ) . First, by the Nagata theorem, each complex algebraic variety admits a compactification in the category of complex algebraic varieties. It follows that each complex algebraic variety is ( b, σ ) -compactifiable for some ( b, σ ) . Now if X is a complex algebraic manifold (i.e., nonsingular complex algebraic variety), then the pair ( b, σ ) does not depend on any compactification in the category of complex analytic manifolds. Namely, b is exactly the number of topological ends of X , and σ is exactly the dimension of the Albanese variety of X (Proposition 4.1). In the case of almost homogeneous algebraic G -manifolds, σ is exactly the dimension of the Albanese variety of the open G -orbit (Remark 4.5). If G is a connected complex linear algebraic group, then σ = 0 , and the Sumihiro theorem implies that each complex algebraic G -manifold admits a G -equivariant compactification; hence X is ( b, 0) -compactifiable if and only if X has only b topological ends (Remark 4.5).</text>
+<text><loc_59><loc_390><loc_441><loc_418>In Section 5, we study the Hartogs property for (1 , σ ) -compactified pairs (Theorem 5.1) and its relation with the Lefschetz property (Corollary 5.1, Remark 5.1). If the analytic set X ′ \ X is the support of a nef divisor, then we obtain a characterization of the Hartogs property in terms of the Iitaka and numerical dimensions of this divisor (Corollary 5.2).</text>
+<text><loc_59><loc_421><loc_441><loc_456>In Section 6, we consider the case of almost homogeneous algebraic G -varieties and an example. We describe the space of germs of holomorphic functions at infinity analytic set (more precisely, the space Γ( Z, O X ′ | Z ) , where Z = X ′ \ X for some G -equivariant compactification X ′ of X ). If G is a semiabelian variety (i.e., G is an extension of an abelian variety by an algebraic torus), then we describe the space Γ( Z, O X ′ | Z ) in a more precise way. In particular, this implies the convex-geometric criterion of the Hartogs phenomenon (Theorem 6.1).</text>
+<page_footer><loc_248><loc_468><loc_252><loc_475>2</page_footer>
+<page_break>
+<page_header><loc_123><loc_22><loc_378><loc_29>Hartogs and open embeddings, proper maps, compactifications, cohomologies</page_header>
+<section_header_level_1><loc_59><loc_47><loc_111><loc_53>Some notation.</section_header_level_1>
+<unordered_list><list_item><loc_81><loc_59><loc_342><loc_66>Sh ( X ) is the category of sheaves of abelian groups over topological space X .</list_item>
+<list_item><loc_81><loc_68><loc_351><loc_76>Sh C ( X ) is the category of sheaves of C -vector spaces over topological space X .</list_item>
+<list_item><loc_81><loc_78><loc_232><loc_85>Mod ( C ) is the category of C -vector spaces.</list_item>
+<list_item><loc_81><loc_87><loc_361><loc_95>Coh ( O X ) is the category of coherent O X -modules over complex analytic space X .</list_item>
+<list_item><loc_81><loc_97><loc_419><loc_104>V ect ( O X ) is the category of locally free O X -modules of finite ranks over complex analytic space X .</list_item>
+<list_item><loc_81><loc_106><loc_224><loc_113>Top is the category of topological spaces.</list_item>
+<list_item><loc_81><loc_115><loc_442><loc_129>An is the category of complex analytic varieties (objects: reducible, irreducible, and countable at infinity complex analytic spaces; morphisms: holomorphic maps).</list_item>
+<list_item><loc_81><loc_132><loc_390><loc_139>An norm is the category of normal complex analytic varieties (it is a full subcategory of An ).</list_item>
+<list_item><loc_81><loc_141><loc_363><loc_149>An sm is the category of complex analytic manifolds (it is a full subcategory of An ).</list_item>
+<list_item><loc_81><loc_151><loc_443><loc_171>Al a is the analytification of the category of complex algebraic varieties (objects: complex algebraic varieties considered as complex analytic varieties; morphisms: morphisms of algebraic varieties considered as holomorphic maps).</list_item>
+<list_item><loc_81><loc_174><loc_359><loc_182>Al a norm is the analytification of the category of normal complex algebraic varieties.</list_item>
+<list_item><loc_81><loc_183><loc_367><loc_191>Al a sm is the analytification of the category of nonsingular complex algebraic varieties.</list_item>
+<list_item><loc_81><loc_193><loc_443><loc_200>An G is the category of complex analytic G -varieties (here G is a complex Lie group acting holomorphically).</list_item>
+<list_item><loc_81><loc_202><loc_441><loc_216>Al a G is the analytification of the category of complex algebraic G -varieties (here G is a complex algebraic group acting algebraically).</list_item>
+<list_item><loc_81><loc_218><loc_375><loc_227>Al a G,norm is the analytification of the category of normal complex algebraic G -varieties.</list_item>
+<list_item><loc_81><loc_228><loc_383><loc_237>Al a G,sm is the analytification of the category of nonsingular complex algebraic G -varieties.</list_item>
+<list_item><loc_81><loc_238><loc_324><loc_245>If T : A → B is a functor between abelian categories, then we denote by</list_item>
+</unordered_list>
+<formula><loc_224><loc_249><loc_305><loc_256></formula>
+<text><loc_88><loc_260><loc_265><loc_267>the functor between corresponding derived categories.</text>
+<unordered_list><list_item><loc_81><loc_270><loc_441><loc_284>If Z ⊂ X is a closed subset of the topological space X , i : Z ↪ → X is the canonical closed immersion, and F is a sheaf over X , then the inverse image sheaf i -1 F is often denoted by F| Z .</list_item>
+</unordered_list>
+<page_footer><loc_248><loc_468><loc_252><loc_475>3</page_footer>
+<page_break>
+<page_header><loc_123><loc_22><loc_378><loc_29>Hartogs and open embeddings, proper maps, compactifications, cohomologies</page_header>
+<section_header_level_1><loc_59><loc_47><loc_145><loc_53>2 Historical review</section_header_level_1>
+<text><loc_59><loc_61><loc_113><loc_68>To be completed</text>
+<page_footer><loc_248><loc_468><loc_252><loc_475>4</page_footer>
+<page_break>
+<page_header><loc_123><loc_22><loc_378><loc_29>Hartogs and open embeddings, proper maps, compactifications, cohomologies</page_header>
+<section_header_level_1><loc_59><loc_47><loc_205><loc_53>3 Hartogs extension phenomenon</section_header_level_1>
+<text><loc_59><loc_61><loc_441><loc_82>Let X be a connected locally compact Hausdorff topological space (briefly, CLCH-space ), and let Sh C ( X ) be the category of sheaves of C -vector spaces over X , and let Mod ( C ) be the category of C -vector spaces. Let K ⊂ X be a compact set. We have the following left exact functors:</text>
+<formula><loc_123><loc_87><loc_377><loc_103></formula>
+<text><loc_59><loc_107><loc_194><loc_114>and the canonical morphisms of functors:</text>
+<section_header_level_1><loc_59><loc_141><loc_102><loc_146>Remark 3.1.</section_header_level_1>
+<unordered_list><list_item><loc_81><loc_152><loc_382><loc_160>Let i K : X \ K ↪ → X be the canonical open immersion. We obtain the following functors:</list_item>
+</unordered_list>
+<formula><loc_223><loc_164><loc_231><loc_169></formula>
+<formula><loc_207><loc_166><loc_322><loc_181></formula>
+<formula><loc_87><loc_186><loc_201><loc_194></formula>
+<unordered_list><list_item><loc_81><loc_198><loc_373><loc_205>Let j K : K ↪ → X be the canonical closed immersion. We obtain the following functors:</list_item>
+</unordered_list>
+<formula><loc_203><loc_210><loc_327><loc_218></formula>
+<formula><loc_87><loc_226><loc_189><loc_234></formula>
+<text><loc_59><loc_239><loc_441><loc_253>Let Γ( X, -): Sh C ( X ) → Mod ( C ) be the global sections functor. We have the following canonical morphisms of the left exact functors:</text>
+<formula><loc_200><loc_259><loc_300><loc_274></formula>
+<text><loc_59><loc_282><loc_441><loc_297>Let us remark that Γ( X, -) ◦ Γ X \ K = Γ X \ K ( X, -) and Γ( X, -) ◦ Γ K = Γ K ( X, -) . For any injective object I ∈ Sh C ( X ) , we have the following exact sequence:</text>
+<formula><loc_169><loc_302><loc_331><loc_309></formula>
+<text><loc_59><loc_317><loc_350><loc_324>It follows that for any sheaf F ∈ Sh C ( X ) we obtain the following distinguished triangle:</text>
+<formula><loc_164><loc_329><loc_442><loc_337></formula>
+<text><loc_59><loc_342><loc_329><loc_348>Definition 3.1. Let X be a CLCH-space, F ∈ Sh C ( X ) , K ⊂ X be a compact set.</text>
+<ordered_list><list_item><loc_78><loc_356><loc_317><loc_362>The pair ( K,X ) is called a Hartogs pair , if X \ K is a connected set.</list_item>
+<list_item><loc_78><loc_367><loc_441><loc_381>Let ( K,X ) is a Hartogs pair. We say that the sheaf F is Hartogs w.r.t. ( K,X ) , if the canonical morphism Γ( X, F ) → Γ( X \ K, F ) is an epimorphism.</list_item>
+<list_item><loc_78><loc_386><loc_392><loc_392>We say that the sheaf F is Hartogs if F is Hartogs with respect to every Hartogs pair ( K,X )</list_item>
+</ordered_list>
+<text><loc_59><loc_399><loc_435><loc_406>A complex analytic space is called complex analytic variety if it is reducible, irreducible, and countable at infinity.</text>
+<text><loc_58><loc_409><loc_441><loc_429>Example 3.1. Note that if X is a compact analytic space and F is a coherent O X -module, then F is not Hartogs. Let ( K,X ) be a Hartogs pair such that U = X \ K is a Stein space. The Cartan theorem A implies that dim C Γ( U, F ) = ∞ , but the Cartan-Serre theorem implies that dim C Γ( X, F ) < ∞ .</text>
+<text><loc_59><loc_435><loc_442><loc_456>Note that a noncompact CLCH-space X has only one topological end if and only if for any compact set K ⊂ X the pair ( µ ( K ) , X ) is a Hartogs, where µ ( K ) is the union of K with all connected components of X \ K that are relatively compact in X (see [19, 18] for more details about topological ends).</text>
+<formula><loc_219><loc_119><loc_281><loc_136></formula>
+<page_footer><loc_248><loc_468><loc_252><loc_475>5</page_footer>
+<page_break>
+<page_header><loc_123><loc_22><loc_378><loc_29>Hartogs and open embeddings, proper maps, compactifications, cohomologies</page_header>
+<text><loc_59><loc_47><loc_397><loc_53>Remark 3.2. Let us remember on the topological ends. Let X be a topological space, and suppose that</text>
+<formula><loc_203><loc_58><loc_297><loc_65></formula>
+<text><loc_59><loc_69><loc_443><loc_82>is an ascending sequence of compact subsets of X whose interiors cover X (that is, X is hemicompact). The complementary sets C n := X \ K n form an inverse sequence:</text>
+<formula><loc_204><loc_86><loc_296><loc_93></formula>
+<text><loc_59><loc_97><loc_328><loc_104>Define the set of ends E ( X ) as the collection of sequences { U n } of non-empty sets</text>
+<formula><loc_202><loc_108><loc_298><loc_115></formula>
+<text><loc_59><loc_119><loc_199><loc_125>where U n is a connected component of C n .</text>
+<text><loc_58><loc_129><loc_413><loc_136>The number of ends does not depend on the specific sequence { K n } of compact sets and is denoted by e ( X ) .</text>
+<text><loc_58><loc_139><loc_441><loc_173>The definition of ends given above applies only to spaces X that possess an exhaustion by compact sets. Let X be an arbitrary topological space (which is not necessarily hemicompact). Consider the direct system { K } of compact subsets of X and inclusion maps. There is a corresponding inverse system { π 0 ( X \ K ) } , where π 0 ( Y ) denotes the set of connected components of a space Y , and each inclusion map Y ↪ → Z induces a function π 0 ( Y ) → π 0 ( Z ) . Define the set of ends E ( X ) as the inverse limit of this inverse system.</text>
+<text><loc_59><loc_179><loc_441><loc_193>Let Γ c ( X, -): Sh C ( X ) → Mod ( C ) be the global sections functor with compact supports. Define the sections at boundary functor by the rule:</text>
+<formula><loc_126><loc_197><loc_374><loc_210></formula>
+<text><loc_59><loc_216><loc_247><loc_223>Taking the direct limit over compact sets in (1), we obtain</text>
+<formula><loc_198><loc_226><loc_442><loc_241></formula>
+<text><loc_59><loc_243><loc_191><loc_250>and the following distinguished triangle:</text>
+<formula><loc_170><loc_254><loc_442><loc_262></formula>
+<text><loc_59><loc_268><loc_326><loc_275>Moreover, we have the following commutative diagram of distinguished triangles:</text>
+<formula><loc_141><loc_285><loc_442><loc_326></formula>
+<text><loc_58><loc_334><loc_442><loc_348>We only need the global sections of sheaves. We obviously obtain the following lemma, which follows from (3), (2), (4).</text>
+<unordered_list><list_item><loc_59><loc_350><loc_441><loc_364>Lemma 3.1. 1. Let X be a noncompact CLCH-space and F ∈ Sh C ( X ) . If H 1 c ( X, F ) = 0 , then the canonical morphism Γ( X, F ) → Γ( ∂X, F ) is an epimorphism.</list_item>
+<list_item><loc_78><loc_369><loc_441><loc_384>Let X be a noncompact CLCH-space and F ∈ Sh C ( X ) . If for any compact set K ⊂ X there exists a compact set K ′ ⊂ X such that K ⊂ K ′ and H 1 K ′ ( X, F ) = 0 , then H 1 c ( X, F ) = 0 .</list_item>
+<list_item><loc_78><loc_388><loc_441><loc_408>Let X be a noncompact CLCH-space and F ∈ Sh C ( X ) . Let ( K,X ) be a Hartogs pair. Suppose the canonical morphism Γ( X, F ) → Γ( ∂X, F ) is an epimorphism and the canonical morphism Γ( X \ K, F ) → Γ( ∂X, F ) is a monomorphism. Then F is Hartogs w.r.t ( K,X ) .</list_item>
+</unordered_list>
+<text><loc_59><loc_411><loc_441><loc_431>Remark 3.3. The identity theorem for locally free O X -modules of finite rank: let F be a locally free O X -module of finite rank over a complex analytic variety X and f ∈ Γ( X, F ) ; if there exists an open subset U ⊂ X such that f | U = 0 , then f = 0 .</text>
+<text><loc_58><loc_435><loc_441><loc_456>Assume that F is an arbitrary coherent O X -module. There exists an analytic thin subset S ⊂ X such that F| X \ S is a locally free O X \ S -module of finite rank [9, Chapter 1, Section 7]. If the restriction homomorphism Γ( X, F ) → Γ( X \ S, F ) is a monomorphism, then the identity theorem is also true.</text>
+<page_footer><loc_248><loc_468><loc_252><loc_475>6</page_footer>
+<page_break>
+<page_header><loc_123><loc_22><loc_378><loc_29>Hartogs and open embeddings, proper maps, compactifications, cohomologies</page_header>
+<text><loc_59><loc_47><loc_441><loc_74>Define S m ( F ) := { x ∈ X | codh F x ≤ m } . Note that S = S n -1 ( F ) , S i ( F ) ⊂ S i +1 ( F ) . If dim S i +1 ( F ) < i +1 for all i (in particular, dim S < n -1 ), then the restriction homomorphism Γ( X, F ) → Γ( X \ S, F ) is a monomorphism [9, Chapter II, Theorem 5.8]. This is also true for the reflexive sheaves over normal complex analytic varieties with dim S < n -1 [9, Chapter II, Theorem 5.29].</text>
+<text><loc_59><loc_80><loc_428><loc_87>Now we give the sufficient condition of the Hartogs phenomenon for the locally free O X -modules of finite ranks.</text>
+<text><loc_59><loc_90><loc_441><loc_104>Lemma 3.2. Let X be a noncompact complex analytic variety, and let F ∈ V ect ( O X ) be a locally free O X -module of finite rank. If H 1 c ( X, F ) = 0 , then the canonical morphism</text>
+<formula><loc_213><loc_108><loc_287><loc_114></formula>
+<text><loc_59><loc_119><loc_333><loc_125>is an isomorphism. In particular, F is Hartogs and X has only one topological end.</text>
+<text><loc_59><loc_133><loc_441><loc_147>Proof. By the identity theorem (see Remark 3.3), Γ( X \ K, F ) → Γ( ∂X, F ) is a monomorphism for any Hartogs pair ( K,X ) . Finally, we use lemma 3.1.</text>
+<text><loc_59><loc_152><loc_441><loc_165>Remark 3.4. Let F be a coherent O X -module and S be the singular locus of F . If the restriction homomorphism F ( X ) →F ( X \ S ) is an injective, then the Lemma 3.2 is also true for that F (see Remark 3.3).</text>
+<text><loc_59><loc_168><loc_443><loc_182>Example 3.2. Let X be a cohomological ( n -1) -complete complex manifold, n > 1 , and F be a locally free O X -module of finite rank. By [41, Proposition 1], it follows that H 1 c ( X, F ) = 0 . In this case, F is Hartogs.</text>
+<text><loc_59><loc_187><loc_441><loc_202>In the case of normal complex analytic spaces and the structure sheaves, we only require the finite dimension of the space H 1 c ( X, O X ) for the Hartogs phenomenon.</text>
+<text><loc_59><loc_204><loc_441><loc_218>Proposition 3.1. Let X be a noncompact normal complex analytic variety that has only one topological end. If m := dim C H 1 c ( X, O X ) < ∞ , then the canonical homomorphism</text>
+<formula><loc_207><loc_222><loc_293><loc_229></formula>
+<text><loc_59><loc_233><loc_250><loc_240>is an isomorphism. In particular, the sheaf O X is Hartogs.</text>
+<text><loc_59><loc_247><loc_226><loc_254>Proof. We have the following long exact sequence:</text>
+<text><loc_155><loc_268><loc_155><loc_269>/d47</text>
+<formula><loc_136><loc_264><loc_364><loc_273></formula>
+<text><loc_155><loc_269><loc_155><loc_270>/d47</text>
+<text><loc_222><loc_268><loc_222><loc_269>/d47</text>
+<text><loc_222><loc_269><loc_222><loc_270>/d47</text>
+<text><loc_295><loc_268><loc_295><loc_269>/d47</text>
+<text><loc_295><loc_269><loc_295><loc_270>/d47</text>
+<text><loc_352><loc_268><loc_352><loc_269>/d47</text>
+<text><loc_352><loc_269><loc_352><loc_270>/d47</text>
+<text><loc_59><loc_280><loc_441><loc_294>Now we use the Andreotti-Hill trick (see [1, corollary 4.3]). We may assume that Γ( ∂X, O X ) = C . Consider an equivalence class f ∈ Γ( ∂X, O X ) of a nonconstant holomorphic function on X \ K .</text>
+<text><loc_379><loc_281><loc_379><loc_287>/negationslash</text>
+<text><loc_58><loc_297><loc_442><loc_325>We may assume that c ( f i ) are non-zero for any 1 ≤ i ≤ m +1 replacing f by af + b for some a, b ∈ C \ { 0 } . So, the elements c ( f ) , c ( f 2 ) , · · · , c ( f m +1 ) are non-zero and linearly dependent. This means that there exists a non-zero polynomial P ∈ C [ T ] of degree m + 1 such that c ( P ( f )) = 0 . It follows that there is a non-constant holomorphic function H ∈ Γ( Y, O ) such that r ( H ) = P ( f ) .</text>
+<text><loc_59><loc_328><loc_443><loc_349>Now the elements c ( f ) , c ( r ( H ) f ) , · · · , c ( r ( H ) m f ) are non-zero and linearly dependent. Hence there exists a polynomial P 1 ∈ C [ T ] such that c ( P 1 ( r ( H )) f ) = 0 . It follows that there exists a holomorphic function F ∈ Γ( Y, O ) such that r ( F ) = P 1 ( r ( H )) f . Denoting G = P 1 ( H ) , we obtain r ( F ) = r ( G ) f .</text>
+<text><loc_415><loc_360><loc_415><loc_366>/negationslash</text>
+<text><loc_59><loc_352><loc_442><loc_380>Since r ( G m +1 H ) = r ( G m +1 P ( F/G )) , it follows that G m +1 H = G m +1 P ( F/G ) . Hence, we obtain H = P ( F/G ) on Y \{ G = 0 } . It follows that F/G ∈ Γ( Y \{ G = 0 } , O ) and is locally bounded on Y \{ G = 0 } . Since G = 0 , the Riemann extension theorem implies that F/G ∈ Γ( Y, O ) and r ( F/G ) = f . Therefore, the canonical homomorphism r is isomorphic. The last statement follows from Lemma 3.1.</text>
+<section_header_level_1><loc_59><loc_385><loc_102><loc_391>Remark 3.5.</section_header_level_1>
+<ordered_list><list_item><loc_78><loc_397><loc_379><loc_405>Note that a noncompact CLCH-space X has at most dim C H 1 c ( X, O X ) topological ends.</list_item>
+<list_item><loc_78><loc_409><loc_408><loc_416>Proposition 3.1 is still true if we replace O X by a sheaf of ideals of O X or by a free O X -modules.</list_item>
+<list_item><loc_78><loc_421><loc_323><loc_427>We may use the Andreotti-Hill trick to the following long exact sequence</list_item>
+</ordered_list>
+<formula><loc_167><loc_431><loc_363><loc_439></formula>
+<text><loc_88><loc_443><loc_441><loc_457>Hence if X is a noncompact normal complex analytic variety and ( K,X ) is a Hartogs pair, then the condition dim C H 1 K ( X, O X ) < ∞ implies that the sheaf O X is Hartogs w.r.t. ( K,X ) .</text>
+<page_footer><loc_248><loc_468><loc_252><loc_475>7</page_footer>
+<page_break>
+<page_header><loc_123><loc_22><loc_378><loc_29>Hartogs and open embeddings, proper maps, compactifications, cohomologies</page_header>
+<ordered_list><list_item><loc_78><loc_47><loc_443><loc_67>The Andreotti-Hill trick may be applied to the sheaf of meromorphic function M over a noncompact complex analytic variety (which is not necessarily normal). Note that the identity theorem is also true for the meromorphic functions. It follows that Lemma 3.2 is true for this case.</list_item>
+</ordered_list>
+<text><loc_59><loc_72><loc_441><loc_87>Question: Let X be a noncompact normal complex analytic variety which has only one topological end, and let F be a locally free O X -module of finite rank. Is it true that the condition dim C H 1 c ( X, F ) < ∞ implies that F is Hartogs?</text>
+<text><loc_59><loc_89><loc_442><loc_124>This problem can be reduced to the case of holomorphic line bundles associated with effective Cartier divisors (see section 3.3). We solved this problem for the case of complex analytic manifolds X with the following additional assumption: X \ K have non-constant holomorphic functions for a sufficiently large compact set K ⊂ X and any irreducible divisor D of X with compact support if F -removable (i.e., the restriction homomorphism Γ( X, F ) → Γ( X \ D, F ) is an epimorphism).</text>
+<section_header_level_1><loc_59><loc_133><loc_183><loc_138>3.1 Hartogs and open embeddings</section_header_level_1>
+<text><loc_59><loc_144><loc_441><loc_158>Let X be a CLCH-space. For any domain W ⊂ X (i.e., open and connected subset of X ) and for any compact subset K ⊂ W , there exists the following functor:</text>
+<formula><loc_148><loc_160><loc_352><loc_168></formula>
+<text><loc_59><loc_170><loc_442><loc_183>Remark 3.6. If X is a connected topological space, W ⊂ X is a domain, and ( K,W ) is a Hartogs pair, then ( K,X ) is a Hartogs pair.</text>
+<text><loc_59><loc_187><loc_364><loc_194>Since W \ K = ( X \ K ) ∩ W , it follows that the following natural isomorphism of functors:</text>
+<formula><loc_167><loc_197><loc_334><loc_204></formula>
+<text><loc_59><loc_208><loc_223><loc_215>In particular, we obtain the following easy lemma.</text>
+<text><loc_59><loc_217><loc_440><loc_231>Lemma 3.3. Let X be a CLCH-space, F ∈ Sh C ( X ) , W ⊂ X be a domain, and ( K,W ) be a Hartogs pair. If F| W is Hartogs w.r.t. ( K,W ) , then F is Hartogs w.r.t. ( K,X ) .</text>
+<text><loc_58><loc_235><loc_441><loc_250>With additional conditions, we obtain a converse statement to Lemma 3.3. First, for the sheaf F ∈ Sh C ( X ) , we define the irregularity of F as σ 1 ( X, F ) := dim C H 1 ( X, F ) . Let us define the irregularity of X as the number σ 1 ( X, O X ) .</text>
+<section_header_level_1><loc_59><loc_251><loc_104><loc_257>Example 3.3.</section_header_level_1>
+<ordered_list><list_item><loc_78><loc_261><loc_441><loc_276>σ 1 ( X, O X ) = 0 for projective spaces CP n , flag varieties (generally, for spherical varieties [26, Corollaire 1]).</list_item>
+</ordered_list>
+<text><loc_128><loc_281><loc_128><loc_287>/negationslash</text>
+<ordered_list><list_item><loc_78><loc_280><loc_439><loc_288>σ 1 ( X, O X ) = 0 for complex tori (in particular, for abelian varieties). If X = C n / Λ , then σ 1 ( X, O X ) = n .</list_item>
+</ordered_list>
+<formula><loc_270><loc_288><loc_443><loc_308></formula>
+<ordered_list><list_item><loc_78><loc_297><loc_441><loc_324>If X = CP 1 , F = O CP 1 ( n ) , then σ 1 ( X, F ) = -n -1 , if n < -1 . . Actually, for the ical sheaf K CP 1 we have K CP 1 ∼ = O CP 1 ( -2) . The Serre duality implies that σ 1 ( X, O CP 1 ( n )) = dim C ( H 0 ( CP 1 , O CP 1 ( -n -2))) .</list_item>
+</ordered_list>
+<text><loc_59><loc_325><loc_441><loc_346>Lemma 3.4. Let X be a CLCH-space, F ∈ Sh C ( X ) , W ⊂ X be a domain, and ( K,W ) be a Hartogs pair. Suppose there exists a CLCH-space X ′ , a sheaf F ′ ∈ Sh C ( X ′ ) with σ 1 ( X ′ , F ′ ) = 0 , and an open embedding i : X ↪ → X ′ such that F = i -1 F ′ . If F is Hartogs w.r.t. ( K,X ) , then F| W is Hartogs w.r.t. ( K,W ) .</text>
+<text><loc_59><loc_353><loc_280><loc_360>Proof. The proof follows from the following commutative diagram:</text>
+<text><loc_184><loc_369><loc_192><loc_377>✲</text>
+<text><loc_261><loc_369><loc_269><loc_377>✲</text>
+<picture><loc_130><loc_372><loc_370><loc_455></picture>
+<text><loc_353><loc_369><loc_361><loc_377>✲</text>
+<page_footer><loc_248><loc_468><loc_252><loc_475>8</page_footer>
+<page_break>
+<page_header><loc_123><loc_22><loc_378><loc_29>Hartogs and open embeddings, proper maps, compactifications, cohomologies</page_header>
+<text><loc_59><loc_61><loc_434><loc_68>In the case of the structure sheaf of a noncompact normal complex analytic variety, we obtain the following results.</text>
+<text><loc_59><loc_71><loc_443><loc_91>Proposition 3.2. Let X be a noncompact normal complex analytic variety, W ⊂ X be a domain, and ( K,W ) be a Hartogs pair. Suppose there exists a CLCH-space X ′ , a sheaf F ′ ∈ Sh C ( X ′ ) with σ 1 ( X ′ , F ′ ) < ∞ , and an open embedding i : X ↪ → X ′ such that O X = i -1 F ′ . If O X is Hartogs w.r.t. ( K,X ) , then O X | W is Hartogs w.r.t. ( K,W ) .</text>
+<text><loc_59><loc_99><loc_337><loc_106>Proof. The proof follows from Lemma 3.3, from the following commutative diagram</text>
+<picture><loc_117><loc_117><loc_382><loc_184></picture>
+<text><loc_59><loc_188><loc_298><loc_195>and from the Andreotti-Hill trick applying to the last line of this diagram.</text>
+<text><loc_59><loc_203><loc_338><loc_209>If a CLCH-space has only one topological end, then we have the following statement.</text>
+<text><loc_59><loc_213><loc_441><loc_234>Lemma 3.5. Let X be a noncompact CLCH-space which has only one topological end, and let F ∈ Sh C ( X ) be a sheaf of C -vector spaces. Suppose there exists a CLCH-space X ′ , a sheaf F ′ ∈ Sh C ( X ′ ) with σ 1 ( X ′ , F ′ ) < ∞ , and an open embedding i : X ↪ → X ′ such that F = i -1 F ′ . If F is Hartogs, then dim C H 1 c ( X, F ) ≤ σ 1 ( X ′ , F ′ ) .</text>
+<text><loc_59><loc_240><loc_280><loc_247>Proof. The proof follows from the following commutative diagram:</text>
+<formula><loc_122><loc_252><loc_378><loc_300></formula>
+<text><loc_59><loc_306><loc_441><loc_326>and from the canonical isomorphism H 1 c ( X, F ) ∼ = lim - → K H 1 K ( X, F ) (here the colimit taking over compact sets K such that ( K,X ) is a Hartogs pair).</text>
+<text><loc_59><loc_334><loc_403><loc_341>Lemma 3.2, 3.4, 3.5 implies the following necessary and sufficient condition of the Hartogs phenomenon.</text>
+<text><loc_59><loc_344><loc_442><loc_371>Theorem 3.1. Let X be a noncompact complex analytic variety which has only one topological end, and let F ∈ V ect ( O X ) be a locally free O X -module of finite rank. Suppose there exists a CLCH-space X ′ , a sheaf F ′ ∈ Sh C ( X ′ ) with σ 1 ( X ′ , F ′ ) = 0 , and an open embedding i : X ↪ → X ′ such that F = i -1 F ′ . Then the following conditions are equivalent:</text>
+<ordered_list><list_item><loc_78><loc_376><loc_138><loc_385>H 1 c ( X, F ) = 0</list_item>
+<list_item><loc_78><loc_389><loc_166><loc_395>The sheaf F is Hartogs.</list_item>
+<list_item><loc_78><loc_400><loc_257><loc_407>The sheaf F| W is Hartogs for any domain W ⊂ X .</list_item>
+</ordered_list>
+<section_header_level_1><loc_59><loc_410><loc_104><loc_416>Example 3.4.</section_header_level_1>
+<ordered_list><list_item><loc_78><loc_421><loc_443><loc_456>Let X be a Stein variety, dim X ≥ 2 , F ∈ V ect ( O X ) . By the Cartan theorem, it follows that H 1 ( X, F ) = 0 . By [33, Chapter VII, Section D, Theorem 2] or [6, Chapter I, Corollary 4.10], it follows that X has only one topological end. Hence we may take X ′ = X, F ′ = F . It follows that H 1 c ( X, F ) = 0 if and only if the sheaf F is Hartogs. Note that the implication " ⇐ " is also following from codh( F ) = dim X ≥ 2 [6, Chapter 1, Theorem 3.6, Corollary 4.2].</list_item>
+</ordered_list>
+<page_footer><loc_248><loc_468><loc_252><loc_475>9</page_footer>
+<page_break>
+<page_header><loc_123><loc_22><loc_378><loc_29>Hartogs and open embeddings, proper maps, compactifications, cohomologies</page_header>
+<ordered_list><list_item><loc_78><loc_46><loc_441><loc_61>Let X be a domain with connected boundary of a complex manifold X ′ . Assume that H 1 ( X ′ , O X ′ ) = 0 . It follows that H 1 c ( X, O X ) = 0 if and only if O X is Hartogs.</list_item>
+<list_item><loc_78><loc_65><loc_443><loc_85>Let X ′ be a compact complex manifold and X := X ′ \{ pt } , where pt is a point of X ′ . Let F be a locally free O X ′ -module of finite rank. Since dim C H 1 c ( X, F ) = ∞ , we obtain the sheaf F| X is not Hartogs. Actually, we have the following exact sequence:</list_item>
+</ordered_list>
+<text><loc_188><loc_94><loc_188><loc_96>/d47</text>
+<formula><loc_169><loc_91><loc_360><loc_100></formula>
+<text><loc_188><loc_95><loc_188><loc_96>/d47</text>
+<text><loc_252><loc_94><loc_252><loc_96>/d47</text>
+<text><loc_252><loc_95><loc_252><loc_96>/d47</text>
+<text><loc_87><loc_105><loc_263><loc_112>We see that dim C Γ( X ′ , F ) < ∞ but dim C F pt = ∞ .</text>
+<text><loc_59><loc_117><loc_428><loc_124>In the case of the structure sheaf of a noncompact normal complex analytic variety, we have more general results.</text>
+<text><loc_59><loc_127><loc_441><loc_148>Theorem 3.2. Let X be a noncompact normal complex analytic variety that has only one topological end. Suppose there exists a CLCH-space X ′ , a sheaf F ′ ∈ Sh C ( X ′ ) with σ 1 ( X ′ , F ′ ) < ∞ , and an open embedding i : X ↪ → X ′ such that O X = i -1 F ′ . Then the following conditions are equivalent:</text>
+<ordered_list><list_item><loc_78><loc_154><loc_172><loc_161>The sheaf O X is Hartogs.</list_item>
+<list_item><loc_78><loc_165><loc_263><loc_172>The sheaf O X | W is Hartogs for any domain W ⊂ X .</list_item>
+<list_item><loc_78><loc_176><loc_169><loc_184>dim C H 1 c ( X, O X ) < ∞ .</list_item>
+<list_item><loc_78><loc_188><loc_195><loc_196>dim C H 1 c ( X, O X ) ≤ σ ( X ′ , F ′ ) .</list_item>
+</ordered_list>
+<text><loc_58><loc_202><loc_441><loc_216>Proof. The implications 2 ⇒ 1 , 4 ⇒ 3 are clear. The implication 1 ⇒ 2 follows from Proposition 3.2. The implication 1 ⇒ 4 follows from Lemma 3.5. The implication 3 ⇒ 1 follows from Proposition 3.1.</text>
+<text><loc_59><loc_221><loc_441><loc_243>Remark 3.7. Let X be a complex analytic variety, F ∈ V ect ( O X ) . Assume that dim C H 1 c ( X, F ) = ∞ . If X has at least two topological ends, then F may or may not be a Hartogs sheaf. For instance, consider open submanifolds of CP n , ( n ≥ 2) , and let F ∈ V ect ( O CP n ) . In the following cases, we have dim C H 1 c ( X, F ) = ∞ :</text>
+<ordered_list><list_item><loc_78><loc_247><loc_441><loc_261>Consider X = CP n \ { x, y } , where x, y are distinct points of CP n . Then the sheaf F| X is not Hartogs because there exists a compact set K ⊂ CP n such that y /negationslash∈ K and CP n \ K is a Stein manifold.</list_item>
+<list_item><loc_78><loc_265><loc_441><loc_280>Consider X = CP n \ { x, H } , where x is a point and H is a hyperplane of CP n such that x /negationslash∈ H . Since X is an open submanifold of the Stein manifold X \ H , it follows that F| X is Hartogs.</list_item>
+</ordered_list>
+<section_header_level_1><loc_59><loc_289><loc_249><loc_295>3.2 Hartogs and proper surjective holomorphic maps</section_header_level_1>
+<text><loc_59><loc_300><loc_441><loc_314>Let f : X → Y be a proper surjective continuous map between CLCH-spaces. We have the following commutative diagrams:</text>
+<text><loc_240><loc_323><loc_249><loc_331>✲</text>
+<picture><loc_116><loc_326><loc_386><loc_381></picture>
+<text><loc_58><loc_388><loc_241><loc_395>We have the following natural isomorphism of functors:</text>
+<formula><loc_208><loc_399><loc_292><loc_407></formula>
+<text><loc_59><loc_410><loc_216><loc_417>This implies the following natural isomorphism:</text>
+<formula><loc_198><loc_421><loc_302><loc_429></formula>
+<formula><loc_220><loc_448><loc_280><loc_455></formula>
+<text><loc_364><loc_323><loc_372><loc_330>✲</text>
+<text><loc_297><loc_94><loc_297><loc_96>/d47</text>
+<text><loc_297><loc_95><loc_297><loc_96>/d47</text>
+<text><loc_348><loc_94><loc_348><loc_96>/d47</text>
+<text><loc_348><loc_95><loc_348><loc_96>/d47</text>
+<text><loc_59><loc_436><loc_131><loc_443>The natural morphism</text>
+<text><loc_380><loc_366><loc_388><loc_373>❄</text>
+<page_footer><loc_246><loc_468><loc_254><loc_475>10</page_footer>
+<page_break>
+<page_header><loc_123><loc_22><loc_378><loc_29>Hartogs and open embeddings, proper maps, compactifications, cohomologies</page_header>
+<text><loc_59><loc_46><loc_152><loc_53><loc_59><loc_68><loc_190><loc_75>and the natural isomorphism implies the following natural morphism:</text>
+<formula><loc_67><loc_81><loc_433><loc_98></formula>
+<text><loc_59><loc_104><loc_265><loc_111>This implies the following natural morphism and isomorphism:</text>
+<formula><loc_147><loc_114><loc_353><loc_123></formula>
+<text><loc_59><loc_130><loc_226><loc_137>The same way we obtain that the natural morphism</text>
+<formula><loc_210><loc_141><loc_289><loc_148></formula>
+<formula><loc_192><loc_161><loc_308><loc_170></formula>
+<text><loc_59><loc_151><loc_152><loc_158><loc_59><loc_173><loc_190><loc_180>and the natural isomorphism implies the following natural morphism:</text>
+<formula><loc_67><loc_186><loc_433><loc_203></formula>
+<text><loc_59><loc_209><loc_263><loc_216>This implies the canonical natural morphism and isomorphism</text>
+<formula><loc_134><loc_219><loc_366><loc_228></formula>
+<text><loc_59><loc_235><loc_318><loc_242>Hence we obtain the following commutative diagram for a sheaf F ∈ Sh C ( X ) :</text>
+<text><loc_213><loc_247><loc_221><loc_254>✲</text>
+<text><loc_294><loc_247><loc_302><loc_254>✲</text>
+<picture><loc_110><loc_249><loc_389><loc_333></picture>
+<text><loc_59><loc_342><loc_191><loc_349>It is easy to prove the following lemmas.</text>
+<unordered_list><list_item><loc_59><loc_353><loc_442><loc_373>Lemma 3.6. 1. Let f : X → Y be a proper surjective continuous map between CLCH-spaces and F ∈ Sh C ( X ) . If f ∗ F ∈ Sh C ( Y ) is Hartogs and the canonical morphism Γ( X \ K, F ) → Γ( X \ f -1 ( f ( K )) , F ) is a monomorphism for any Hartogs pair ( K,X ) , then F is Hartogs.</list_item>
+<list_item><loc_78><loc_378><loc_441><loc_391>Let f : X → Y be a proper surjective continuous map between CLCH-spaces and F ∈ Sh C ( X ) . If F is Hartogs, then the canonical map f ∗ F is Hartogs.</list_item>
+<list_item><loc_59><loc_399><loc_443><loc_412>Proof. 1. The proof follows from the commutative diagram of long exact sequences of the cohomologies corresponding to the commutative diagram of distinguished triangles above.</list_item>
+<list_item><loc_78><loc_417><loc_441><loc_431>The proof follows from the diagram above. Actually, each compact set S ⊂ Y has a form S = f ( K ) for some compact set K ⊂ X ; moreover, ( f -1 ( S ) , X ) is a Hartogs pair provided ( S, Y ) is a Hartogs pair.</list_item>
+</unordered_list>
+<text><loc_59><loc_449><loc_282><loc_456>In particular, for vector bundles we obtain the following proposition.</text>
+<formula><loc_201><loc_56><loc_299><loc_65></formula>
+<page_footer><loc_246><loc_468><loc_254><loc_475>11</page_footer>
+<page_break>
+<page_header><loc_123><loc_22><loc_378><loc_29>Hartogs and open embeddings, proper maps, compactifications, cohomologies</page_header>
+<text><loc_59><loc_47><loc_441><loc_61>Proposition 3.3. Let f : X → Y be a proper surjective holomorphic map between noncompact complex analytic varieties and F ∈ V ect ( O X ) . Then F is Hartogs if and only if f ∗ F is Hartogs.</text>
+<text><loc_59><loc_63><loc_439><loc_77>Corollary 3.1. Let X be a holomorphically convex noncompact normal complex analytic variety, and let R : X → Y be the corresponding Remmert reduction, F ∈ V ect ( O X ) . Then F is Hartogs if and only if dim Y > 1 .</text>
+<text><loc_59><loc_84><loc_441><loc_98>Proof. Recall that R : X → Y is a proper surjective holomorphic map onto the normal Stein variety, and R ∗ O X = O Y . It follows that R ∗ F is a locally free O Y -module of finite rank. But R ∗ F is Hartogs if and only if dim Y > 1 .</text>
+<text><loc_59><loc_102><loc_443><loc_145>Example 3.5. Let X ′ be a normal complex projective variety, D be an effective basepoint-free Cartier divisor with connected support, and X := X ′ \ Supp( D ) . The complete linear system associated with D induces a proper holomorphic map φ : X ′ → CP N . The Stein factorization implies a proper surjective holomorphic map φ : X ′ → Y ′ , where Y ′ is a normal projective variety such that φ ∗ O X ′ = O Y ′ , and D = φ ∗ ( H ) for an ample divisor H on Y ′ . Note that Y := Y ′ \ Supp( H ) is a normal Stein variety. It follows that X is holomorphically convex. So, O X is Hartogs if and only if dim Y > 1 .</text>
+<text><loc_59><loc_150><loc_443><loc_164>Let f : X → Y be a proper surjective continuous map between CLCH-spaces. We have the following natural isomorphism of functors:</text>
+<formula><loc_205><loc_167><loc_295><loc_175></formula>
+<text><loc_59><loc_178><loc_214><loc_185>This implies the following natural isomorphism</text>
+<formula><loc_195><loc_188><loc_305><loc_196></formula>
+<text><loc_59><loc_200><loc_441><loc_214>Remark 3.8. Let f : X → Y be a proper surjective holomorphic map between noncompact complex analytic varieties and F ∈ V ect ( O X ) . Assume that F is cohomologically flat at dimension 1 over Y or, equivalently, the function</text>
+<formula><loc_155><loc_217><loc_345><loc_225></formula>
+<text><loc_59><loc_228><loc_353><loc_237>is locally constant. Then we obtain the canonical isomorphism H 1 c ( X, F ) ∼ = H 1 c ( Y, f ∗ F ) .</text>
+<text><loc_59><loc_241><loc_441><loc_254>It follows from the Leray spectral sequence and the Grauert theorem. Indeed, by the Grauert theorem, it follows that R 1 f ∗ F is a locally free O Y -module of finite rank. We get</text>
+<formula><loc_202><loc_257><loc_298><loc_287></formula>
+<text><loc_59><loc_290><loc_441><loc_303>Remark 3.9. Let f : X → Y be a proper surjective continuous map between CLCH-spaces. We also have the following natural isomorphism of functors:</text>
+<formula><loc_204><loc_306><loc_296><loc_314></formula>
+<formula><loc_193><loc_330><loc_307><loc_339></formula>
+<text><loc_58><loc_346><loc_206><loc_352>We have the following commutative diagram:</text>
+<picture><loc_129><loc_364><loc_369><loc_405></picture>
+<text><loc_59><loc_413><loc_441><loc_427>Now let f : X → Y be a proper surjective continuous map between CLCH-spaces and F ∈ Sh C ( X ) . Suppose the following conditions hold:</text>
+<ordered_list><list_item><loc_78><loc_433><loc_193><loc_440>X has only one topological end.</list_item>
+<list_item><loc_78><loc_442><loc_441><loc_456>There exists a CLCH-space X ′ , a sheaf F ′ ∈ Sh C ( X ′ ) with σ 1 ( X ′ , F ′ ) < ∞ , and open embedding i : X ↪ → X ′ such that F = i -1 F ′</list_item>
+</ordered_list>
+<text><loc_59><loc_322><loc_123><loc_327>It is easy to see that</text>
+<page_footer><loc_246><loc_468><loc_254><loc_475>12</page_footer>
+<page_break>
+<page_header><loc_123><loc_22><loc_378><loc_29>Hartogs and open embeddings, proper maps, compactifications, cohomologies</page_header>
+<text><loc_59><loc_46><loc_441><loc_60>Since f is a proper map, it follows that Y has only one topological end. Now consider the pushout of maps f and i (in the category of CLCH topological spaces):</text>
+<picture><loc_207><loc_71><loc_292><loc_127><caption><loc_59><loc_133><loc_441><loc_148>Lemma3.7. For the above situation, we have that the map j is an open embedding, f ′ is a proper surjective continuous map, Y ′ is a CLCH-space, and the sheaf of C -vector spaces f ′ ∗ F ′ satisfies the following properties:</caption></picture>
+<formula><loc_78><loc_153><loc_201><loc_173></formula>
+<text><loc_59><loc_182><loc_441><loc_198>Proof. Since i is injective, then j is also injective. Since f is proper surjective and f ′ | X = f, f ′ | X ′ \ X = id , then f ′ is also proper and surjective. The Leray spectral sequence implies that σ 1 ( Y ′ , f ′ ∗ F ′ ) ≤ σ 1 ( X ′ , F ′ ) .</text>
+<text><loc_59><loc_200><loc_441><loc_214>Now let V ⊂ Y be an open subset. The set j ( V ) is open if and only if j -1 ( j ( V )) = V is open and f ′-1 ( j ( V )) is open. Since f ′-1 ( j ( V )) = i ( f -1 ( V )) and i is open, it follows that f ′-1 ( j ( V )) is open.</text>
+<formula><loc_59><loc_217><loc_441><loc_232></formula>
+<text><loc_59><loc_241><loc_342><loc_248>The following proposition follows from Proposition 3.3, Lemma 3.7, and Theorem 3.1.</text>
+<text><loc_59><loc_252><loc_443><loc_278>Proposition 3.4. Let f : X → Y be a proper surjective holomorphic map between noncompact complex analytic varieties and F ∈ V ect ( O X ) . Suppose X has only one topological end. Assume that there exists a CLCH-space X ′ , a sheaf F ′ ∈ Sh C ( X ′ ) with σ 1 ( X ′ , F ′ ) = 0 , and an open embedding i : X ↪ → X ′ such that F = i -1 F ′ . Then the following conditions are equivalent:</text>
+<ordered_list><list_item><loc_78><loc_286><loc_134><loc_292>F is Hartogs;</list_item>
+<list_item><loc_78><loc_297><loc_141><loc_304>f ∗ F is Hartogs;</list_item>
+<list_item><loc_78><loc_309><loc_140><loc_317>H 1 c ( X, F ) = 0 ;</list_item>
+<list_item><loc_78><loc_320><loc_146><loc_329>H 1 c ( Y, f ∗ F ) = 0 .</list_item>
+</ordered_list>
+<text><loc_59><loc_334><loc_442><loc_347>In the case of the structure sheaf of a noncompact normal complex analytic variety, we obtain the following proposition, which follows from Proposition 3.3, Lemma 3.7, and Theorem 3.2.</text>
+<text><loc_59><loc_351><loc_441><loc_378>Proposition 3.5. Let f : X → Y be a proper surjective holomorphic map between noncompact normal complex analytic varieties, f ∗ O X = O Y . Suppose X has only one topological end. Assume that there exists a CLCH-space X ′ , a sheaf F ′ ∈ Sh C ( X ′ ) with σ 1 ( X ′ , F ′ ) < ∞ , and an open embedding i : X ↪ → X ′ such that O X = i -1 F ′ . Then the following conditions are equivalent:</text>
+<ordered_list><list_item><loc_78><loc_385><loc_140><loc_392>O X is Hartogs;</list_item>
+<list_item><loc_78><loc_397><loc_139><loc_404>O Y is Hartogs;</list_item>
+<list_item><loc_78><loc_408><loc_169><loc_416>dim C H 1 c ( X, O X ) < ∞ .</list_item>
+<list_item><loc_78><loc_420><loc_167><loc_428>dim C H 1 c ( Y, O Y ) < ∞ .</list_item>
+</ordered_list>
+<section_header_level_1><loc_59><loc_437><loc_250><loc_443>3.3 Reduction to the case of holomorphic line bundles</section_header_level_1>
+<text><loc_59><loc_449><loc_364><loc_456>Now we recall some facts about projective line bundles (see, for instance, [9, Example 5.17]).</text>
+<page_footer><loc_246><loc_468><loc_254><loc_475>13</page_footer>
+<page_break>
+<page_header><loc_123><loc_22><loc_378><loc_29>Hartogs and open embeddings, proper maps, compactifications, cohomologies</page_header>
+<text><loc_59><loc_46><loc_442><loc_70><loc_59><loc_66><loc_441><loc_82>Let X be a complex analytic variety, and let F be a locally free O X -module of rank r . Let π : P ( F ) → X be the associated projective fiber space. Recall P ( F ) = Proj(Sym F ) , where Sym F = ⊕ i ≥ 0 Sym i F , and π is induced by the canonical morphism O X → Sym F . The variety P ( F ) carries a natural line bundle O P ( F ) (1) whose restriction to a fiber π -1 ( x ) ∼ = P r -1 is the line bundle O P r -1 (1) . Moreover, we have the following canonical isomorphisms:</text>
+<formula><loc_59><loc_84><loc_292><loc_93></formula>
+<text><loc_59><loc_95><loc_352><loc_102>The Leray spectral sequence implies the following canonical isomorphisms for any q ≥ 0 :</text>
+<formula><loc_192><loc_105><loc_308><loc_114></formula>
+<text><loc_59><loc_117><loc_307><loc_124>and since π is a proper map, it follows the following canonical isomorphism</text>
+<formula><loc_191><loc_127><loc_309><loc_136></formula>
+<text><loc_59><loc_143><loc_370><loc_150>Proposition 3.3 implies that the sheaf O P ( F ) (1) is Hartogs if and only if the sheaf F is Hartogs.</text>
+<text><loc_59><loc_154><loc_441><loc_168>If X has only one topological end, then P ( F ) also has only one topological end. Moreover, we have the following canonical isomorphisms:</text>
+<formula><loc_136><loc_171><loc_364><loc_179></formula>
+<text><loc_59><loc_186><loc_443><loc_214>Further, we consider the case of holomorphic line bundles over a nonsingular complex analytic variety X (i.e., complex manifold). Denote by O ( D ) the invertible O X -module associated with the Cartier divisor D on X . Denote by M the sheaf of meromorphic functions. If L is a holomorphic line bundle over X , then we denote by L the invertible O X -module of holomorphic sections of L .</text>
+<text><loc_211><loc_223><loc_211><loc_230>/negationslash</text>
+<text><loc_59><loc_216><loc_441><loc_237>Lemma 3.8. Let X be a noncompact complex manifold that has only one topological end. Let L be a holomorphic line bundle over X . Assume that Γ( ∂X, O X ) = C and Γ( ∂X, L ) = 0 . If dim C H 1 c ( X, L ) < ∞ , then there exists a global holomorphic non-zero section σ ∈ Γ( X, L ) . In particular, L ∼ = O ( div ( σ )) .</text>
+<text><loc_59><loc_244><loc_226><loc_251>Proof. We have the following long exact sequence:</text>
+<text><loc_165><loc_260><loc_165><loc_261>/d47</text>
+<formula><loc_147><loc_256><loc_353><loc_265></formula>
+<text><loc_165><loc_261><loc_165><loc_262>/d47</text>
+<text><loc_226><loc_260><loc_226><loc_261>/d47</text>
+<text><loc_226><loc_261><loc_226><loc_262>/d47</text>
+<text><loc_291><loc_260><loc_291><loc_261>/d47</text>
+<text><loc_291><loc_261><loc_291><loc_262>/d47</text>
+<text><loc_341><loc_260><loc_341><loc_261>/d47</text>
+<text><loc_341><loc_261><loc_341><loc_262>/d47</text>
+<text><loc_59><loc_274><loc_441><loc_288>Denote m = dim C H 1 c ( X, L ) . Let s ∈ Γ( ∂X, L ) be a non-zero holomorphic section, and assume that c ( s ) = 0 . Let f ∈ Γ( ∂X, O X ) be a nonconstant holomorphic function.</text>
+<text><loc_403><loc_292><loc_403><loc_298>/negationslash</text>
+<text><loc_412><loc_275><loc_412><loc_281>/negationslash</text>
+<text><loc_59><loc_291><loc_442><loc_312>Consider the following holomorphic sections: s, fs, · · · , f m s ∈ Γ( ∂X, L ) . We may assume that c ( f i s ) = 0 for any i = 1 , · · · m . Then there exists a non-zero polynomial P ∈ C [ T ] such that c ( P ( f ) s ) = 0 . So, there exists a global holomorphic non-zero section σ ∈ Γ( X, L ) such that r ( σ ) = P ( f ) s .</text>
+<text><loc_209><loc_320><loc_209><loc_327>/negationslash</text>
+<text><loc_59><loc_339><loc_441><loc_352>Lemma 3.9. Let X be a noncompact complex manifold that has only one topological end, and let D be an effective Cartier divisor. For a given b , the following conditions hold:</text>
+<text><loc_59><loc_316><loc_442><loc_343>For a Cartier divisor D = ∑ j ∈ I a j D j ( a j = 0 ), we define the Cartier divisor D red := ∑ j ∈ I D j , and for any b = ( b j ) j ∈ I such that b j ∈ { 0 , 1 } we define D b := ∑ j ∈ I b j D j .</text>
+<ordered_list><list_item><loc_78><loc_357><loc_308><loc_365>dim C H 1 c ( X, O ( D )) < ∞ implies dim C H 1 c ( X, O ( D -D b )) < ∞</list_item>
+<list_item><loc_78><loc_369><loc_308><loc_377>dim C H 1 c ( X, O ( D + D b )) < ∞ implies dim C H 1 c ( X, O ( D )) < ∞</list_item>
+</ordered_list>
+<text><loc_59><loc_382><loc_443><loc_395>In particular, if the divisor D b has a noncompact support, then the following canonical homomorphisms are monomorphisms:</text>
+<ordered_list><list_item><loc_78><loc_401><loc_217><loc_409>H 1 c ( X, O ( D -D b )) → H 1 c ( X, O ( D ))</list_item>
+<list_item><loc_78><loc_413><loc_217><loc_421>H 1 c ( X, O ( D )) → H 1 c ( X, O ( D + D b ))</list_item>
+</ordered_list>
+<text><loc_59><loc_427><loc_245><loc_434>Proof. Consider the following canonical exact sequence:</text>
+<formula><loc_191><loc_439><loc_309><loc_446></formula>
+<text><loc_278><loc_223><loc_278><loc_230><loc_59><loc_449><loc_157><loc_457>/negationslash where O D b := O X / O ( -D b ) .</text>
+<page_footer><loc_246><loc_468><loc_254><loc_475>14</page_footer>
+<page_break>
+<page_header><loc_123><loc_22><loc_378><loc_29>Hartogs and open embeddings, proper maps, compactifications, cohomologies</page_header>
+<text><loc_59><loc_46><loc_304><loc_53>Tensoring this sequence by O ( D ) , we obtain the following exact sequence:</text>
+<formula><loc_175><loc_56><loc_325><loc_63></formula>
+<text><loc_59><loc_65><loc_215><loc_73>where O D b ( D ) = ( O X / O ( -D b )) ⊗ O X O ( D ) .</text>
+<text><loc_59><loc_75><loc_442><loc_97>Let us note that ( D b , O D b ) is a reduced complex analytic space. If ( D b , O D b ) is a compact analytic space, then dim C Γ c ( X, O D b ( D )) < ∞ . Hence dim C H 1 c ( X, O ( D )) < ∞ implies dim C H 1 c ( X, O ( D -D b )) < ∞ . If ( D b , O D b ) is a noncompact analytic space, then Γ c ( X, O D b ( D )) = 0 . Hence the canonical homomorphism</text>
+<formula><loc_187><loc_99><loc_313><loc_107></formula>
+<text><loc_59><loc_108><loc_126><loc_115>is a monomorphism.</text>
+<text><loc_59><loc_118><loc_341><loc_125>For the second statement, we need to consider the following canonical exact sequence:</text>
+<formula><loc_179><loc_129><loc_321><loc_136></formula>
+<text><loc_247><loc_156><loc_247><loc_162>/negationslash</text>
+<text><loc_59><loc_149><loc_443><loc_170>Corollary 3.2. Let X be a noncompact complex manifold that has only one topological end, and let L be a holomorphic line bundle over X . Assume that Γ( ∂X, O X ) = C and Γ( ∂X, L ) = 0 . If dim C H 1 c ( X, L ) < ∞ , then dim C H 1 c ( X, O X ) < ∞ . In particular, O X is Hartogs.</text>
+<text><loc_318><loc_156><loc_318><loc_162>/negationslash</text>
+<text><loc_59><loc_172><loc_441><loc_199>Proof. Lemma 3.8 implies that L = O ( D ) for an effective Cartier divisor D = ∑ a i D i , a i ∈ Z ≥ 1 . Note that D -D red = ∑ i : a i ≥ 2 ( a i -1) D i . Lemma 3.9 implies that dim C H 1 c ( X, O ( D -D red ) < ∞ .</text>
+<text><loc_59><loc_195><loc_442><loc_215>Further, for the divisor D ′ = D -D red , we may repeat the same arguments. Since the sum D = ∑ a i D i is locally finite, it follows that dim C H 1 c ( X, O X ) < ∞ . The last statement follows from Proposition 3.1.</text>
+<text><loc_244><loc_225><loc_244><loc_231>/negationslash</text>
+<text><loc_297><loc_225><loc_297><loc_231>/negationslash</text>
+<text><loc_59><loc_218><loc_443><loc_239>Remark 3.10. Let X be a noncompact complex manifold that has only one topological end, and let L be a holomorphic line bundle over X . So, the conditions Γ( ∂X, O X ) = C , Γ( ∂X, L ) = 0 , and dim C H 1 c ( X, L ) < ∞ implies that Γ( X, L ) = 0 , Γ( X, O X ) = C .</text>
+<text><loc_89><loc_232><loc_89><loc_238>/negationslash</text>
+<text><loc_142><loc_232><loc_142><loc_238>/negationslash</text>
+<text><loc_59><loc_241><loc_441><loc_254>Definition 3.2. Let F be a coherent O X -module over a complex analytic variety X . An irreducible divisor D of X is called F -removable if the restriction homomorphism</text>
+<formula><loc_207><loc_257><loc_292><loc_263></formula>
+<text><loc_59><loc_266><loc_121><loc_272>is an epimorphism.</text>
+<text><loc_59><loc_275><loc_443><loc_301>Example 3.6. Each exceptional irreducible divisor is F -removable for any locally free O X -module of finite rank F . Let us remember that an irreducible divisor D of a complex analytic variety X is called exceptional if there exists a complex analytic variety Y and a proper surjective holomorphic map φ : X → Y such that codim( φ ( D )) ≥ 2 and φ : X \ D → Y \ φ ( D ) is a biholomorphism.</text>
+<text><loc_102><loc_318><loc_102><loc_324>/negationslash</text>
+<text><loc_59><loc_304><loc_443><loc_331>Proposition 3.6. Let X be a noncompact complex manifold which has only one topological end, and let L be a holomorphic line bundle over X . Assume that each compact irreducible Cartier divisor of X is L -removable, Γ( ∂X, O X ) = C , and Γ( ∂X, L ) = 0 . If dim C H 1 c ( X, L ) < ∞ , then the canonical homomorphism Γ( X, L ) → Γ( ∂X, L ) is an isomorphism. In particular, the sheaf L is Hartogs.</text>
+<text><loc_174><loc_318><loc_174><loc_324>/negationslash</text>
+<text><loc_59><loc_338><loc_226><loc_345>Proof. We have the following long exact sequence:</text>
+<text><loc_165><loc_353><loc_165><loc_354>/d47</text>
+<formula><loc_147><loc_349><loc_353><loc_358></formula>
+<text><loc_165><loc_354><loc_165><loc_355>/d47</text>
+<text><loc_226><loc_353><loc_226><loc_354>/d47</text>
+<text><loc_226><loc_354><loc_226><loc_355>/d47</text>
+<text><loc_291><loc_353><loc_291><loc_354>/d47</text>
+<text><loc_291><loc_354><loc_291><loc_355>/d47</text>
+<text><loc_341><loc_353><loc_341><loc_354>/d47</text>
+<text><loc_341><loc_354><loc_341><loc_355>/d47</text>
+<text><loc_59><loc_364><loc_441><loc_379>Lemma 3.8 implies that there exists an effective Cartier divisor D on X such that L = O ( D ) . Remark 3.10 implies that Γ( X, O X ) = C .</text>
+<text><loc_110><loc_372><loc_110><loc_378>/negationslash</text>
+<text><loc_59><loc_382><loc_441><loc_403>As in the proof of Lemma 3.8, for any s ∈ Γ( ∂X, O ( D )) (which is represented by a section σ ∈ Γ( X \ K, O ( D )) for a sufficiently large compact set K ⊂ X ) there exists a global holomorphic function g ∈ Γ( X, O X ) and there exists a global holomorphic section σ ′ ∈ Γ( X, O ( D )) such that r ( σ ′ ) = gs .</text>
+<text><loc_59><loc_406><loc_327><loc_416>Consider the global meromorphic section s ′ = σ ′ g ∈ Γ( X, M⊗O ( D )) . Note that</text>
+<formula><loc_205><loc_418><loc_295><loc_426></formula>
+<text><loc_59><loc_424><loc_443><loc_456>for a sufficiently large compact set K ⊂ X . Consider div ( s ′ ) = ∑ a i D i , where D i are irreducible Cartier divisors. If a i < 0 , then D i is a compact set. It follows that the meromorphic section s ′ has only compact poles. Since each compact irreducible Cartier divisor of X is O ( D ) -removable, it follows that s ′ ∈ Γ( X, O ( D )) . The last statement follows from Lemma 3.1.</text>
+<page_footer><loc_246><loc_468><loc_254><loc_475>15</page_footer>
+<page_break>
+<page_header><loc_123><loc_22><loc_378><loc_29>Hartogs and open embeddings, proper maps, compactifications, cohomologies</page_header>
+<text><loc_338><loc_54><loc_338><loc_60>/negationslash</text>
+<text><loc_413><loc_54><loc_413><loc_60>/negationslash</text>
+<text><loc_59><loc_47><loc_441><loc_68>Theorem 3.3. Let X be a noncompact complex manifold that has only one topological end, F ∈ V ect ( O X ) . Assume that each compact irreducible Cartier divisor of X is F -removable, Γ( ∂X, O X ) = C , and Γ( ∂X, F ) = 0 . If dim C H 1 c ( X, F ) < ∞ , then the canonical homomorphism</text>
+<formula><loc_213><loc_72><loc_287><loc_78></formula>
+<text><loc_59><loc_83><loc_244><loc_90>is an isomorphism. In particular, the sheaf F is Hartogs.</text>
+<text><loc_59><loc_97><loc_356><loc_104>Proof. Consider the projective fiber bundle π : P ( F ) → X . The following conditions hold:</text>
+<ordered_list><list_item><loc_78><loc_112><loc_204><loc_119>P ( F ) has only one topological end.</list_item>
+</ordered_list>
+<text><loc_149><loc_124><loc_149><loc_131>/negationslash</text>
+<ordered_list><list_item><loc_78><loc_124><loc_165><loc_131>Γ( ∂ P ( F ) , O P ( F ) ) = C .</list_item>
+</ordered_list>
+<text><loc_159><loc_137><loc_159><loc_143>/negationslash</text>
+<ordered_list><list_item><loc_78><loc_136><loc_174><loc_144>Γ( ∂ P ( F ) , O P ( F ) (1)) = 0 .</list_item>
+<list_item><loc_78><loc_149><loc_199><loc_157>dim C H 1 c ( P ( F ) , O P ( F ) (1)) < ∞ .</list_item>
+</ordered_list>
+<text><loc_81><loc_172><loc_81><loc_178>/negationslash</text>
+<text><loc_59><loc_164><loc_441><loc_185>If D is a compact irreducible Cartier divisor of P ( F ) , then π ( D ) is a compact subset. Since X is noncompact, then π ( D ) = X . The Remmert's proper mapping theorem implies that π ( D ) is an analytic subset of X . We have the following commutative diagram of the restriction homomorphisms:</text>
+<text><loc_255><loc_194><loc_263><loc_201>✲</text>
+<picture><loc_151><loc_196><loc_348><loc_291></picture>
+<text><loc_59><loc_337><loc_441><loc_351>If codim( π ( D )) > 1 , then r is an isomorphism (by the Serre theorem [9, Chapter II, Theorem 5.29]). If codim( π ( D )) = 1 , then r is an isomorphism by assumption. In both cases, we obtain that r 1 is an isomorphism.</text>
+<text><loc_59><loc_354><loc_441><loc_369>Since r 2 , r 3 are monomorphisms, it follows that r 2 is an isomorphism. Hence each compact irreducible Cartier divisor of P ( F ) is O P ( F (1) -removable. Proposition 3.6 implies that the restriction homomorphism</text>
+<formula><loc_177><loc_374><loc_323><loc_381></formula>
+<text><loc_59><loc_385><loc_321><loc_393>is an isomorphism. In particular, O P ( F ) (1) is Hartogs. This concludes the proof.</text>
+<text><loc_59><loc_397><loc_441><loc_418>Example 3.7. Since each compact irreducible Cartier divisor of a 1-convex complex manifold is exceptional, it follows that it is F -removable for any locally free O X -module of finite rank F . By [41, Proposition 1], it follows that dim C H 1 c ( X, F ) < ∞ for any locally free O X -module of finite rank. Hence F is Hartogs.</text>
+<page_footer><loc_246><loc_468><loc_254><loc_475>16</page_footer>
+<page_break>
+<page_header><loc_123><loc_22><loc_378><loc_29>Hartogs and open embeddings, proper maps, compactifications, cohomologies</page_header>
+<section_header_level_1><loc_59><loc_46><loc_178><loc_54>4 ( b, σ ) -Compactified pairs</section_header_level_1>
+<section_header_level_1><loc_59><loc_62><loc_141><loc_68>4.1 Fibered categories</section_header_level_1>
+<text><loc_59><loc_73><loc_442><loc_95>In this section, we consider categories that are obtained via the following Grothendieck construction (see, for instance, [2, 3]): let B be a small category, Cat be the category of all (small) categories, and T : B → Cat op be a (contravariant) pseudo-functor. We form the following category, which is denoted by B T .</text>
+<ordered_list><list_item><loc_78><loc_100><loc_299><loc_107>Objects of B T : Ob ( B T ) := { ( x, y ) | x ∈ Ob ( B ) , y ∈ Ob ( Tx ) } ;</list_item>
+<list_item><loc_78><loc_109><loc_283><loc_117>Morphisms of B T : for any ( x, y ) , ( x ′ , y ′ ) ∈ Ob ( B T ) define</list_item>
+</ordered_list>
+<formula><loc_126><loc_119><loc_403><loc_128></formula>
+<ordered_list><list_item><loc_78><loc_132><loc_180><loc_139>Composition of morphisms:</list_item>
+</ordered_list>
+<formula><loc_120><loc_142><loc_409><loc_159></formula>
+<ordered_list><list_item><loc_78><loc_164><loc_442><loc_179>Identity: for any ( x, y ) ∈ Ob ( B T ) define 1 ( x,y ) = (1 x , 1 y ) , where 1 x is the identity morphism of x ∈ Ob ( B ) , 1 y is the identity morphism of y ∈ Ob ( Tx ) .</list_item>
+</ordered_list>
+<text><loc_59><loc_184><loc_304><loc_191>It is easy to show that we indeed obtain a category. Note that the morphism</text>
+<formula><loc_210><loc_195><loc_290><loc_202></formula>
+<text><loc_59><loc_206><loc_441><loc_220>is an isomorphism if and only if f : x → x ′ is an isomorphism and g : ( Tf )( y ′ ) → y is an isomorphism such that g ◦ ( Tf )( g -1 ) = 1 y , g -1 ◦ ( Tf -1 )( g ) = 1 y ′ .</text>
+<text><loc_59><loc_223><loc_443><loc_250>Example 4.1. The category Top Sh , where Top is the category of topological spaces and Sh is the following pseudofunctor (indeed, it is a functor): each X ∈ Top corresponds to the category Sh ( X ) (i.e., the category of sheaves of abelian groups over X ), and each continuous map f : X → Y corresponds to the inverse image functor Sh ( f ) := f -1 : Sh ( Y ) → Sh ( X ) .</text>
+<section_header_level_1><loc_59><loc_259><loc_319><loc_265>4.2 Fibered categories which are considered and ( b, σ ) -compactified pairs</section_header_level_1>
+<text><loc_59><loc_271><loc_404><loc_278>Definition 4.1. We list below the pairs ( B,T ) such that the corresponding categories B T are considered.</text>
+<ordered_list><list_item><loc_78><loc_284><loc_441><loc_298>Categories: complex analytic varieties An ; normal complex analytic varieties An norm ; complex analytic manifolds An sm . Pseudo-functors:</list_item>
+<list_item><loc_91><loc_302><loc_443><loc_324>(a) Sh C : each object ( X, O X ) corresponds to the category Sh C ( X ) of sheaves of C -vector spaces over X ; each morphism ( f, f # ): ( X, O X ) → ( Y, O Y ) (here f : X → Y is a continuous map, f # : f -1 O Y → O X is a morphism of sheaves) corresponds to the inverse image functor</list_item>
+</ordered_list>
+<formula><loc_228><loc_327><loc_318><loc_334></formula>
+<unordered_list><list_item><loc_91><loc_339><loc_441><loc_361>(b) Id : each object ( X, O X ) corresponds to the structure sheaf O X considered as the category with one object and one morphism (identity); each morphism ( f, f # ): ( X, O X ) → ( Y, O Y ) corresponds to the functor Id ( f, f # ): O Y →O X defined via the canonical isomorphism</list_item>
+</unordered_list>
+<formula><loc_194><loc_364><loc_351><loc_373></formula>
+<unordered_list><list_item><loc_91><loc_377><loc_441><loc_391>(c) Coh : each object ( X, O X ) corresponds to the category Coh ( O X ) of coherent O X -modules; each morphism ( f, g ): ( X, O X ) → ( Y, O Y ) corresponds to the analytic inverse image functor</list_item>
+</unordered_list>
+<formula><loc_167><loc_395><loc_378><loc_403></formula>
+<unordered_list><list_item><loc_91><loc_407><loc_441><loc_421>(d) V ect : each object ( X, O X ) corresponds to the category V ect ( O X ) of locally free O X -modules of finite ranks; each morphism ( f, g ): ( X, O X ) → ( Y, O Y ) corresponds to the analytic inverse image functor</list_item>
+</unordered_list>
+<formula><loc_223><loc_424><loc_323><loc_431></formula>
+<ordered_list><list_item><loc_78><loc_435><loc_443><loc_456>Categories: Al a , Al a norm , Al a sm which are analytifications of the categories of complex algebraic varieties Al , of normal complex algebraic varieties Al norm , of nonsingular complex algebraic varieties Al sm , respectively; Pseudo-functors: Sh C , Id, Coh, V ect .</list_item>
+</ordered_list>
+<page_footer><loc_246><loc_468><loc_254><loc_475>17</page_footer>
+<page_break>
+<page_header><loc_123><loc_22><loc_378><loc_29>Hartogs and open embeddings, proper maps, compactifications, cohomologies</page_header>
+<ordered_list><list_item><loc_78><loc_47><loc_418><loc_54>Category of complex analytic G -varieties An G (here G is a complex Lie group); Pseudo-functor: Id .</list_item>
+<list_item><loc_78><loc_58><loc_441><loc_79>Categories: Al a G , Al a G,norm , Al a G,sm (here G is a complex algebraic group) which are analytifications of the categories of complex algebraic G -varieties, of normal complex algebraic G -varieties, of complex algebraic G -manifolds, respectively; Pseudo-functor: Id .</list_item>
+</ordered_list>
+<text><loc_59><loc_81><loc_408><loc_88>Remark 4.1. Let B be as in Definition 4.1. The category B Id is equivalent to B , and we denote B Id by B .</text>
+<text><loc_59><loc_90><loc_443><loc_103>Definition 4.2. Fix a category B T as in Definition 4.1. Let ( X, F ) be an object of B T such that X is noncompact, and let b, σ ∈ [0 , ∞ ] .</text>
+<unordered_list><list_item><loc_81><loc_108><loc_292><loc_115>The pair ( X, F ) is called ( b, σ ) -compactified by the morphism</list_item>
+</unordered_list>
+<formula><loc_221><loc_118><loc_309><loc_125></formula>
+<text><loc_88><loc_129><loc_260><loc_135>in the category B T if the following conditions holds:</text>
+<ordered_list><list_item><loc_94><loc_139><loc_153><loc_146>X ′ is compact.</list_item>
+</ordered_list>
+<text><loc_94><loc_146><loc_398><loc_155>2. i : X ↪ → X ′ is an open immersion (i.e., topological open immersion with i -1 O X ′ ∼ = O X ).</text>
+<ordered_list><list_item><loc_94><loc_155><loc_228><loc_162>k : ( Ti )( F ′ ) →F is an isomorphism.</list_item>
+<list_item><loc_94><loc_163><loc_343><loc_170>X ′ \ i ( X ) is a proper analytic set that has only b connected components.</list_item>
+<list_item><loc_94><loc_171><loc_181><loc_178>dim C H 1 ( X ′ , F ′ ) = σ .</list_item>
+<list_item><loc_81><loc_182><loc_359><loc_189>If T = Id , then we say that X is ( b, σ ) -compactified by the morphism i : X ↪ → X ′ .</list_item>
+<list_item><loc_81><loc_194><loc_408><loc_201>We say that X is ( b, σ ) -compactifiable if X is ( b, σ ) -compactified by some morphism i : X ↪ → X ′ .</list_item>
+</ordered_list>
+<text><loc_59><loc_204><loc_441><loc_230>Remark 4.2. The notion of compactifiable complex manifolds may have first arisen in Kawamata's paper [45] in the deformation theory of non-compact manifolds context. See also [10] for more about this context. The questions are about a classification of compactifiable manifolds considered in Enoki's paper [17] and, for instance, Vo Van Tan's papers [42, 43, 44].</text>
+<unordered_list><list_item><loc_59><loc_232><loc_441><loc_246>Example 4.2. Let X = C ∗ and F = O C ∗ be the sheaf of holomorphic functions. In the category An Sh C , we can compactify X in the following ways.</list_item>
+<list_item><loc_78><loc_251><loc_284><loc_258>The pair ( C ∗ , O C ∗ ) is (2 , ∞ ) -compactified by the morphism</list_item>
+</unordered_list>
+<formula><loc_207><loc_261><loc_323><loc_270></formula>
+<text><loc_88><loc_272><loc_443><loc_287>where i : C ∗ ↪ → CP 1 is the canonical open immersion, k : i -1 i ! O C ∗ ∼ = O C ∗ is the canonical isomorphism. Indeed, we have the following short exact sequence</text>
+<formula><loc_146><loc_290><loc_383><loc_299></formula>
+<text><loc_88><loc_301><loc_161><loc_308>It follows that σ = ∞ .</text>
+<ordered_list><list_item><loc_78><loc_312><loc_281><loc_319>The pair ( C ∗ , O C ∗ ) is (2 , σ ) -compactified by the morphism</list_item>
+</ordered_list>
+<formula><loc_202><loc_322><loc_327><loc_330></formula>
+<text><loc_88><loc_333><loc_443><loc_348>where i : C ∗ ↪ → CP 1 is the canonical open immersion, k : i -1 O CP 1 ( n ) ∼ = O C ∗ is a trivialization isomorphism, and</text>
+<formula><loc_218><loc_346><loc_311><loc_366></formula>
+<ordered_list><list_item><loc_78><loc_373><loc_278><loc_380>The pair ( C ∗ , O X ) is (1 , 1) -compactified by the morphism</list_item>
+</ordered_list>
+<formula><loc_211><loc_382><loc_318><loc_390></formula>
+<text><loc_88><loc_393><loc_441><loc_408>where X ′ ⊂ CP 2 is defined by the equation z 3 1 + z 3 2 -z 0 z 1 z 2 = 0 , i : C ∗ ↪ → X ′ is the canonical open immersion, and k : i -1 O X ′ ∼ = O C ∗ is the canonical isomorphism.</text>
+<text><loc_88><loc_411><loc_441><loc_433>Recall that the sheaf of ideals of X ′ and the canonical sheaf of CP 2 are isomorphic to O CP 2 ( -3 H ) . The short exact sequence 0 →I → O CP 2 →O CP 2 / I → 0 , the Serre duality, and H i ( CP 2 , O CP 2 ) = 0 , ∀ i > 0 implies that</text>
+<formula><loc_96><loc_438><loc_268><loc_446></formula>
+<formula><loc_227><loc_448><loc_414><loc_456></formula>
+<formula><loc_268><loc_440><loc_433><loc_456></formula>
+<page_footer><loc_246><loc_468><loc_254><loc_475>18</page_footer>
+<page_break>
+<page_header><loc_123><loc_22><loc_378><loc_29>Hartogs and open embeddings, proper maps, compactifications, cohomologies</page_header>
+<text><loc_58><loc_47><loc_441><loc_71>Example 4.3. Fix a category B T as in Definition 4.1. If ( X, F ) is ( b, σ ) -compactified by a morphism ( X, F ) → ( X ′ , F ′ ) , then for any k ∈ Z the pair ( X, F ) is ( b, σ ′ ) -compactified by a morphism ( X, F ) → ( X, F ′ ⊗I ⊗ k Z ) , where I Z is the sheaf of ideals of Z and σ ′ = dim C H 1 ( X ′ , F ′ ⊗I ⊗ k Z ) .</text>
+<text><loc_58><loc_73><loc_443><loc_101>Assume that B is An Coh or An V ect . Assume that Z := X ′ \ X is connected and the support of a divisor D . Let O X ′ ( D ) be the corresponding line bundle, which is positive. The Grauert vanishing theorem ([9, Chapter VI, Theorem 4.3]) implies that if ( X, F ) is (1 , σ ) -compactified by a morphism ( X, F ) → ( X ′ , F ′ ) , then ( X, F ) is (1 , 0) -compactified by a morphism ( X, F ) → ( X ′ , F ′ ⊗O X ′ ( kD )) for some k ∈ Z ≥ 0 .</text>
+<text><loc_58><loc_104><loc_442><loc_133>Now, fix the category ( An sm ) V ect and let Z := X ′ \ X be connected and the support of a divisor D . If ( X, F ) is (1 , σ ) -compactified by a morphism ( X, F ) → ( X ′ , F ′ ) , then ( X, F ) is (1 , σ ( k )) -compactified by a morphism ( X, F ) → ( X ′ , F ′ ⊗O X ′ ( kD )) where σ ( k ) is a function which has some asymptotic inequalities as k → + ∞ (see the weak Morse inequalities [12, Section 8]). In particular, if D is nef and X ′ is Kähler, then σ ( k ) = o ( k dim X ′ ) .</text>
+<section_header_level_1><loc_59><loc_142><loc_193><loc_148>4.3 On ( b, σ ) -compactifiable varieties</section_header_level_1>
+<text><loc_59><loc_154><loc_381><loc_161>In this subsection, we give any remarks on numbers ( b, σ ) for the categories B as in Definition 4.1.</text>
+<text><loc_59><loc_164><loc_441><loc_199>Note that the number b is related to the topological ends of X (see [19, 18] or Remark 3.2 for more details about topological ends). Suppose X has e ( X ) topological ends. In general, b ≤ e ( X ) , but in the category An norm we have equality b = e ( X ) ; in fact, the Riemann extension theorem implies that if X is a connected normal space, then for each thin set A in X the space X \ A is connected ([9, Chapter 1, §13]). It follows that the number b does not depend on compactifications of X in An norm .</text>
+<text><loc_58><loc_202><loc_442><loc_223>In the category An sm , the number σ is a bimeromorphic invariant. Namely, if X is ( b, σ ′ ) -compactified by X ↪ → X ′ , ( b, σ ′′ ) -compactified by X ↪ → X ′′ in the category An sm , and X ′ and X ′′ are bimeromorphically equivalent, then σ ′ = σ ′′ (see, for instance, [39, Corollary 1.4]).</text>
+<text><loc_59><loc_226><loc_443><loc_248>The Nagata theorem [22] implies that each normal complex algebraic variety admits a compactification in the category Al a norm . By the resolution of singularities theorem, it follows that each complex algebraic manifold admits a compactification in the category Al a sm .</text>
+<text><loc_59><loc_250><loc_441><loc_271>In the category Al a sm , the number σ coincides with the dimension of the Albanese variety (see [14] for more details about Albanese varieties). Recall that if X ′ is a compact complex algebraic manifold and Alb( X ′ ) is the Albanese variety of X ′ , then</text>
+<formula><loc_152><loc_275><loc_348><loc_283></formula>
+<text><loc_59><loc_289><loc_442><loc_303>Now if X is ( b, σ ) -compactified by X ↪ → X ′ in Al a sm , then σ = dim C Alb( X ′ ) . Moreover, since the Albanese variety is a birational invariant, it follows that σ = dim C Alb( X ) .</text>
+<text><loc_59><loc_306><loc_443><loc_320>By the remarks above, it follows that the numbers ( b, σ ) do not depend on any compactification in the category Al a sm . Namely, we obtain the following proposition:</text>
+<text><loc_59><loc_323><loc_441><loc_337>Proposition 4.1. A complex algebraic manifold is ( b, σ ) -compactifiable in Al a sm if and only if X has b topological ends and dim C Alb( X ) = σ .</text>
+<text><loc_59><loc_340><loc_443><loc_375>Remark 4.3. By the Sumihiro theorem [21, Theorem 3], it follows that if G is a connected complex linear algebraic group, then each noncompact normal complex algebraic G -variety admits a compactification in the category Al a G,norm (i.e., a G -equivariant compactification). By Brion's results [29], it follows that if G is an arbitrary connected complex algebraic group, then each noncompact normal quasiprojective complex algebraic G -variety admits a compactification in the category Al a G,norm .</text>
+<section_header_level_1><loc_59><loc_384><loc_231><loc_389>4.4 Almost homogeneous algebraic G-manifolds</section_header_level_1>
+<text><loc_59><loc_395><loc_443><loc_416>A complex analytic G -variety X is called almost homogeneous if X has an open G -orbit (which we denote by Ω ). Note that an open G -orbit Ω is unique and connected, and E := X \ Ω is a proper analytic subset [8, Section 1.7, Proposition 4].</text>
+<text><loc_59><loc_419><loc_441><loc_433>In this section, we only consider analytifications of almost homogeneous algebraic G -manifolds with respect to an algebraic action of a connected complex algebraic group G .</text>
+<text><loc_59><loc_436><loc_442><loc_456>Remark 4.4. We list some properties of Albanese varieties of algebraic groups and almost homogeneous algebraic varieties (see [27, 28, 29, 30]). Let G be a connected complex algebraic group, G/H be an algebraic homogeneous G -manifold, and X be an almost homogeneous G -manifold with open G -orbit Ω ∼ = G/H .</text>
+<page_footer><loc_246><loc_468><loc_254><loc_475>19</page_footer>
+<page_break>
+<page_header><loc_123><loc_22><loc_378><loc_29>Hartogs and open embeddings, proper maps, compactifications, cohomologies</page_header>
+<ordered_list><list_item><loc_78><loc_47><loc_441><loc_61>There exists a minimal closed normal algebraic subgroup G aff ⊂ G such that the quotient G/G aff is an abelian variety. Note that G aff is an affine connected subgroup.</list_item>
+<list_item><loc_78><loc_65><loc_441><loc_79>The Albanese variety of G is Alb( G ) = G/G aff , and the Albanese morphism is the quotient holomorphic map G → G/G aff .</list_item>
+<list_item><loc_78><loc_84><loc_441><loc_97>The Albanese variety of G/H is Alb( G/H ) = G/G aff H , and the Albanese morphism is the quotient holomorphic map G/H → G/G aff H .</list_item>
+<list_item><loc_78><loc_102><loc_442><loc_122>The canonical map Alb(Ω) → Alb( X ) is an isomorphism, the Albanese variety Alb( X ) is a homogeneous algebraic G -manifold, and the Albanese morphism X → Alb( X ) is a surjective G -equivariant holomorphic map.</list_item>
+<list_item><loc_78><loc_127><loc_441><loc_141>Let I := G aff H . The Albanese map α : X → Alb(Ω) = G/I is a holomorphic fiber bundle with fiber Y := α -1 ( eI ) (which is a complex I -manifold).</list_item>
+<list_item><loc_78><loc_145><loc_441><loc_167>Let G × I Y be the fiber bundle associated with the principal I -bundle G → G/I and complex I -manifold Y . We have that X ∼ = G × I Y as fiber bundles. Moreover, Y is an almost homogeneous G aff -manifold with open G aff -orbit G aff H/H ∼ = G aff /G aff ∩ H .</list_item>
+</ordered_list>
+<text><loc_59><loc_169><loc_443><loc_212>Remark 4.5. If an almost homogeneous complex algebraic G -manifold X with open G -orbit Ω is ( b, σ ) -compactifiable in Al a G,sm , then X has b topological ends, σ = dim C Alb(Ω) . In particular, if G is a connected complex linear algebraic group, then Alb(Ω) is a point. It follows that σ = 0 and every complex algebraic G -manifold X has a G -equivariant compactification by the Sumihiro theorem (see Remark 4.3). So, if G is a connected complex linear algebraic group, then an almost homogeneous complex algebraic G -manifold X is ( b, 0) -compactifiable in Al a G,sm if and only if X has b topological ends.</text>
+<text><loc_59><loc_214><loc_441><loc_235>Remark 4.6. Let X be an almost homogeneous complex algebraic G -manifold with open G -orbit Ω , and let Y be a fiber of the Albanese map α : X → G/I . Since X = G × I Y , it follows the following statement: Y has a compactification in the category A l a I,sm if and only if X has a compactification in the category A l a G,sm .</text>
+<section_header_level_1><loc_59><loc_244><loc_227><loc_252>5 Hartogs for (1 , σ ) -compactified pairs</section_header_level_1>
+<text><loc_59><loc_259><loc_441><loc_273>Let X ′ be a compact complex analytic variety, Z ⊂ X ′ be a proper closed analytic set, X := X ′ \ Z , i : X ↪ → X ′ be the open immersion, and j : Z ↪ → X ′ be the closed immersion.</text>
+<text><loc_59><loc_276><loc_180><loc_283>Consider the corresponding functors:</text>
+<formula><loc_286><loc_285><loc_288><loc_290></formula>
+<formula><loc_204><loc_287><loc_296><loc_323></formula>
+<text><loc_58><loc_329><loc_235><loc_336>We have the following natural morphisms of functors:</text>
+<formula><loc_214><loc_338><loc_286><loc_356></formula>
+<text><loc_59><loc_362><loc_224><loc_369>Also we have the following global section functors</text>
+<formula><loc_301><loc_373><loc_305><loc_379></formula>
+<formula><loc_195><loc_371><loc_304><loc_396></formula>
+<text><loc_59><loc_403><loc_436><loc_410>Since Γ( X ′ , -) ◦ i ! = Γ c ( X, -) , Γ( X ′ , -) ◦ j ∗ = Γ( Z, -) , it follows the following natural morphisms of functors:</text>
+<formula><loc_203><loc_413><loc_297><loc_430></formula>
+<text><loc_59><loc_436><loc_340><loc_443>Note that, for any injective object I ∈ Sh C ( X ′ ) we have the following exact sequence</text>
+<formula><loc_166><loc_447><loc_334><loc_455></formula>
+<page_footer><loc_246><loc_468><loc_254><loc_475>20</page_footer>
+<page_break>
+<page_header><loc_123><loc_22><loc_378><loc_29>Hartogs and open embeddings, proper maps, compactifications, cohomologies</page_header>
+<text><loc_59><loc_46><loc_315><loc_53>This implies the following distinguished triangle for any sheaf F ′ ∈ Sh C ( X ′ ) :</text>
+<formula><loc_156><loc_64><loc_442><loc_71></formula>
+<text><loc_58><loc_77><loc_333><loc_84>We have the following commutative diagrams of morphisms of functors on Sh ( X ′ ) :</text>
+<picture><loc_117><loc_96><loc_381><loc_140></picture>
+<text><loc_59><loc_175><loc_400><loc_182>This implies the following commutative diagram of distinguished triangles for any sheaf F ′ ∈ Sh C ( X ′ ) :</text>
+<picture><loc_128><loc_189><loc_371><loc_232></picture>
+<text><loc_58><loc_242><loc_441><loc_271>Further, to the end of Section 5, we consider only the following categories B T as in Definition 4.1: B is one of the following An norm , An sm , Al norm , Al sm , An a G,norm , An a G,sm , Al a G,norm , Al a G,sm ; T is one of the following Id or Sh C . In this case, X has exactly b topological ends. Suppose ( X, F ) is ( b, σ ) -compactified by the morphism ( X, F ) → ( X ′ , F ′ ) in B T .</text>
+<text><loc_59><loc_274><loc_211><loc_281>It follows the following commutative diagram:</text>
+<picture><loc_139><loc_293><loc_359><loc_333></picture>
+<text><loc_59><loc_338><loc_282><loc_345>and for cohomologies we obtain the following commutative diagram</text>
+<formula><loc_131><loc_350><loc_442><loc_395></formula>
+<section_header_level_1><loc_59><loc_407><loc_219><loc_413>5.1 Case of (1 , σ ) -compactifiability of ( X, F )</section_header_level_1>
+<text><loc_59><loc_419><loc_441><loc_433>Let X ∈ B , and let F be a locally free O X -module of finite rank. Let us assume that ( X, F ) is (1 , σ ) -compactified by the morphism ( X, F ) → ( X ′ , F ′ ) in B Sh C . Consider the following assertions:</text>
+<ordered_list><list_item><loc_78><loc_439><loc_132><loc_446>F is Hartogs;</list_item>
+<list_item><loc_78><loc_449><loc_345><loc_456>The canonical homomorphism Γ( X ′ , F ′ ) → Γ( Z, j -1 F ′ ) is an epimorphism.;</list_item>
+</ordered_list>
+<page_footer><loc_246><loc_468><loc_254><loc_475>21</page_footer>
+<page_break>
+<page_header><loc_123><loc_22><loc_378><loc_29>Hartogs and open embeddings, proper maps, compactifications, cohomologies</page_header>
+<ordered_list><list_item><loc_78><loc_46><loc_160><loc_54>dim C H 1 c ( X, F ) ≤ σ ;</list_item>
+<list_item><loc_78><loc_56><loc_163><loc_64>dim C H 1 c ( X, F ) < ∞ .</list_item>
+</ordered_list>
+<text><loc_59><loc_67><loc_291><loc_73>Theorem 5.1. With the above data, we obtain the following assertions.</text>
+<ordered_list><list_item><loc_78><loc_79><loc_264><loc_86>We have the following implications: 1 ⇒ 2 ⇒ 3 ⇒ 4 ;</list_item>
+<list_item><loc_78><loc_91><loc_192><loc_97>If σ = 0 , then 1 ⇔ 2 ⇔ 3 ⇒ 4 ;</list_item>
+<list_item><loc_78><loc_103><loc_202><loc_109>If F = O X , then 1 ⇔ 2 ⇔ 3 ⇔ 4 ;</list_item>
+<list_item><loc_78><loc_114><loc_441><loc_127>If X is nonsingular, each compact irreducible divisor of X is F -removable, Γ( ∂X, O X ) = C and Γ( ∂X, F ) = 0 , then 1 ⇔ 2 ⇔ 3 ⇔ 4 .</list_item>
+</ordered_list>
+<text><loc_124><loc_121><loc_124><loc_127>/negationslash</text>
+<unordered_list><list_item><loc_59><loc_135><loc_441><loc_149>Proof. 1. The implication 2 ⇒ 3 follows from the first line of the diagram 6. Further, since the first square of the diagram 6 is Cartesian, it follows that the implication 1 ⇒ 2 is also true. The implication 3 ⇒ 4 is clear.</list_item>
+<list_item><loc_78><loc_153><loc_250><loc_161>The implication 3 ⇒ 1 , 2 is clear (see diagram 6).</list_item>
+<list_item><loc_78><loc_165><loc_254><loc_172>The equivalence 1 ⇔ 4 follows from Theorem 3.2.</list_item>
+<list_item><loc_78><loc_177><loc_252><loc_184>The implication 4 ⇒ 1 follows from Theorem 3.3.</list_item>
+</unordered_list>
+<text><loc_59><loc_202><loc_261><loc_209>In particular, we obtain the following Lefschetz type property.</text>
+<text><loc_59><loc_211><loc_441><loc_225>Corollary 5.1. With the above data, if F is Hartogs, then for any sheaf of C -vector spaces F ′ on X ′ such that i -1 F ′ ∼ = F and dim H 1 ( X ′ , F ′ ) < ∞ , the canonical homomorphism Γ( X ′ , F ′ ) → Γ( Z, j -1 F ′ ) is surjective.</text>
+<text><loc_59><loc_227><loc_441><loc_262>Remark 5.1. In particular, for any locally free O X ′ -module of finite rank, we obtain that if i -1 F ′ is Hartogs, then the canonical homomorphism Γ( X ′ , F ′ ) → Γ( Z, j -1 F ′ ) is surjective. For the case where X ′ is a projective complex manifold, Z is a hyperplane, and F ′ is an algebraic vector bundle, we obtain that i -1 F ′ is Hartogs because X is Stein; so, we obtain the Grauert-Grothendieck theorem on the Lefschetz property for algebraic vector bundles over projective manifolds (see [11, Theorem 3.1] or [4, pg. 83]).</text>
+<text><loc_59><loc_268><loc_443><loc_295>For the case F = O X and Z is an analytic set of codimension one of a projective complex manifold X ′ , we can consider the sheaves F ′ as the line bundles O X ′ ( -mD ) where D is an effective divisor supported on Z , m ∈ Z > 0 . For the nef divisors D , we obtain the following characterization of the Hartogs property for X (see [38] for more details).</text>
+<text><loc_59><loc_298><loc_443><loc_319>Corollary 5.2. Let X ′ be a complex projective manifold, dim X ′ > 1 , Z be a connected analytic subset of codimension one which is the support of a nef effective Cartier divisor D on X ′ , and X := X ′ \ Z . The following assertions are equivalent:</text>
+<unordered_list><list_item><loc_81><loc_325><loc_147><loc_332>X is not Hartogs;</list_item>
+<list_item><loc_81><loc_337><loc_192><loc_345>H 1 c ( X, O X ) is ∞ -dimensional;</list_item>
+<list_item><loc_81><loc_348><loc_217><loc_355>D is abundant of Iitaka dimension one;</list_item>
+<list_item><loc_81><loc_360><loc_221><loc_367>D is semiample of Iitaka dimension one;</list_item>
+<list_item><loc_81><loc_372><loc_232><loc_379>X is a proper fibration over an affine curve;</list_item>
+</unordered_list>
+<text><loc_59><loc_385><loc_441><loc_399>Consider X ∈ B and let us assume that X is (1 , σ ) -compactified by X → X ′ in B . Taking F ′ = O X ′ , we obtain the following corollary.</text>
+<text><loc_59><loc_402><loc_242><loc_408>Corollary 5.3. The following assertions are equivalent:</text>
+<ordered_list><list_item><loc_78><loc_415><loc_140><loc_422>O X is Hartogs;</list_item>
+<list_item><loc_78><loc_425><loc_156><loc_433>Γ( Z, j -1 O X ′ ) ∼ = C ;</list_item>
+<list_item><loc_78><loc_437><loc_167><loc_446>dim C H 1 c ( X, O X ) ≤ σ ;</list_item>
+<list_item><loc_78><loc_449><loc_169><loc_457>dim C H 1 c ( X, O X ) < ∞ .</list_item>
+</ordered_list>
+<text><loc_407><loc_114><loc_407><loc_120>/negationslash</text>
+<page_footer><loc_246><loc_468><loc_254><loc_475>22</page_footer>
+<page_break>
+<page_header><loc_123><loc_22><loc_378><loc_29>Hartogs and open embeddings, proper maps, compactifications, cohomologies</page_header>
+<text><loc_59><loc_46><loc_443><loc_67>Remark 5.2. In the case of B = Al a sm , we have σ = dim C Alb( X ) (see Propositions 4.1). Moreover, if X is an almost homogeneous algebraic G -manifold with an open G -orbit Ω (where G is a connected complex algebraic group), then σ = dim C Alb(Ω) (see Section 4.4).</text>
+<unordered_list><list_item><loc_59><loc_76><loc_247><loc_83>5.2 Case of ( b, σ ) -compactifiability of ( X, O X ) , b > 1</list_item>
+</unordered_list>
+<text><loc_59><loc_88><loc_441><loc_103>Proposition 5.1. Suppose X ∈ B is ( b, σ ) -compactified by X → X ′ in B , b > 1 . Let { E i } be the set of connected components of Z = X ′ \ X . If there exists i such that Γ( E i , O X ′ | E i ) ∼ = C , then O X is Hartogs.</text>
+<text><loc_59><loc_110><loc_441><loc_124>Proof. By Corollary 5.3, it follows that the structure sheaf O X ′′ of X ′′ := X ′ \ E i is Hartogs. By Theorem 3.2, it follows that O X is Hartogs.</text>
+<text><loc_59><loc_131><loc_441><loc_146>Question : Suppose X ∈ B is ( b, σ ) -compactified by X → X ′ in B , b > 1 . Let { E i } be a set of connected components of Z = X ′ \ X . Is it true that O X is Hartogs implies that there exists i such that Γ( E i , O X ′ | E i ) ∼ = C ?</text>
+<page_footer><loc_246><loc_468><loc_254><loc_475>23</page_footer>
+<page_break>
+<page_header><loc_123><loc_22><loc_378><loc_29>Hartogs and open embeddings, proper maps, compactifications, cohomologies</page_header>
+<section_header_level_1><loc_59><loc_46><loc_252><loc_53>6 Almost homogeneous algebraic G -varieties</section_header_level_1>
+<section_header_level_1><loc_59><loc_62><loc_178><loc_69>6.1 Calculations for Γ( Z, O X ′ | Z )</section_header_level_1>
+<text><loc_59><loc_74><loc_441><loc_99>Let X ∈ Al a G,sm be an almost homogeneous algebraic G -manifold with open G -orbit Ω = G/H (here G is a connected complex algebraic group). Suppose X is (1 , σ ) -compactifiable in Al a G,sm . It follows that X has only one topological end and dim C Alb(Ω) = σ (see Remark 4.5). Let X ↪ → X ′ be any compactification in Al a G,sm .</text>
+<text><loc_59><loc_102><loc_441><loc_117>Note that X = G × I Y and X ′ = G × I Y ′ , where I = G aff H , Y is a complex I -manifold (moreover, Y is an almost homogeneous G aff -manifold), and Y ′ is an I -equivariant compactification of Y (see Section 4.4).</text>
+<text><loc_59><loc_120><loc_441><loc_134>Let Z := X ′ \ X,F := Y ′ \ Y , and q : G × Y ′ → X ′ be the canonical quotient map. Since π -1 ( X ) = G × Y , it follows that π -1 ( Z ) = G × F .</text>
+<text><loc_59><loc_150><loc_441><loc_164>family { q -1 ( U ) } forms a base of I -invariant open neighborhoods of G × F . On the other hand, the set G × F admits a base of all neighborhoods of the form G × V , where { V } is a base of all neighborhoods of F .</text>
+<text><loc_59><loc_133><loc_441><loc_153>Now for any neighborhood U of Z , we have G × F ⊂ q -1 ( U ) . Moreover, ⋂ U ⊃ Z q -1 ( U ) = G × F. It follows that the</text>
+<text><loc_59><loc_167><loc_331><loc_175>Recall that for any open set U ⊂ X ′ we have Γ( U, O X ′ ) = (Γ( q -1 ( U ) , O G × Y ′ )) I .</text>
+<text><loc_59><loc_178><loc_441><loc_197>Now we obtain the following canonical injective homomorphisms, where ̂ ⊗ is the topological tensor product (see [12, 20]):</text>
+<formula><loc_72><loc_196><loc_428><loc_217></formula>
+<text><loc_59><loc_218><loc_441><loc_232>Taking I -invariants and the direct limit over neighborhoods U of Z for both sides, we obtain the following canonical injective homomorphism:</text>
+<formula><loc_124><loc_244><loc_376><loc_263></formula>
+<text><loc_59><loc_264><loc_442><loc_278>Note that the algebra of regular functions C [ G ] is a dense subspace of the algebra of holomorphic functions Γ( G, O G ) with respect to the canonical Fréchet topology.</text>
+<text><loc_59><loc_281><loc_441><loc_302>Now, assume that there exists an I -invariant open algebraic subvariety S ⊂ Y ′ such that S ⊃ F and C [ S ] is a dense subspace in Γ( F, O Y ′ | F ) with respect to the canonical inductive limit topology, then we have the following canonical topological isomorphisms:</text>
+<formula><loc_149><loc_306><loc_351><loc_327></formula>
+<text><loc_59><loc_324><loc_362><loc_331>Since G × S = q -1 ( q ( G × S )) , it follows the following canonical topological isomorphism:</text>
+<section_header_level_1><loc_59><loc_354><loc_181><loc_360>6.2 Case of semiabelian variety G</section_header_level_1>
+<formula><loc_197><loc_336><loc_303><loc_356></formula>
+<text><loc_59><loc_366><loc_441><loc_381>Let G be a semiabelian complex algebraic variety. This means that G is an extension of an abelian variety A by an algebraic torus T ∼ = ( C ∗ ) n .</text>
+<text><loc_59><loc_383><loc_441><loc_398>Let X be an almost homogeneous algebraic G -manifold with open G -orbit Ω ∼ = G . In this case, X = G × T Y , where Y is a nonsingular toric variety (about toric varieties, see, for instance, [7]).</text>
+<text><loc_59><loc_401><loc_442><loc_416>Each toric variety Y admits a T -equivariant compactification Y ′ and Alb( T ) is a point. It follows that if Y has only one topological end, then Y is a (1 , 0) -compactifiable in Al a T,sm .</text>
+<text><loc_59><loc_418><loc_441><loc_432>The fibration lemma [5, Section 3] implies that if Y has only one topological end, then X has only one topological end.</text>
+<text><loc_59><loc_435><loc_441><loc_456>Let X ( T ) be a character lattice of the torus T and X ( T ) R := X ( T ) ⊗ Z R . Let G ant ⊂ G be the largest antiaffine subgroup (equivalently, the smallest normal subgroup of G having an affine quotient, or kernel of affinization map G → Spec( C [ G ]) ).</text>
+<page_footer><loc_246><loc_468><loc_254><loc_475>24</page_footer>
+<page_break>
+<page_header><loc_123><loc_22><loc_378><loc_29>Hartogs and open embeddings, proper maps, compactifications, cohomologies</page_header>
+<text><loc_59><loc_46><loc_443><loc_69>The multiplication map ( T × G ant ) / ( G ant ) aff → G is an isogeny with a finite kernel N = ( T ∩ G ant ) / ( G ant ) aff (see [30, Remark 5.1.2.]). Here the groups T ∩ G ant , ( G ant ) aff are viewed as subgroups of T × G ant via x → ( x, x -1 ) . It follows the following canonical isomorphism C [ G ] = ( C [ T ] ( G ant ) aff ) N .</text>
+<text><loc_59><loc_72><loc_441><loc_86>Since the group ( G ant ) aff is a connected closed algebraic subgroup of the torus T , it follows that ( G ant ) aff is also a torus, which is the intersection of kernels of some characters of T [15, Section 16]:</text>
+<formula><loc_192><loc_89><loc_308><loc_109></formula>
+<text><loc_59><loc_110><loc_441><loc_129>Let L 0 := Z 〈 l i | i = 1 , · · · n 〉 be a sublattice of X ( T ) spanned by l i . Note that C [ T ] = ⊕ l ∈ X ( T ) C t -l , where t -l is a</text>
+<formula><loc_209><loc_141><loc_291><loc_163></formula>
+<text><loc_59><loc_127><loc_442><loc_142>monomial of the weight l ∈ X ( T ) . It follows that t -l is ( G ant ) aff -invariant if and only if l | ( G ant ) aff ≡ 1 if and only if l ∈ L 0 . This implies that</text>
+<text><loc_59><loc_168><loc_443><loc_191>Note that the lattice L 0 is the character lattice of the torus T/ ( G ant ) aff and N is a finite subgroup of T/ ( G ant ) aff . Suppose the elements of N are represented by ξ i ∈ T ∩ G ant , i = 1 , · · · , m . For any l ∈ L 0 , the monomial t -l is N -invariant if and only if l ( ξ i ) = 1 , ∀ i = 1 , · · · , m .</text>
+<text><loc_59><loc_193><loc_441><loc_201>Consider the lattice L := { l ∈ L 0 | l ( ξ i ) = 1 , ∀ i = 1 , · · · , m } (which is a finite index sublattice of L ). It follows that</text>
+<formula><loc_220><loc_207><loc_280><loc_227></formula>
+<text><loc_59><loc_232><loc_442><loc_266>Assume that Y has only one topological end. There exists a base { V } of all neighborhoods of F such that each V is invariant with respect to the real compact form K ∼ = ( S 1 ) n of torus T (see, for instance, [8, Section 2.2, Lemma 2]). Moreover, there exists an open toric subvariety S ⊂ Y ′ (here Y ′ is a T -equivariant compactification of Y ) such that F ⊂ S and C [ S ] is a dense subspace of Γ( V, O Y ′ ) for any K -invariant neighborhood V (see, for instance, [36, Section 4]).</text>
+<text><loc_59><loc_270><loc_335><loc_277>Let Σ be the fan of the toric variety Y , and | Σ | be the support of Σ . This implies that</text>
+<formula><loc_211><loc_275><loc_289><loc_295></formula>
+<text><loc_59><loc_299><loc_441><loc_314>where C = ( X ( T ) R \ | Σ | ) ∨ ⊂ X ( T ) R is a strictly convex rational cone which is the dual cone of the closed cone X ( T ) R \ | Σ | (see, for instance, [36, Section 6]).</text>
+<text><loc_59><loc_317><loc_89><loc_324><loc_59><loc_345><loc_183><loc_368>Note that where ̂ ⊕ is the completed direct sum.</text>
+<formula><loc_92><loc_322><loc_408><loc_350></formula>
+<text><loc_59><loc_360><loc_405><loc_368>Algebraic torus T acting in this space by the following formula: ξ. ( t -l ⊗ t ′-l ′ ) = ( l + l ′ )( ξ )( t -l ⊗ t ′-l ′ ) .</text>
+<text><loc_59><loc_372><loc_319><loc_380>The monomial t -l ⊗ t -l ′ is T -invariant if and only if l + l ′ = 0 . It follows that:</text>
+<formula><loc_186><loc_380><loc_314><loc_405></formula>
+<text><loc_58><loc_405><loc_325><loc_412>We obtain the following convex-geometric criterion for the Hartogs phenomenon:</text>
+<text><loc_59><loc_415><loc_441><loc_437><loc_58><loc_434><loc_441><loc_456>Theorem 6.1. Let G be a semiabelian variety with the abelian variety A and torus T , and let L ⊂ X ( T ) be the sublattice of the character lattice of T such that C [ G ] = ⊕ l ∈ L C t -l . Let X be a noncompact almost homogeneous complex algebraic G -manifold with open orbit G . Assume that the fiber Y of the Albanese map α : X → A is a toric variety with a fan Σ such that X ( T ) R \ | Σ | is a connected set. Then O X is Hartogs if and only if L ∩ ( X ( T ) R \ | Σ | ) ∨ = 0 .</text>
+<page_footer><loc_246><loc_468><loc_254><loc_475>25</page_footer>
+<page_break>
+<page_header><loc_123><loc_22><loc_378><loc_29>Hartogs and open embeddings, proper maps, compactifications, cohomologies</page_header>
+<text><loc_59><loc_47><loc_370><loc_54>Corollary 6.1. Let G,A,T,X,Y be as in Theorem 6.1. If O Y is Hartogs, then O X is Hartogs.</text>
+<text><loc_59><loc_63><loc_442><loc_77>Proof. The sheaf O Y is Hartogs if and only if ( X ( T ) R \ | Σ | ) ∨ = 0 (see, for instance, [36, Section 6.1] or [37, Theorem A]).</text>
+<text><loc_59><loc_86><loc_353><loc_93>Note that if O Y is not Hartogs, then O X may or may not be Hartogs (see example below).</text>
+<section_header_level_1><loc_59><loc_103><loc_108><loc_108>6.3 Example</section_header_level_1>
+<text><loc_59><loc_114><loc_443><loc_135>Let { e 1 , e 2 , e 3 } be a basis of C 3 , and let Λ = Z 〈 e 1 , e 2 , e 3 , i ( e 1 + e 3 ) 〉 be a lattice spanned by e 1 , e 2 , e 3 , i ( e 1 + e 3 ) . Note that G = C 3 / Λ is an extension of the elliptic curve A = C / Z 〈 1 , i 〉 by torus ( C ∗ ) 2 . Indeed, the projection p : C 〈 e 1 , e 2 , e 3 〉 → C 〈 e 3 〉 induces the surjective map</text>
+<formula><loc_184><loc_139><loc_316><loc_147></formula>
+<formula><loc_161><loc_162><loc_339><loc_170></formula>
+<text><loc_59><loc_179><loc_441><loc_200>Now let z 1 , z 2 , z 3 be holomorphic coordinates corresponding to the basis vectors e 1 , e 2 , e 3 . Let π : C 3 → G be the quotient map. If p = ( z 1 , z 2 , z 3 ) , q = ( z ′ 1 , z ′ 2 , z ′ 3 ) are points of C 3 , then π ( p ) = π ( q ) if and only if there exist a 1 , a 2 , a 3 , a 4 ∈ Z such that</text>
+<formula><loc_160><loc_204><loc_442><loc_212></formula>
+<text><loc_59><loc_219><loc_268><loc_226>Each f ∈ C [ G ] can be represented by a polynomial in e iz 1 , e iz 2 :</text>
+<formula><loc_193><loc_227><loc_307><loc_247></formula>
+<text><loc_59><loc_255><loc_378><loc_263>By the formulas (7), it follows that for any a 1 , a 2 , a 4 ∈ Z we would have the following equalities:</text>
+<formula><loc_61><loc_272><loc_438><loc_292></formula>
+<text><loc_59><loc_301><loc_440><loc_308>It follows that for a given n 1 ∈ Z we would have e -n 1 a 4 = 1 for all a 4 ∈ Z . Hence n 1 = 0 and L = { (0 , n 2 ) ∈ Z 2 } .</text>
+<text><loc_59><loc_311><loc_442><loc_334>Let w 1 , w 2 be holomorphic coordinates in C 2 . Consider the standard algebraic torus ( C ∗ ) 2 ⊂ C 2 , and isomorphism exp: T ∼ = ( C ∗ ) 2 defined by w 1 = e iz 1 , w 2 = e iz 2 (here z i are holomorphic coordinates in C 3 as above). So, C [ G ] = C [ z 2 , z -1 2 ] .</text>
+<text><loc_59><loc_335><loc_441><loc_350>Moreover, Spec( C [ G ]) = C 〈 e 2 〉 / Z 〈 e 2 〉 ∼ = C ∗ . The affinization map G → Spec( C [ G ]) induced by projection C 〈 e 1 , e 2 , e 3 〉 → C 〈 e 2 〉 . It follows that</text>
+<formula><loc_179><loc_355><loc_321><loc_388></formula>
+<text><loc_59><loc_397><loc_442><loc_412>If Y 1 = CP 1 [ w 1 :1 /w 1 ] × C 1 w 2 , then the sheaf of holomorphic functions of G × T Y 1 is not Hartogs. Indeed, in this case, we have</text>
+<formula><loc_200><loc_416><loc_300><loc_445></formula>
+<text><loc_59><loc_151><loc_143><loc_158>The kernel of α is exactly</text>
+<text><loc_59><loc_449><loc_171><loc_456>This implies that L ∩ C = C = 0 .</text>
+<text><loc_156><loc_450><loc_156><loc_456>/negationslash</text>
+<page_footer><loc_246><loc_468><loc_254><loc_475>26</page_footer>
+<page_break>
+<page_header><loc_123><loc_22><loc_378><loc_29>Hartogs and open embeddings, proper maps, compactifications, cohomologies</page_header>
+<text><loc_59><loc_46><loc_441><loc_61>If Y 2 = C w 1 × CP 1 [ w 2 :1 /w 2 ] , then the sheaf of holomorphic functions of G × T Y 2 is Hartogs. Indeed, in this case, we have</text>
+<formula><loc_200><loc_65><loc_300><loc_93></formula>
+<text><loc_59><loc_97><loc_153><loc_104>This implies that L ∩ C = 0 .</text>
+<text><loc_59><loc_107><loc_332><loc_115>In both cases, the sheaves of holomorphic functions over Y 1 and Y 2 are not Hartogs.</text>
+<page_footer><loc_246><loc_468><loc_254><loc_475>27</page_footer>
+<page_break>
+<page_header><loc_123><loc_22><loc_378><loc_29>Hartogs and open embeddings, proper maps, compactifications, cohomologies</page_header>
+<section_header_level_1><loc_59><loc_47><loc_104><loc_53>References</section_header_level_1>
+<ordered_list><list_item><loc_59><loc_61><loc_443><loc_75>A. Andreotti , D. Hill , E.E. Levi convexity and the Hans Levy problem. Part I: reduction to vanishing theorems. Ann. Sc. Norm. Super. Pisa. 26 (1972), 325-363.</list_item>
+<list_item><loc_59><loc_77><loc_442><loc_91>A. Vistoli , Notes on Grothendieck topologies, fibered categories and descent theory, 2008, http://homepage.sns.it/vistoli/descent.pdf</list_item>
+<list_item><loc_59><loc_93><loc_443><loc_107>A. Grothendieck , Technique de descente et théorèmes d'existence en géométrie algébrique. I. Généralités. Descente par morphismes fidèlement plats, Séminaire N. Bourbaki, 1960, exp. no 190, p. 299-327.</list_item>
+<list_item><loc_59><loc_109><loc_443><loc_130>A. Grothendieck , Cohomologie locale des faisceaux cohérents et théorèmes de Lefschetz locaux et globaux. Séminaire de Géométrie Algébrique du Bois-Marie, SGA 2, 1962, Advanced Studies in Pure Mathematics, Vol. 2. North-Holland Publishing Co., Amsterdam, 1968.</list_item>
+<list_item><loc_59><loc_133><loc_441><loc_146>B. Gilligan , Ends of complex homogeneous manifolds having non-constant holomorphic functions, Archiv der Mathematik. 37 (1981), 544-555.</list_item>
+<list_item><loc_59><loc_149><loc_442><loc_163>C. B˘ anic˘ a , O. St˘ an˘ a¸ sil˘ a , Algebraic Methods in the Global Theory of Complex Spaces. Wiley& Sons, New York, 1976.</list_item>
+<list_item><loc_59><loc_165><loc_441><loc_179>D. Cox , J. Little , H. Schenck , Toric Varieties, Graduate Studies in Mathematics, vol. 124, American Mathematical Society, Providence, RI, 2011.</list_item>
+<list_item><loc_59><loc_181><loc_442><loc_195>D. N. Akhiezer , Lie group actions in complex analysis. Aspects Math., E27 Friedr. Vieweg & Sohn, Braunschweig, 1995.</list_item>
+<list_item><loc_59><loc_197><loc_443><loc_211>H. Grauert , T. Peternell , R. Remmert (Eds.), Several Complex Variables VII: Sheaf-Theoretical Methods in Complex Analysis. Encyclopaedia of Mathematical Sciences, vol. 74, Springer, Berlin, Heidelberg, 1994.</list_item>
+<list_item><loc_59><loc_214><loc_441><loc_228>E. Ballico, E. Gasparim, F. Rubilar , 20 Open questions about deformations of compactifiable manifolds, São Paulo J. Math. Sci. 15, 661-681 (2021).</list_item>
+<list_item><loc_59><loc_230><loc_443><loc_244>J.-B. Bost , Algebraization, Transcendence, and D-Group Schemes. Notre Dame J. Formal Logic 54 (3-4) 377 434, 2013.</list_item>
+<list_item><loc_59><loc_246><loc_443><loc_260>J.-P. Demailly , Complex analytic and differential geometry, 2012, https://www-fourier.ujf-grenoble.fr/ demailly/manuscripts/agbook.pdf</list_item>
+<list_item><loc_59><loc_262><loc_440><loc_269>J.-P. Serre , Quelques problemes globaux relatifs aux varietes de Stein. Coll. Plus. Var. Bruxelles, (1963) 57-68.</list_item>
+<list_item><loc_59><loc_272><loc_442><loc_286>J.-P. Serre , Morphismes universels et variété dÁlbanese. Sèminaire Chevalley (1958-1959), Exposé No. 10, Documents Mathématiques 1, Soc. Math. France, Paris, 2001.</list_item>
+<list_item><loc_59><loc_289><loc_442><loc_303>J. E. Humphreys , Linear algebraic groups, Graduate Texts in Mathematics, vol. 21, Springer-Verlag, New York Inc. 1998.</list_item>
+<list_item><loc_59><loc_305><loc_443><loc_319>J. Merker , E. Porten , The Hartogs extension theorem on ( n -1) -complete complex spaces. J. reine angew. Math. 637 (2009), 23-39.</list_item>
+<list_item><loc_59><loc_321><loc_372><loc_328>I. Enoki , On Compactifiable Complex Analytic Surfaces, Invent. math. 67, 189-211 (1982)</list_item>
+<list_item><loc_59><loc_330><loc_336><loc_337>G. Peschke , The theory of ends. Nieuw Archief voor Wiskunde. 8 (1990), 1-12.</list_item>
+<list_item><loc_59><loc_340><loc_398><loc_347>H. Freudenthal , Über die Enden topologischer Räume und Gruppen. Math. Z. 33 (1931), 692-713.</list_item>
+<list_item><loc_59><loc_349><loc_443><loc_363>H. H. Schaefer , M. P. Wolff , Topological Vector Spaces. Graduate texts in mathematics, Springer Science+Business Media, New York, 1999.</list_item>
+<list_item><loc_59><loc_365><loc_332><loc_372>H. Sumihiro , Equivariant completion. J. Math. Kyoto Univ. 14:1 (1974), 1-28.</list_item>
+<list_item><loc_59><loc_375><loc_433><loc_382>M. Nagata , Imbedding of an abstract variety in a complete variety. Jour.of Math. Kyoto Univ. 2 (1962), 1-10.</list_item>
+<list_item><loc_59><loc_384><loc_443><loc_405>M. Kashiwara , P. Schapira , Sheaves on manifolds, with a chapter in French by Christian Houzel, Grundlehren der Mathematischen Wissenschaften [Fundamental Principles of Mathematical Sciences], vol. 292, Springer-Verlag, Berlin, 1994.</list_item>
+<list_item><loc_59><loc_406><loc_443><loc_421>M. Andersson , H. Samuelsson , Koppelman formulas and the ¯ ∂ -equation on an analytic space. Institut MittagLeffler preprint series, 31 (2008).</list_item>
+<list_item><loc_59><loc_423><loc_443><loc_437>M. Coltoiu , J. Ruppenthal , On Hartogs extension theorem on ( n -1) -complete complex spaces. J. reine angew. Math. 637 (2009), 41-47.</list_item>
+<list_item><loc_59><loc_440><loc_357><loc_447>M. Brion , Une extension du theóremè de Borel-Weil, Math. Ann. 286 (1990), 655-660.</list_item>
+<list_item><loc_59><loc_449><loc_368><loc_456>M. Brion , Log homogeneous varieties, preprint 2007, https://arxiv.org/abs/math/0609669.</list_item>
+</ordered_list>
+<page_footer><loc_246><loc_468><loc_254><loc_475>28</page_footer>
+<page_break>
+<page_header><loc_123><loc_22><loc_378><loc_29>Hartogs and open embeddings, proper maps, compactifications, cohomologies</page_header>
+<ordered_list><list_item><loc_59><loc_46><loc_443><loc_60>M. Brion , Some Basic Results on Actions of Nonaffine Algebraic Groups, in: H. Campbell, A. Helminck, H. Kraft, D. Wehlau (eds), Symmetry and Spaces. Progress in Mathematics, Birkhuser, Boston, 278 (2010), 1-20.</list_item>
+<list_item><loc_59><loc_62><loc_407><loc_69>M. Brion , Algebraic group actions on normal varieties, Trans. Moscow Math. Soc. 78 (2017), 85-107.</list_item>
+<list_item><loc_59><loc_72><loc_377><loc_79>M. Brion , Some structure theorems for algebraic groups, Proc. Symp. Pure Math. 94 (2017).</list_item>
+<list_item><loc_59><loc_81><loc_435><loc_88>N. Øvrelid , S. Vassiliadou , Hartogs Extension Theorems on Stein Spaces. J. Geom. Anal. 20 (2010), 817-836.</list_item>
+<list_item><loc_59><loc_91><loc_429><loc_98>R. Dwilewicz , Holomorphic extensions in complex fiber bundles, J. Math. Anal. Appl. 322 (2006), 556-565.</list_item>
+<list_item><loc_59><loc_100><loc_442><loc_114>R. C. Gunning , H. Rossi , Analytic Functions of Several Complex Variables. Prentice-Hall, Inc., Englewood Cliffs, N.J. 1965.</list_item>
+<list_item><loc_59><loc_116><loc_443><loc_130>R. Harvey , The theory of hyperfunctions on totally real subsets of complex manifolds with applications to extension problems. Am. J. Math. 91 (1969), 853-873.</list_item>
+<list_item><loc_59><loc_133><loc_443><loc_146>S. I. Gelfand , Y. I. Manin , Methods of Homological Algebra. Springer Monographs in Mathematics, 2nd edn. Springer, Berlin,2003.</list_item>
+<list_item><loc_59><loc_149><loc_441><loc_163>S. Feklistov , The Hartogs extension phenomenon in almost homogeneous algebraic varieties. Mat. Sb. 213:12 (2022), 109-136.</list_item>
+<list_item><loc_59><loc_165><loc_442><loc_179>S. Feklistov , A. Shchuplev , The Hartogs extension phenomenon in toric varieties. J. Geom. Anal. 31 (2021), 12034-12052.</list_item>
+<list_item><loc_59><loc_182><loc_440><loc_188>S. Feklistov , On the complement of nef divisors on projective manifolds, 2025, https://arxiv.org/abs/2505.10730</list_item>
+<list_item><loc_59><loc_191><loc_441><loc_205>S. Rao , S. Yang , X. Yang , Dolbeault cohomologies of blowing up complex manifolds. J. Math. Pures Appl. 130 (2019), 68-92.</list_item>
+<list_item><loc_59><loc_207><loc_419><loc_214>V. Vîjîitu , On Hartogs' extension. Annali di Matematica Pura ed Applicata (1923 -). 201 (2022), 487-498.</list_item>
+<list_item><loc_59><loc_217><loc_442><loc_230>V. Vîjîitu , Cohomology with compact supports for cohomologically q -convex spaces. Arch. Math., 80 (2003), 496-500.</list_item>
+<list_item><loc_59><loc_233><loc_442><loc_247>V. V . Tan , On a characterization of analytic compactifications for C ∗ × C ∗ , Bull Braz Math Soc, New Series 41(3), 2010, 355-387</list_item>
+<list_item><loc_59><loc_249><loc_413><loc_256>V. V. Tan , On the compactification problem for Stein surfaces, Compositio Mathematica 71, 1-12, 1989.</list_item>
+<list_item><loc_59><loc_259><loc_441><loc_272>V. V. Tan , On the quasi-projectivity of compactifiable strongly pseudoconvex manifolds, Bull. Sci. math. 129 (2005) 501-522.</list_item>
+<list_item><loc_59><loc_275><loc_414><loc_282>Y., Kawamata , On deformations of compactifiable complex manifolds, Math. Ann.235, 247-265 (1978)</list_item>
+</ordered_list>
+<page_footer><loc_246><loc_468><loc_254><loc_475>29</page_footer>
+</doctag>
