@@ -1,4 +1,7 @@
 stages:
+  prep_pipeline:
+    cmd: uv run python src/utils/prep_pipeline.py
+    
   extract:
     cmd: uv run python src/app/extract.py \
       --input data/raw/documents/2206.01062v1.pdf \

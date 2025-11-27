@@ -1,3 +1,6 @@
+experiment:
+  name: "Demo Pipeline"
+
 chunk:
   max_tokens: 512
 
