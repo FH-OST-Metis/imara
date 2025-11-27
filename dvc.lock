@@ -1,8 +1,8 @@
 schema: '2.0'
 stages:
   extract:
-    cmd: uv run python src/app/extract.py \ --input 
-      data/raw/documents/2206.01062v1.pdf \ --output data/processed/extracted
+    cmd: uv run python src/app/extract.py --input 
+      data/raw/documents/2206.01062v1.pdf --output data/processed/extracted
     deps:
     - path: data/raw/documents/2206.01062v1.pdf
       hash: md5
@@ -10,33 +10,38 @@ stages:
       size: 4310680
     - path: src/app/extract.py
       hash: md5
-      md5: 22599de95f54ca5ef158691f726a45ad
-      size: 365
+      md5: 28b4e593830875876538b03138899957
+      size: 1038
+    params:
+      params.yaml:
+        chunk.chunk_size: 500
+        chunk.overlap: 100
+        chunk.split_by: section
     outs:
     - path: data/processed/extracted
       hash: md5
-      md5: 8822f4625cedc1bb8121a9a8bd310bce.dir
+      md5: 2449f01a23862a6f1bc5ad7d2225179a.dir
       size: 55989
       nfiles: 1
   chunk:
-    cmd: uv run python src/app/chunk.py \ --input data/processed/extracted \ 
+    cmd: uv run python src/app/chunk.py --input data/processed/extracted 
       --output data/processed/chunks
     deps:
     - path: data/processed/extracted
       hash: md5
-      md5: 8822f4625cedc1bb8121a9a8bd310bce.dir
+      md5: 2449f01a23862a6f1bc5ad7d2225179a.dir
       size: 55989
       nfiles: 1
     - path: src/app/chunk.py
       hash: md5
-      md5: 55cd3cc3a273ea470163d76fa3289c49
-      size: 359
+      md5: 3e0b93da88ce0530b57fffb77b46c555
+      size: 3107
     outs:
     - path: data/processed/chunks
       hash: md5
-      md5: 94cb35853c76c30cc3c5ee026c114e5b.dir
-      size: 130
-      nfiles: 1
+      md5: 6881f10df177e0e0ccb57221071d7d26.dir
+      size: 55989
+      nfiles: 29
   embed:
     cmd: uv run python src/app/embed.py \ --input data/processed/chunks \
     deps:

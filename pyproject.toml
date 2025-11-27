@@ -11,6 +11,9 @@ dependencies = [
 	"pandas>=2.0.0",
 	"numpy>=1.24.0",
 	"boto3>=1.40.69",
+	"docling>=2.63.0",
+	"docling-core[chunking]>=2.52.0",
+	"dvc>=3.64.0",
 ]
 
 [tool.mypy]

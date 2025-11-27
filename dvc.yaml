@@ -1,18 +1,18 @@
 stages:
   extract:
-    cmd: uv run python src/app/extract.py \
-      --input data/raw/documents/2206.01062v1.pdf \
-      --output data/processed/extracted
+    cmd: uv run python src/app/extract.py --input data/raw/documents/2206.01062v1.pdf --output data/processed/extracted
     deps:
       - src/app/extract.py
       - data/raw/documents/2206.01062v1.pdf
+    params:
+      - chunk.chunk_size
+      - chunk.overlap
+      - chunk.split_by
     outs:
       - data/processed/extracted
 
   chunk:
-    cmd: uv run python src/app/chunk.py \
-      --input data/processed/extracted \
-      --output data/processed/chunks
+    cmd: uv run python src/app/chunk.py --input data/processed/extracted --output data/processed/chunks
     deps:
       - src/app/chunk.py
       - data/processed/extracted
