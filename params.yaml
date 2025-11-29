@@ -8,7 +8,7 @@ chunk:
   split_by: section
 
 embed:
-  model: "sentence-transformers/all-mpnet-base-v2"
+  model: "bge-m3:567m"
 
 graph:
   similarity_threshold: 0.75

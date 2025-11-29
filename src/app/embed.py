@@ -44,7 +44,6 @@ def _iter_chunks(
     chunk_dir: Path,
     artifacts_root: Optional[Path] = None,
 ) -> Iterable[Tuple[str, int, Optional[str], str]]:
-    """Yield (title, page_ref, pic_ref, content) for each chunk file in directory."""
     if not chunk_dir.exists() or not chunk_dir.is_dir():
         raise FileNotFoundError(f"Chunk directory does not exist: {chunk_dir}")
 
