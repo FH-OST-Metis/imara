@@ -14,12 +14,12 @@
 # Downloading code formula model...
 # Downloading easyocr models...
 # Models downloaded into $HOME/.cache/docling/models.
-# 
-# or 
-# 
+#
+# or
+#
 # in python:
 # docling.utils.model_downloader.download_models()
-# 
+#
 # Also, you can use download-hf-repo parameter to download arbitrary models from HuggingFace by specifying repo id:
 # $ docling-tools models download-hf-repo ds4sd/SmolDocling-256M-preview
 import argparse
@@ -40,16 +40,25 @@ from docling.backend.docling_parse_v4_backend import DoclingParseV4DocumentBacke
 
 from docling.datamodel.base_models import ConversionStatus, InputFormat, PipelineOptions
 from docling.datamodel.document import ConversionResult
-from docling.datamodel.pipeline_options import PipelineOptions, PdfPipelineOptions, EasyOcrOptions, TesseractOcrOptions, TableFormerMode
+from docling.datamodel.pipeline_options import (
+    PipelineOptions,
+    PdfPipelineOptions,
+    EasyOcrOptions,
+    TesseractOcrOptions,
+    TableFormerMode,
+)
 from docling.datamodel.pipeline_options import granite_picture_description
 from docling.document_converter import DocumentConverter, PdfFormatOption
-
+from utils.params import load_params
 
 _log = logging.getLogger(__name__)
 
 IMAGE_RESOLUTION_SCALE = 2.0
 
-def export_documents(conv_results: Iterable[ConversionResult], output_dir: Path, source_handling: str):
+
+def export_documents(
+    conv_results: Iterable[ConversionResult], output_dir: Path, source_handling: str
+):
     output_dir.mkdir(parents=True, exist_ok=True)
 
     success_count = 0
@@ -61,8 +70,7 @@ def export_documents(conv_results: Iterable[ConversionResult], output_dir: Path,
             success_count += 1
             doc_filename = conv_res.input.file.stem
 
-
-            # Save page 
+            # Save page
             SAVE_PAGE_IMAGES = False
             if SAVE_PAGE_IMAGES:
                 for page_no, page in conv_res.document.pages.items():
@@ -74,7 +82,7 @@ def export_documents(conv_results: Iterable[ConversionResult], output_dir: Path,
             # Save images of figures and tables
             SAVE_IMAGES_OF_FIGURES = False
             SAVE_IMAGES_OF_TABLES = False
-            if(SAVE_IMAGES_OF_FIGURES or SAVE_IMAGES_OF_TABLES):
+            if SAVE_IMAGES_OF_FIGURES or SAVE_IMAGES_OF_TABLES:
                 table_counter = 0
                 picture_counter = 0
                 for element, _level in conv_res.document.iterate_items():
@@ -94,7 +102,6 @@ def export_documents(conv_results: Iterable[ConversionResult], output_dir: Path,
                         with element_image_filename.open("wb") as fp:
                             element.get_image(conv_res.document).save(fp, "PNG")
 
-
             # Recommended modern Docling exports. These helpers mirror the
             # lower-level "export_to_*" methods used below, but handle
             # common details like image handling.
@@ -104,7 +111,7 @@ def export_documents(conv_results: Iterable[ConversionResult], output_dir: Path,
             )
             conv_res.document.save_as_html(
                 output_dir / f"{doc_filename}.html",
-                image_mode=ImageRefMode.EMBEDDED, # ImageRefMode.REFERENCED
+                image_mode=ImageRefMode.EMBEDDED,  # ImageRefMode.REFERENCED
             )
             conv_res.document.save_as_doctags(
                 output_dir / f"{doc_filename}.doctags.txt"
@@ -114,16 +121,16 @@ def export_documents(conv_results: Iterable[ConversionResult], output_dir: Path,
                 image_mode=ImageRefMode.REFERENCED,
             )
 
-
-            # move or copy source file 
-            if(source_handling == "copy"):
+            # move or copy source file
+            if source_handling == "copy":
                 print("copy the source file to the target directory")
-                shutil.copyfile(conv_res.input.file, output_dir / conv_res.input.file.name)
+                shutil.copyfile(
+                    conv_res.input.file, output_dir / conv_res.input.file.name
+                )
 
-            elif(source_handling == "move"):
+            elif source_handling == "move":
                 print("move the source file to the target directory")
                 shutil.move(conv_res.input.file, output_dir / conv_res.input.file.name)
-
 
         elif conv_res.status == ConversionStatus.PARTIAL_SUCCESS:
             _log.info(
@@ -143,18 +150,19 @@ def export_documents(conv_results: Iterable[ConversionResult], output_dir: Path,
     )
     return success_count, partial_success_count, failure_count
 
-async def process_documents(pdf_path: Path, out_dir: Path, batch_size: int, source_handling: str):
+
+async def process_documents(
+    pdf_path: Path, out_dir: Path, batch_size: int, source_handling: str
+):
     logging.basicConfig(level=logging.INFO)
 
     print(pdf_path)
     input_doc_paths = None
 
-    if(pdf_path.is_dir()):
+    if pdf_path.is_dir():
         input_doc_paths = [f for f in pdf_path.iterdir() if f.is_file()]
     else:
         input_doc_paths = [pdf_path]
-
-
 
     # pipeline_options = PipelineOptions()
     # artifacts_path = "/local/path/to/models"
@@ -163,7 +171,8 @@ async def process_documents(pdf_path: Path, out_dir: Path, batch_size: int, sour
     pipeline_options = PdfPipelineOptions()
     # Explicitly set the accelerator
     accelerator_options = AcceleratorOptions(
-        num_threads=8, device="cuda:1"# AcceleratorDevice.CPU #AUTO
+        num_threads=8,
+        device="cuda:1",  # AcceleratorDevice.CPU #AUTO
     )
     pipeline_options.accelerator_options = accelerator_options
     pipeline_options.ocr_batch_size = 8
@@ -188,14 +197,21 @@ async def process_documents(pdf_path: Path, out_dir: Path, batch_size: int, sour
     pipeline_options.do_formula_enrichment = True
 
     pipeline_options.do_table_structure = True
-    pipeline_options.table_structure_options.do_cell_matching = False  # uses text cells predicted from table structure model
-    pipeline_options.table_structure_options.mode = TableFormerMode.ACCURATE  # use more accurate TableFormer model
+    pipeline_options.table_structure_options.do_cell_matching = (
+        False  # uses text cells predicted from table structure model
+    )
+    pipeline_options.table_structure_options.mode = (
+        TableFormerMode.ACCURATE
+    )  # use more accurate TableFormer model
 
     pipeline_options.do_ocr = True
-    pipeline_options.ocr_options = EasyOcrOptions() #TesseractOcrOptions()  # Use Tesseract
+    pipeline_options.ocr_options = (
+        EasyOcrOptions()
+    )  # TesseractOcrOptions()  # Use Tesseract
 
-    pipeline_options.enable_remote_services=True # PictureDescriptionApiOptions: Using vision models via API calls.
-
+    pipeline_options.enable_remote_services = (
+        True  # PictureDescriptionApiOptions: Using vision models via API calls.
+    )
 
     doc_converter = DocumentConverter(
         allowed_formats=[
@@ -213,7 +229,7 @@ async def process_documents(pdf_path: Path, out_dir: Path, batch_size: int, sour
             InputFormat.PDF: PdfFormatOption(
                 pipeline_options=pipeline_options, backend=DoclingParseV4DocumentBackend
             )
-        }
+        },
     )
 
     start_time = time.time()
@@ -232,12 +248,14 @@ async def process_documents(pdf_path: Path, out_dir: Path, batch_size: int, sour
             source=batch,
             raises_on_error=False,  # to let conversion run through all and examine results at the end
         )
-    
+
         _success_count, _partial_success_count, failure_count = export_documents(
-            conv_results=conv_results, output_dir=out_dir, source_handling=source_handling
+            conv_results=conv_results,
+            output_dir=out_dir,
+            source_handling=source_handling,
         )
 
-            # if failure_count > 0:
+        # if failure_count > 0:
         #     raise RuntimeError(
         #         f"The example failed converting {failure_count} on {len(batch)}."
         #     )
@@ -247,7 +265,7 @@ async def process_documents(pdf_path: Path, out_dir: Path, batch_size: int, sour
         #         f"The example partially failed converting {_partial_success_count} on {len(batch)}."
         #     )
 
-        # # move or copy source file 
+        # # move or copy source file
         # if(source_handling == "copy"):
         #     print("copy the source file to the target directory")
         #     for b in batch:
@@ -259,42 +277,26 @@ async def process_documents(pdf_path: Path, out_dir: Path, batch_size: int, sour
         #     #shutil.move(path, out_dir_per_file / path.name)
 
         end_time = time.time() - start_time
-        _log.info(f"Document conversion complete in {end_time:.2f} seconds. it successfully completed {_success_count} out of {len(input_doc_paths)}")
+        _log.info(
+            f"Document conversion complete in {end_time:.2f} seconds. it successfully completed {_success_count} out of {len(input_doc_paths)}"
+        )
 
 
+async def main(pdf_path: Path, out_dir: Path) -> None:
+    extract_params = load_params("extract")
 
-async def main() -> None:
-    # parse arguments
-    parser = argparse.ArgumentParser(description="Run Docling ingestion on the bundled sample PDF.")
+    batch_size: int = int(extract_params.get("batch_size", 1))
+    source_handling: str = str(extract_params.get("source_handling", "move"))
 
-    # input is a single file or a directory
-    parser.add_argument("--input", type=str, default=str((Path(__file__).parent.parent.parent / "configs" / "data" / "OpenRAGBench" / "pdfs").resolve()))
-    # parser.add_argument("--input", type=str, default=str((Path(__file__).parent / "data" / "pdf").resolve()))
-    parser.add_argument("--out", type=str, default=str((Path(__file__).parent.parent.parent / "configs" / "data" / "OpenRAGBench" / "out").resolve()))
-    parser.add_argument("--batch_size", type=int, default=1)
+    await process_documents(pdf_path, out_dir, batch_size, source_handling)
 
-    # Handle source file; do nothing and read only, copy the source file or move the source file after processing sucessfolly
-    parser.add_argument("--source_handling", type=str, default="move") # Options: "copy" or "move"
 
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser()
+
+    parser.add_argument("--input", type=Path, required=True)
+    parser.add_argument("--output", type=Path, required=True)
 
     args = parser.parse_args()
 
-    out_dir = Path(args.out)
-
-    pdf_path = Path(args.input)
-    if not pdf_path.exists():
-        raise FileNotFoundError(f"Sample PDF not found: {pdf_path}")
-
-    batch_size = args.batch_size
-
-    source_handling = args.source_handling
-
-    # setup environment
-
-
-    # run processing
-    await process_documents(pdf_path, out_dir, batch_size, source_handling)
-
-    
-if __name__ == "__main__":
-    asyncio.run(main())
+    asyncio.run(main(args.input, args.output))
