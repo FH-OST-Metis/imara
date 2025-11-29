@@ -15,6 +15,7 @@ dependencies = [
 	"docling-core>=2.54.0",
 	"docling>=2.63.0",
 	"dvc>=3.64.0",
+	"dvc-s3>=3.2.2",
 ]
 
 [tool.mypy]

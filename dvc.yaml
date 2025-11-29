@@ -1,9 +1,9 @@
 stages:
   extract:
-    cmd: uv run python src/app/extract.py --input data/raw/documents/2206.01062v1.pdf --output data/processed/extracted
+    cmd: uv run python src/app/extract.py --input data/raw/documents/2402.14887v4.pdf --output data/processed/extracted
     deps:
       - src/app/extract.py
-      - data/raw/documents/2206.01062v1.pdf
+      - data/raw/documents/2402.14887v4.pdf
     outs:
       - data/processed/extracted
 
