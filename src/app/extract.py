@@ -288,7 +288,7 @@ async def main(pdf_path: Path, out_dir: Path) -> None:
     batch_size: int = int(extract_params.get("batch_size", 1))
     source_handling: str = str(extract_params.get("source_handling", ""))
 
-    await process_documents(pdf_path, out_dir, batch_size, source_handling)
+    await process_documents(pdf_path.resolve(), out_dir.resolve(), batch_size, source_handling)
 
 
 if __name__ == "__main__":
