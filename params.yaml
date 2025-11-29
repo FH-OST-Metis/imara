@@ -1,6 +1,6 @@
 extract:
   batch_size: 1
-  source_handling: "move"
+  source_handling: "copy"
 
 chunk:
   max_tokens: 512
