@@ -8,9 +8,7 @@ stages:
       - data/processed/extracted
 
   chunk:
-    cmd: uv run python src/app/chunk.py \
-      --input data/processed/extracted \
-      --output data/processed/chunks
+    cmd: uv run python src/app/chunk.py --input data/processed/extracted --output data/processed/chunks
     deps:
       - src/app/chunk.py
       - data/processed/extracted

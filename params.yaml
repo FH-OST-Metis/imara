@@ -3,7 +3,9 @@ extract:
   source_handling: "copy"
 
 chunk:
-  max_tokens: 512
+  chunk_size: 500
+  overlap: 100
+  split_by: section
 
 embed:
   model: "sentence-transformers/all-mpnet-base-v2"

@@ -10,30 +10,30 @@ stages:
       size: 222042
     - path: src/app/extract.py
       hash: md5
-      md5: 6a7eda28ed8e8da136afe49ef62fc69f
-      size: 11419
+      md5: 33d836e54bd2ac5bb2de22432a70bf67
+      size: 11117
     outs:
     - path: data/processed/extracted
       hash: md5
-      md5: ad2db27bfd86b79642e58bcab14e04cd.dir
-      size: 4785732
-      nfiles: 5
+      md5: 4065efd980e1243efa3506a32f8c9882.dir
+      size: 5086187
+      nfiles: 6
   chunk:
-    cmd: python3 src/app/chunk.py \ --input data/processed/extracted \ --output 
-      data/processed/chunks
+    cmd: uv run python src/app/chunk.py --input data/processed/extracted 
+      --output data/processed/chunks
     deps:
     - path: data/processed/extracted
       hash: md5
-      md5: d751713988987e9331980363e24189ce.dir
-      size: 0
-      nfiles: 0
+      md5: 4065efd980e1243efa3506a32f8c9882.dir
+      size: 5086187
+      nfiles: 6
     - path: src/app/chunk.py
       hash: md5
-      md5: 814e0e717fd147d25b9bd91068c51096
-      size: 318
+      md5: 84970fc1d06aef0c5eb51767946c3efe
+      size: 1592
     outs:
     - path: data/processed/chunks
       hash: md5
-      md5: d751713988987e9331980363e24189ce.dir
-      size: 0
-      nfiles: 0
+      md5: 483ea2a25d02c9fe130a50998eefdd50.dir
+      size: 24411
+      nfiles: 43
