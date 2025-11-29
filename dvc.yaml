@@ -15,15 +15,11 @@ stages:
     outs:
       - data/processed/chunks
 
-  # embed:
-  #   cmd: python3 src/embed.py \
-  #     --input data/processed/chunks \
-  #     --output data/processed/embeddings
-  #   deps:
-  #     - src/embed.py
-  #     - data/processed/chunks
-  #   outs:
-  #     - data/processed/embeddings
+  embed:
+    cmd: uv run python src/app/embed.py --input data/processed/chunks --database_url postgresql://postgres:postgres@127.0.0.1:54322/postgres
+    deps:
+      - src/app/embed.py
+      - data/processed/chunks
 
   # graph_build:
   #   cmd: python3 src/graph_build.py \
