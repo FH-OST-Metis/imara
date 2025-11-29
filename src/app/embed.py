@@ -81,7 +81,6 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser()
 
     parser.add_argument("--input", type=Path, required=True)
-    parser.add_argument("--dsn", type=str, default=None)
     parser.add_argument("--database_url", type=str, default=None)
 
     args = parser.parse_args()

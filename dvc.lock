@@ -48,5 +48,5 @@ stages:
       nfiles: 43
     - path: src/app/embed.py
       hash: md5
-      md5: 9200e122b8da87f9a21332ba4a2b00cf
-      size: 2768
+      md5: f5e02fa5a3db893695c73880d703db96
+      size: 2711
