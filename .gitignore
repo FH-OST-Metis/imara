@@ -219,3 +219,6 @@ __marimo__/
 /.dvc/tmp/
 /.dvc/cache/
 /.dvc/config.local
+
+# GitHub workflows and prompts (local development only)
+.github/
