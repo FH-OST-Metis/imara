@@ -6,7 +6,13 @@ This setup includes all core features, such as authentication, databases, and st
 
 ## Serving Project local
 
-After you have set up local Supabase ENV.
+After you have set up local Supabase ENV (Install and Link). **See install instructions below**
+
+> **Notice:** Docker has to be installed and up and running **
+
+> **Notice:** For Windows: Supabase CLI is installed by Scoop: https://scoop.sh. Don't forget to reboot Windows.**
+
+> **Notice:** For Windows: Has to be executed in PowerShell **
 
 ```bash
 supabase start
@@ -27,29 +33,29 @@ https://supabase.com/docs/guides/local-development/cli/getting-started?queryGrou
 > **Notice:** This step has already been completed and committed. **Do not run it again.**
 
 ```bash
-npx supabase@beta init # switched to beta, due a bug on the stable version of the cli
+supabase init # switched to beta, due a bug on the stable version of the cli
 ```
 Initializes a new Supabase project in the current directory.
 
 > **Notice:** The linking has to be done on each local device. **Do this with first time connecting new local ENV **
 
 ```bash
-npx supabase@beta login # switched to beta, due a bug on the stable version of the cli
-npx supabase@beta link --project-ref <PROJECT_ID> # switched to beta, due a bug on the stable version of the cli
+supabase login # switched to beta, due a bug on the stable version of the cli
+supabase link --project-ref <PROJECT_ID> # switched to beta, due a bug on the stable version of the cli
 ```
 Links the local repository to an existing Supabase project.
 
 ### Synchronize Schema Changes
 
 ```bash
-npx supabase@beta db pull # switched to beta, due a bug on the stable version of the cli
+supabase db pull # switched to beta, due a bug on the stable version of the cli
 ```
 Pulls schema changes from the dashboard and creates a new migration.
 
 ### Start Local Development
 
 ```bash
-npx supabase@beta start # switched to beta, due a bug on the stable version of the cli
+supabase start # switched to beta, due a bug on the stable version of the cli
 ```
 Starts the local Supabase environment (Docker required).
 
@@ -57,29 +63,46 @@ Starts the local Supabase environment (Docker required).
 
 **Manual migration:**
 ```bash
-npx supabase@beta migration new <migration_name> # switched to beta, due a bug on the stable version of the cli
+supabase migration new <migration_name> # switched to beta, due a bug on the stable version of the cli
 ```
 Creates a new empty migration file.
 
 **Migration from SQL script:**
 ```bash
-npx supabase@beta migration new <migration_name> < script.sql # switched to beta, due a bug on the stable version of the cli
+supabase migration new <migration_name> < script.sql # switched to beta, due a bug on the stable version of the cli
 ```
 Creates a migration directly from an existing SQL script.
 
 **Apply migrations:**
 ```bash
-npx supabase@beta db reset # switched to beta, due a bug on the stable version of the cli
+supabase db reset # switched to beta, due a bug on the stable version of the cli
 ```
 Resets the local database and applies all migrations.
 
 ### Automatic Schema Diff Migration
 
 ```bash
-npx supabase@beta db diff -f <migration_name> # switched to beta, due a bug on the stable version of the cli
+supabase db diff -f <migration_name> # switched to beta, due a bug on the stable version of the cli
 ```
 Generates a migration based on changes in the local database.
 
 ---
 
 These commands enable efficient management of development, staging, and production environments with Supabase and GitHub Actions.
+
+## Troubelshoot Windows
+
+If you see this Error:
+
+```bash
+failed to start docker container: Error response from daemon: ports are not available: exposing port TCP 0.0.0.0:54322 -> 127.0.0.1:0: listen tcp 0.0.0.0:54322: bind: An attempt was made to access a socket in a way forbidden by its access permissions.
+Try rerunning the command with --debug to troubleshoot the error.
+```
+
+do execut this in command in PowerShell with Admin Permissions:
+
+```bash
+net stop winnat
+docker start container_name
+net start winnat
+```
