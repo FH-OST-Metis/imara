@@ -149,6 +149,18 @@ For instructions on setting up Supabase, please refer to the Supabase integratio
 
 [Supabase Setup Guide](supabase/README.md)
 
+### Setup Ollama Embeddings
+
+For local embedding generation with Ollama and GPU acceleration, refer to the Ollama setup guide.
+
+[Ollama Setup Guide](ollama/README.md)
+
+This includes:
+- NVIDIA GPU setup for Linux and Windows/WSL2
+- Apple Silicon (MPS) configuration for Macs
+- Model installation and verification
+- Integration with Supabase Edge Functions
+
 
 ## Development Tools
 

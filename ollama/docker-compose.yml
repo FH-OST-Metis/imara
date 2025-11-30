@@ -1,0 +1,42 @@
+services:
+  ollama-embeddings:
+    image: ollama/ollama:latest
+    container_name: ollama-embeddings
+    restart: unless-stopped
+    ports:
+      - "11434:11434"
+    volumes:
+      - ./models:/root/.ollama
+    environment:
+      - OLLAMA_HOST=0.0.0.0:11434
+    dns:
+      - 8.8.8.8
+      - 8.8.4.4
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:11434/api/tags"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+    
+    # GPU Configuration: Uncomment the appropriate section for your hardware
+    
+    # Option 1: NVIDIA GPU (Linux/Windows with nvidia-docker)
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [gpu]
+    
+    # Option 2: Apple Silicon (Mac with M1/M2/M3)
+    # deploy:
+    #   resources:
+    #     reservations:
+    #       devices:
+    #         - driver: mps
+    #           count: all
+    
+    # Option 3: CPU-only (default, no GPU acceleration)
+    # No additional configuration needed - runs on CPU by default
