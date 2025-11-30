@@ -359,7 +359,7 @@ s3_secret_key = "env(S3_SECRET_KEY)"
 
 [functions.embed]
 enabled = true
-verify_jwt = true
+verify_jwt = false
 import_map = "./functions/embed/deno.json"
 # Uncomment to specify a custom file path to the entrypoint.
 # Supported file extensions are: .ts, .js, .mjs, .jsx, .tsx
@@ -368,13 +368,13 @@ entrypoint = "./functions/embed/index.ts"
 # For example, if you want to serve static HTML pages in your function:
 # static_files = [ "./functions/embed/*.html" ]
 
-[functions.embed_local]
+[functions.embed_ollama]
 enabled = true
-verify_jwt = true
-import_map = "./functions/embed_local/deno.json"
+verify_jwt = false
+import_map = "./functions/embed_ollama/deno.json"
 # Uncomment to specify a custom file path to the entrypoint.
 # Supported file extensions are: .ts, .js, .mjs, .jsx, .tsx
-entrypoint = "./functions/embed_local/index.ts"
+entrypoint = "./functions/embed_ollama/index.ts"
 # Specifies static files to be bundled with the function. Supports glob patterns.
 # For example, if you want to serve static HTML pages in your function:
-# static_files = [ "./functions/embed_local/*.html" ]
+# static_files = [ "./functions/embed_ollama/*.html" ]
