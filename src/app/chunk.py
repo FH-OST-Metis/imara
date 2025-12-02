@@ -5,8 +5,10 @@ from typing import List
 from utils.params import load_params
 
 from docling_core.transforms.chunker import HierarchicalChunker
+from docling_core.transforms.chunker.hierarchical_chunker import DocChunk
 
 from docling_core.types import DoclingDocument
+from docling_core.types.doc.labels import DocItemLabel
 
 
 def write_chunks_for_file(
@@ -20,12 +22,30 @@ def write_chunks_for_file(
 
     doc = DoclingDocument.load_from_json(input_file)
 
-    chunks = [chunk.text for chunk in chunker.chunk(doc)]
-
     stem = input_file.stem
-    for idx, chunk in enumerate(chunks):
+    artifacts_dir = input_file.parent / f"{stem}_artifacts"
+    image_paths: List[str] = []
+    if artifacts_dir.exists() and artifacts_dir.is_dir():
+        for img_path in sorted(artifacts_dir.glob("image_*.png")):
+            # store relative path (to the JSON file directory) instead of absolute
+            rel_path = img_path.relative_to(input_file.parent.parent.parent.parent)
+            image_paths.append(str(rel_path))
+
+    for idx, raw_chunk in enumerate(chunker.chunk(doc)):
+        doc_chunk = DocChunk.model_validate(raw_chunk)
+        has_picture = any(
+            it.label == DocItemLabel.PICTURE for it in doc_chunk.meta.doc_items
+        )
+
+        text = raw_chunk.text
+
+        if has_picture and image_paths:
+            chunk_with_images = f"{text}\n\n[IMAGES]\n" + "\n".join(image_paths)
+        else:
+            chunk_with_images = text
+
         out_path = output_dir / f"{stem}_chunk_{idx}.txt"
-        out_path.write_text(chunk, encoding="utf-8")
+        out_path.write_text(chunk_with_images, encoding="utf-8")
 
 
 def main(input_dir: Path, output_dir: Path) -> None:
