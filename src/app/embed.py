@@ -44,7 +44,6 @@ def _iter_chunks(
     chunk_dir: Path,
     artifacts_root: Optional[Path] = None,
 ) -> Iterable[Tuple[str, int, Optional[str], str]]:
-    """Yield (title, page_ref, pic_ref, content) for each chunk file in directory."""
     if not chunk_dir.exists() or not chunk_dir.is_dir():
         raise FileNotFoundError(f"Chunk directory does not exist: {chunk_dir}")
 
@@ -60,11 +59,13 @@ def _connect(database_url: str) -> PGConnection:
     return psycopg2.connect(database_url)
 
 
-def main(input_dir: Path, database_url: str) -> None:
+def main(input_dir: Path, artifacts_dir: Path, database_url: str) -> None:
     conn = _connect(database_url)
     try:
         with conn, conn.cursor() as cur:
-            for title, page_ref, pic_ref, content in _iter_chunks(input_dir):
+            for title, page_ref, pic_ref, content in _iter_chunks(
+                input_dir, artifacts_dir
+            ):
                 cur.execute(
                     """
                     insert into document_chunk (title, page_ref, pic_ref, content)
@@ -81,8 +82,12 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser()
 
     parser.add_argument("--input", type=Path, required=True)
-    parser.add_argument("--dsn", type=str, default=None)
+    parser.add_argument("--artifacts", type=Path, default=None)
     parser.add_argument("--database_url", type=str, default=None)
 
     args = parser.parse_args()
-    main(input_dir=args.input.resolve(), database_url=args.database_url)
+    main(
+        input_dir=args.input.resolve(),
+        artifacts_dir=args.artifacts.resolve(),
+        database_url=args.database_url,
+    )

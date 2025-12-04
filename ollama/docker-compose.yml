@@ -1,0 +1,44 @@
+services:
+  ollama-embeddings:
+    image: ollama/ollama:latest
+    container_name: ollama-embeddings
+    restart: unless-stopped
+    ports:
+      - "11434:11434"
+    volumes:
+      - ./models:/root/.ollama
+    environment:
+      - OLLAMA_HOST=0.0.0.0:11434
+    dns:
+      - 8.8.8.8
+      - 8.8.4.4
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:11434/api/tags"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+    
+    # GPU Configuration: Uncomment the appropriate section for your hardware
+    
+    # Option 1: NVIDIA GPU (Linux/Windows with nvidia-docker)
+    # Uncomment to enable GPU acceleration on Linux/Windows with NVIDIA GPU
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [gpu]
+    
+    # Option 2: Apple Silicon (Mac with M1/M2/M3)
+    # Docker Desktop on macOS does NOT support Metal/MPS GPU passthrough.
+    # Docker containers run in a Linux VM which cannot access macOS Metal APIs.
+    # For GPU acceleration on Mac, install native Ollama: brew install ollama
+    # Performance comparison:
+    #   - Native Ollama with Metal: 50-100ms per embedding
+    #   - Docker CPU-only: 500-2000ms per embedding
+    
+    # Option 3: CPU-only (default - used on macOS)
+    # No additional configuration needed - runs on CPU by default
+    # This is the only supported mode for Docker on macOS

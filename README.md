@@ -1,82 +1,141 @@
 # Imara – Project Setup & Development Guide
 
-Dieses Dokument beschreibt das grundlegende Setup sowie die wichtigsten Entwicklungs- und Arbeitsabläufe für das **Imara-Projekt**.
+This document describes the basic setup and the most important development and workflows for the **Imara project**.
+
+## Table of Contents
+
+- [Getting Started](#getting-started)
+- [Required Tools](#required-tools)
+- [Setup Instructions](#setup-instructions)
+  - [Clone repository](#clone-repository)
+  - [Install dependencies](#install-dependencies)
+  - [Install pre-commit hooks](#install-pre-commit-hooks)
+  - [S3 authentication](#s3-authentication)
+  - [Download documents](#download-documents)
+  - [Setup Supabase local ENV](#setup-supabase-local-env)
+- [Development Tools](#development-tools)
+  - [Linter (ruff)](#linter-ruff)
+  - [Formatter](#formatter)
+  - [Type Checking (mypy)](#type-checking-mypy)
+  - [Unit Tests](#unit-tests)
+- [Using DVC](#using-dvc)
+- [Package Management (uv)](#package-management-uv)
+- [MLFlow](#mlflow)
+
+---
+
+## Getting Started
+
+Quick steps to get the project running:
+
+1. **Clone the repository**
+   ```bash
+   git clone https://github.com/FH-OST-Metis/imara.git
+   cd imara
+   ```
+
+2. **Install dependencies**
+   ```bash
+   uv sync
+   ```
+
+3. **Set up S3 authentication** (see [S3 authentication](#s3-authentication) for details)
+   ```bash
+   cp .dvc/config.local-template .dvc/config.local
+   cp env-template env
+   # Edit both files with your credentials
+   ```
+
+4. **Download data**
+   ```bash
+   dvc pull
+   ```
+
+5. **Start developing!**
 
 ---
 
 ## Required Tools
 
-Bevor du startest, installiere folgende Werkzeuge:
+Before you start, install the following tools:
 
-* **uv** – schnelles Python-Package- und Environment-Management
+* **uv** – fast Python package and environment management
   [https://docs.astral.sh/uv/](https://docs.astral.sh/uv/)
-* **dvc** – Data Version Control für reproduzierbare ML-Pipelines
+* **dvc** – Data Version Control for reproducible ML pipelines
   [https://dvc.org/doc/install](https://dvc.org/doc/install)
-* **git** – Versionskontrolle
+* **git** – version control
 * **Python 3.10+**
 
-Optional, aber empfohlen:
+Optional, but recommended:
 
 * **pre-commit**
-* **pytest**, **ruff**, **mypy** (werden durch `uv sync` installiert)
+* **pytest**, **ruff**, **mypy** (installed via `uv sync`)
 
 ---
 
 ## Setup Instructions
 
-### Repository klonen
+### Clone repository
 
 ```bash
 git clone https://github.com/FH-OST-Metis/imara.git
 cd imara
 ```
 
-### Abhängigkeiten installieren
+### Install dependencies
 
 ```bash
 uv sync
 ```
 
-Dies erstellt ein virtuelles Environment und installiert alle im `pyproject.toml` definierten Pakete.
+This creates a virtual environment and installs all packages defined in `pyproject.toml`.
 
 ---
 
-### Pre-commit Hooks installieren
+### Install pre-commit hooks
 
 ```bash
 uv run pre-commit install
 ```
 
-Pre-commit wird danach automatisch bei jedem Commit ausgeführt.
+Pre-commit will then run automatically on every commit.
 
 ---
 
-### S3-Authentifizierung
+### S3 authentication
 
-1. Erstelle einen neuen Access Key im
-   [https://supabase.com/dashboard/project/hjijyloqvddflojzrvcn/storage/s3](https://supabase.com/dashboard/project/hjijyloqvddflojzrvcn/storage/s3)
+To enable DVC data pulling and enable database access, you need to configure S3 credentials:
 
-2. Kopiere das Template und erstelle deine lokale Config:
+1. **Create a new Access Key**
+   
+   Visit the [Supabase S3 dashboard](https://supabase.com/dashboard/project/hjijyloqvddflojzrvcn/storage/s3) and generate a new access key.
 
+2. **Configure DVC credentials**
+   
    ```bash
    cp .dvc/config.local-template .dvc/config.local
    ```
+   
+   Edit `.dvc/config.local` and fill in:
+   - `access_key_id` - from step 1
+   - `secret_access_key` - from step 1
+   
+   **Note:** `.dvc/config.local` is gitignored and not versioned.
 
-3. Fülle `access_key_id` und `secret_access_key` aus Schritt 1 in `.dvc/config.local` ein.
-
-   Hinweis: Die Datei `.dvc/config.local` wird **nicht** versioniert.
-
-4. Kopiere das Template und erstelle deine lokale Config:
-
+3. **Configure environment variables**
+   
    ```bash
    cp env-template env
    ```
+   
+   Edit `env` and fill in:
+   - `AWS_ACCESS_KEY_ID` - from step 1
+   - `AWS_SECRET_ACCESS_KEY` - from step 1
+   - `[DB_PASSWORD]` - replace with your database password
+   
+   **Note:** `env` is gitignored and not versioned.
 
-5. Fülle `AWS_ACCESS_KEY_ID` und `AWS_SECRET_ACCESS_KEY` aus Schritt 1 in `env` ein und ersetze `[DB_PASSWORD]`.
-
-   Hinweis: Die Datei `env` wird **nicht** versioniert.
-
-### Dokumente herunterladen
+### Download documents
 
 ```bash
 dvc pull
@@ -84,7 +143,26 @@ dvc pull
 
 ---
 
-## CI/CD Tools
+### Setup Supabase local ENV
+
+For instructions on setting up Supabase, please refer to the Supabase integration documentation.
+
+[Supabase Setup Guide](supabase/README.md)
+
+### Setup Ollama Embeddings
+
+For local embedding generation with Ollama and GPU acceleration, refer to the Ollama setup guide.
+
+[Ollama Setup Guide](ollama/README.md)
+
+This includes:
+- NVIDIA GPU setup for Linux and Windows/WSL2
+- Apple Silicon (MPS) configuration for Macs
+- Model installation and verification
+- Integration with Supabase Edge Functions
+
+
+## Development Tools
 
 ### Linter (ruff)
 
@@ -112,61 +190,63 @@ uv run pytest
 
 ---
 
-## Verwendung von DVC
+## Using DVC
 
-Falls du reproduzierbare Pipelines und versionierte Artefakte nutzt:
+If you are using reproducible pipelines and versioned artifacts:
 
-### Pipeline ausführen
+### Run pipeline
 
 ```bash
 dvc repro
 ```
 
-### Einzelnen Pipeline-Schritt ausführen
+### Run single pipeline step
 
 ```bash
 dvc repro chunk
 ```
 
-### Dokumente herunterladen (z. B. aus S3)
+### Download documents (e.g., from S3)
 
 ```bash
 dvc pull
 ```
 
-### Dokumente hochladen
+### Upload documents
 
 ```bash
 dvc push
 ```
 
-### Dokumente zur Versionskontrolle hinzufügen
+### Add documents to version control
 
 ```bash
 dvc add data/raw/documents/sample.pdf
 ```
 
-## uv
+## Package Management (uv)
 
-### Pakete hinzufügen
+### Add packages
 
 ```bash
-uv add <paketname>
+uv add <package-name>
 ```
 
-### Lokale Umgebung aktualisieren
+### Update local environment
 
 ```bash
 uv sync
 ```
 
-### Lokfile aktualisieren
+### Update lockfile
 
 ```bash
 uv lock
 ```
 
 ## MLFlow
+
+Start the MLFlow tracking server to log and compare ML experiments:
 
 ```bash
 uv run start_mlflow.py

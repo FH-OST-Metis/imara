@@ -29,24 +29,30 @@ stages:
       nfiles: 6
     - path: src/app/chunk.py
       hash: md5
-      md5: 84970fc1d06aef0c5eb51767946c3efe
-      size: 1592
+      md5: 10b859d8137ce96fbfc184fe6fc58564
+      size: 2498
     outs:
     - path: data/processed/chunks
       hash: md5
-      md5: 483ea2a25d02c9fe130a50998eefdd50.dir
-      size: 24411
+      md5: c95209faeebd9dcd59855b660db4052a.dir
+      size: 24551
       nfiles: 43
   embed:
     cmd: uv run python src/app/embed.py --input data/processed/chunks 
-      --database_url postgresql://postgres:postgres@127.0.0.1:54322/postgres
+      --artifacts data/processed/extracted --database_url 
+      postgresql://postgres:postgres@127.0.0.1:54322/postgres
     deps:
     - path: data/processed/chunks
       hash: md5
-      md5: 483ea2a25d02c9fe130a50998eefdd50.dir
-      size: 24411
+      md5: c95209faeebd9dcd59855b660db4052a.dir
+      size: 24551
       nfiles: 43
+    - path: data/processed/extracted
+      hash: md5
+      md5: 4065efd980e1243efa3506a32f8c9882.dir
+      size: 5086187
+      nfiles: 6
     - path: src/app/embed.py
       hash: md5
-      md5: 9200e122b8da87f9a21332ba4a2b00cf
-      size: 2768
+      md5: 24ba96d93fddcf0121bf423806c54de5
+      size: 2826
