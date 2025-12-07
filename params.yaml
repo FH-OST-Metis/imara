@@ -15,3 +15,6 @@ graph:
 
 eval:
   top_k: 5
+
+experiment:
+  name: "Document Vector Store Pipeline"

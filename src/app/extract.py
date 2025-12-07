@@ -23,9 +23,7 @@
 # Also, you can use download-hf-repo parameter to download arbitrary models from HuggingFace by specifying repo id:
 # $ docling-tools models download-hf-repo ds4sd/SmolDocling-256M-preview
 import argparse
-import os
 import asyncio
-import json
 import logging
 import time
 from collections.abc import Iterable
@@ -34,22 +32,21 @@ import shutil
 
 
 from docling_core.types.doc import ImageRefMode, PictureItem, TableItem
-from docling.datamodel.accelerator_options import AcceleratorDevice, AcceleratorOptions
+from docling.datamodel.accelerator_options import AcceleratorOptions
 
 from docling.backend.docling_parse_v4_backend import DoclingParseV4DocumentBackend
 
-from docling.datamodel.base_models import ConversionStatus, InputFormat, PipelineOptions
+from docling.datamodel.base_models import ConversionStatus, InputFormat
 from docling.datamodel.document import ConversionResult
 from docling.datamodel.pipeline_options import (
-    PipelineOptions,
     PdfPipelineOptions,
     EasyOcrOptions,
-    TesseractOcrOptions,
     TableFormerMode,
 )
 from docling.datamodel.pipeline_options import granite_picture_description
 from docling.document_converter import DocumentConverter, PdfFormatOption
-from utils.params import load_params
+from app.utils.params_helper import load_params
+from utils.device_helper import get_device
 
 _log = logging.getLogger(__name__)
 
@@ -77,7 +74,8 @@ def export_documents(
                     page_no = page.page_no
                     page_image_filename = output_dir / f"{doc_filename}-{page_no}.png"
                     with page_image_filename.open("wb") as fp:
-                        page.image.pil_image.save(fp, format="PNG")
+                        if page.image and page.image.pil_image:
+                            page.image.pil_image.save(fp, format="PNG")
 
             # Save images of figures and tables
             SAVE_IMAGES_OF_FIGURES = False
@@ -92,7 +90,9 @@ def export_documents(
                             output_dir / f"{doc_filename}-table-{table_counter}.png"
                         )
                         with element_image_filename.open("wb") as fp:
-                            element.get_image(conv_res.document).save(fp, "PNG")
+                            img = element.get_image(conv_res.document)
+                            if img:
+                                img.save(fp, "PNG")
 
                     if SAVE_IMAGES_OF_FIGURES and isinstance(element, PictureItem):
                         picture_counter += 1
@@ -100,7 +100,9 @@ def export_documents(
                             output_dir / f"{doc_filename}-picture-{picture_counter}.png"
                         )
                         with element_image_filename.open("wb") as fp:
-                            element.get_image(conv_res.document).save(fp, "PNG")
+                            img = element.get_image(conv_res.document)
+                            if img:
+                                img.save(fp, "PNG")
 
             # Recommended modern Docling exports. These helpers mirror the
             # lower-level "export_to_*" methods used below, but handle
@@ -172,7 +174,7 @@ async def process_documents(
     # Explicitly set the accelerator
     accelerator_options = AcceleratorOptions(
         num_threads=8,
-        device="cuda:1",  # AcceleratorDevice.CPU #AUTO
+        device=get_device(),  # AcceleratorDevice.CPU #AUTO
     )
     pipeline_options.accelerator_options = accelerator_options
     pipeline_options.ocr_batch_size = 8
@@ -236,7 +238,7 @@ async def process_documents(
 
     # batch handling
     while len(input_doc_paths) > 0:
-        batch = []
+        batch: list[Path] = []
         while len(input_doc_paths) > 0 and len(batch) < batch_size:
             batch.append(input_doc_paths.pop(0))
 
