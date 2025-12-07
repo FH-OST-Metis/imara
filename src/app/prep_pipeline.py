@@ -18,6 +18,9 @@ def main():
     except mlflow.exceptions.MlflowException as e:
         _log.info(f"Experiment {experiment_name} already exists. Error: {e}")
         experiment = mlflow.get_experiment_by_name(experiment_name)
+        if experiment is None:
+            _log.error(f"Experiment {experiment_name} does not exist and could not be retrieved.")
+            raise RuntimeError(f"Experiment {experiment_name} could not be found after failed creation.")
         experiment_id = experiment.experiment_id
         _log.info(
             f"Using existing MLflow experiment: {experiment_name} with ID: {experiment_id}"
