@@ -10,8 +10,8 @@ stages:
       size: 222042
     - path: src/app/extract.py
       hash: md5
-      md5: 021398e49f48cd6b7ffec2f87900bac6
-      size: 11164
+      md5: dd815d6f51c73c7b533d3ea95c8c4ac8
+      size: 15345
     outs:
     - path: data/processed/extracted
       hash: md5
