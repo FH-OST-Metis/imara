@@ -1,7 +1,7 @@
 import mlflow
 import os
 from dotenv import load_dotenv, find_dotenv
-from app.utils.params_helper import load_params
+from utils.params_helper import load_params
 
 load_dotenv(find_dotenv())
 
