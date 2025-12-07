@@ -6,7 +6,7 @@ _log = logging.getLogger(__name__)
 
 def get_device(device_preference: str = "cpu") -> str:
     """
-    Find and returns the available GPU device or CPU.
+    Finds and returns the available GPU device or CPU.
     In case of multiple GPUs, returns the second one (cuda:1).
 
     Returns:
