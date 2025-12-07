@@ -1,4 +1,9 @@
 stages:
+  prep_pipeline:
+    cmd: uv run python src/app/prep_pipeline.py
+    deps:
+      - src/app/prep_pipeline.py
+  
   extract:
     cmd: uv run python src/app/extract.py --input data/raw/documents/2402.14887v4.pdf --output data/processed/extracted
     deps:

@@ -2,7 +2,7 @@ import argparse
 from pathlib import Path
 from typing import List
 
-from utils.params import load_params
+from app.utils.params_helper import load_params
 
 from docling_core.transforms.chunker import HierarchicalChunker
 from docling_core.transforms.chunker.hierarchical_chunker import DocChunk
