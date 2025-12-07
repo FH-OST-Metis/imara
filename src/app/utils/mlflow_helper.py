@@ -23,6 +23,6 @@ def get_mlflow_experiment_name() -> str:
     Returns:
         str: The name of the MLflow experiment.
     """
-    extract_params = load_params("experiment")
-    name: str = extract_params.get("name", "Default Experiment")
+    experiment_params = load_params("experiment")
+    name: str = experiment_params.get("name", "Default Experiment")
     return name
