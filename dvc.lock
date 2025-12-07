@@ -10,13 +10,13 @@ stages:
       size: 222042
     - path: src/app/extract.py
       hash: md5
-      md5: 33d836e54bd2ac5bb2de22432a70bf67
-      size: 11117
+      md5: ad4d553b94723e18e22baeb9bdea90e1
+      size: 15715
     outs:
     - path: data/processed/extracted
       hash: md5
-      md5: 4065efd980e1243efa3506a32f8c9882.dir
-      size: 5086187
+      md5: 331c5f352599c641691b7b5217b9fffc.dir
+      size: 5086208
       nfiles: 6
   chunk:
     cmd: uv run python src/app/chunk.py --input data/processed/extracted 
@@ -24,13 +24,13 @@ stages:
     deps:
     - path: data/processed/extracted
       hash: md5
-      md5: 4065efd980e1243efa3506a32f8c9882.dir
-      size: 5086187
+      md5: 331c5f352599c641691b7b5217b9fffc.dir
+      size: 5086208
       nfiles: 6
     - path: src/app/chunk.py
       hash: md5
-      md5: 10b859d8137ce96fbfc184fe6fc58564
-      size: 2498
+      md5: f8aeab456396f072ffebffae7e2b1ed1
+      size: 3531
     outs:
     - path: data/processed/chunks
       hash: md5
@@ -49,10 +49,17 @@ stages:
       nfiles: 43
     - path: data/processed/extracted
       hash: md5
-      md5: 4065efd980e1243efa3506a32f8c9882.dir
-      size: 5086187
+      md5: 331c5f352599c641691b7b5217b9fffc.dir
+      size: 5086208
       nfiles: 6
     - path: src/app/embed.py
       hash: md5
-      md5: 24ba96d93fddcf0121bf423806c54de5
-      size: 2826
+      md5: a18e2a2087219d2f687a4b5231a900e3
+      size: 3950
+  prep_pipeline:
+    cmd: uv run python src/app/prep_pipeline.py
+    deps:
+    - path: src/app/prep_pipeline.py
+      hash: md5
+      md5: 3c82813e0507d3971a369fa333e9c814
+      size: 953

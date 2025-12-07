@@ -52,6 +52,13 @@ Quick steps to get the project running:
    ```
 
 5. **Start developing!**
+   ```bash
+   uv run start_mlflow.py
+   supabase start
+   supabase functions serve
+   # or supabase functions serve embed (only gemini)
+   # or supabase functions serve embed_local (only ollama)
+   ```
 
 ---
 
