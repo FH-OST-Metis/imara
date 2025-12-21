@@ -4,6 +4,10 @@ import argparse
 import json
 from pathlib import Path
 from typing import Iterable, Optional, Tuple, List
+import sys
+
+# Ensure sibling 'utils' package is importable when running as script via path
+sys.path.append(str(Path(__file__).resolve().parents[1]))  # adds src/app
 
 import psycopg2
 from psycopg2.extensions import connection as PGConnection

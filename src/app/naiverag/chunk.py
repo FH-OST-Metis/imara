@@ -1,6 +1,10 @@
 import argparse
 from pathlib import Path
 from typing import List
+import sys
+
+# Ensure sibling 'utils' package is importable when running as script via path
+sys.path.append(str(Path(__file__).resolve().parents[1]))  # adds src/app
 
 from utils.params_helper import load_params
 

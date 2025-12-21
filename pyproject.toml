@@ -16,6 +16,9 @@ dependencies = [
 	"docling>=2.63.0",
 	"dvc>=3.64.0",
 	"dvc-s3>=3.2.2",
+	"sentence-transformers>=5.2.0",
+	"networkx>=3.6",
+	"transformers>=4.57.3",
 ]
 
 [tool.mypy]
