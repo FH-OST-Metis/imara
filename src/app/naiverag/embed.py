@@ -1,13 +1,21 @@
 from __future__ import annotations
 
 import argparse
-import os
 import json
 from pathlib import Path
 from typing import Iterable, Optional, Tuple, List
+import sys
+
+# Ensure sibling 'utils' package is importable when running as script via path
+sys.path.append(str(Path(__file__).resolve().parents[1]))  # adds src/app
 
 import psycopg2
 from psycopg2.extensions import connection as PGConnection
+
+import mlflow
+from utils.mlflow_helper import mlflow_connect
+from utils.mlflow_helper import get_mlflow_experiment_name
+from datetime import datetime
 
 
 def _parse_chunk_filename(path: Path) -> Tuple[str, int, Optional[str]]:
@@ -61,11 +69,35 @@ def _connect(database_url: str) -> PGConnection:
 
 def main(input_dir: Path, artifacts_dir: Path, database_url: str) -> None:
     conn = _connect(database_url)
+    chunk_count = 0
+    chunks_with_page_ref = 0
+    chunks_with_pic_ref = 0
+
     try:
         with conn, conn.cursor() as cur:
             for title, page_ref, pic_ref, content in _iter_chunks(
                 input_dir, artifacts_dir
             ):
+                chunk_count += 1
+
+                has_page_ref = page_ref is not None and page_ref > 0
+                if has_page_ref:
+                    chunks_with_page_ref += 1
+
+                has_pic_ref = pic_ref is not None
+                if has_pic_ref:
+                    chunks_with_pic_ref += 1
+
+                mlflow.log_metric(
+                    "content_size_bytes", float(len(content)), step=chunk_count
+                )
+                mlflow.log_metric(
+                    "has_page_ref", 1.0 if has_page_ref else 0.0, step=chunk_count
+                )
+                mlflow.log_metric(
+                    "has_pic_ref", 1.0 if has_pic_ref else 0.0, step=chunk_count
+                )
+
                 cur.execute(
                     """
                     insert into document_chunk (title, page_ref, pic_ref, content)
@@ -86,8 +118,17 @@ if __name__ == "__main__":
     parser.add_argument("--database_url", type=str, default=None)
 
     args = parser.parse_args()
-    main(
-        input_dir=args.input.resolve(),
-        artifacts_dir=args.artifacts.resolve(),
-        database_url=args.database_url,
-    )
+
+    mlflow_connect()
+    experiment_name = get_mlflow_experiment_name()
+    mlflow.set_experiment(experiment_name)
+
+    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+    run_name = f"embedding_chunks_{timestamp}"
+
+    with mlflow.start_run(run_name=run_name):
+        main(
+            input_dir=args.input.resolve(),
+            artifacts_dir=args.artifacts.resolve(),
+            database_url=args.database_url,
+        )

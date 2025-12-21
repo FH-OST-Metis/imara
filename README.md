@@ -29,17 +29,20 @@ This document describes the basic setup and the most important development and w
 Quick steps to get the project running:
 
 1. **Clone the repository**
+
    ```bash
    git clone https://github.com/FH-OST-Metis/imara.git
    cd imara
    ```
 
 2. **Install dependencies**
+
    ```bash
    uv sync
    ```
 
 3. **Set up S3 authentication** (see [S3 authentication](#s3-authentication) for details)
+
    ```bash
    cp .dvc/config.local-template .dvc/config.local
    cp env-template env
@@ -47,11 +50,20 @@ Quick steps to get the project running:
    ```
 
 4. **Download data**
+
    ```bash
    dvc pull
    ```
 
 5. **Start developing!**
+
+   ```bash
+   uv run start_mlflow.py
+   supabase start
+   supabase functions serve
+   # or supabase functions serve embed (only gemini)
+   # or supabase functions serve embed_local (only ollama)
+   ```
 
 ---
 
@@ -59,17 +71,17 @@ Quick steps to get the project running:
 
 Before you start, install the following tools:
 
-* **uv** – fast Python package and environment management
+- **uv** – fast Python package and environment management
   [https://docs.astral.sh/uv/](https://docs.astral.sh/uv/)
-* **dvc** – Data Version Control for reproducible ML pipelines
+- **dvc** – Data Version Control for reproducible ML pipelines
   [https://dvc.org/doc/install](https://dvc.org/doc/install)
-* **git** – version control
-* **Python 3.10+**
+- **git** – version control
+- **Python 3.10+**
 
 Optional, but recommended:
 
-* **pre-commit**
-* **pytest**, **ruff**, **mypy** (installed via `uv sync`)
+- **pre-commit**
+- **pytest**, **ruff**, **mypy** (installed via `uv sync`)
 
 ---
 
@@ -107,32 +119,32 @@ Pre-commit will then run automatically on every commit.
 To enable DVC data pulling and enable database access, you need to configure S3 credentials:
 
 1. **Create a new Access Key**
-   
+
    Visit the [Supabase S3 dashboard](https://supabase.com/dashboard/project/hjijyloqvddflojzrvcn/storage/s3) and generate a new access key.
 
 2. **Configure DVC credentials**
-   
+
    ```bash
    cp .dvc/config.local-template .dvc/config.local
    ```
-   
+
    Edit `.dvc/config.local` and fill in:
    - `access_key_id` - from step 1
    - `secret_access_key` - from step 1
-   
+
    **Note:** `.dvc/config.local` is gitignored and not versioned.
 
 3. **Configure environment variables**
-   
+
    ```bash
    cp env-template env
    ```
-   
+
    Edit `env` and fill in:
    - `AWS_ACCESS_KEY_ID` - from step 1
    - `AWS_SECRET_ACCESS_KEY` - from step 1
    - `[DB_PASSWORD]` - replace with your database password
-   
+
    **Note:** `env` is gitignored and not versioned.
 
 ### Download documents
@@ -156,11 +168,11 @@ For local embedding generation with Ollama and GPU acceleration, refer to the Ol
 [Ollama Setup Guide](ollama/README.md)
 
 This includes:
+
 - NVIDIA GPU setup for Linux and Windows/WSL2
 - Apple Silicon (MPS) configuration for Macs
 - Model installation and verification
 - Integration with Supabase Edge Functions
-
 
 ## Development Tools
 

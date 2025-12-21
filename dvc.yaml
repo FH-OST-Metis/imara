@@ -1,4 +1,9 @@
 stages:
+  prep_pipeline:
+    cmd: uv run python src/app/prep_pipeline.py
+    deps:
+      - src/app/prep_pipeline.py
+
   extract:
     cmd: uv run python src/app/extract.py --input data/raw/documents/2402.14887v4.pdf --output data/processed/extracted
     deps:
@@ -6,54 +11,57 @@ stages:
       - data/raw/documents/2402.14887v4.pdf
     outs:
       - data/processed/extracted
+    params:
+      - extract.batch_size
+      - extract.source_handling
 
-  chunk:
-    cmd: uv run python src/app/chunk.py --input data/processed/extracted --output data/processed/chunks
+  naiverag_chunk:
+    cmd: uv run python src/app/naiverag/chunk.py --input data/processed/extracted --output data/processed/chunks
     deps:
-      - src/app/chunk.py
+      - src/app/naiverag/chunk.py
       - data/processed/extracted
     outs:
       - data/processed/chunks
+    params:
+      - chunk.chunk_size
+      - chunk.overlap
+      - chunk.split_by
 
-  embed:
-    cmd: uv run python src/app/embed.py --input data/processed/chunks --artifacts data/processed/extracted --database_url postgresql://postgres:postgres@127.0.0.1:54322/postgres
+  naiverag_embed:
+    cmd: uv run python src/app/naiverag/embed.py --input data/processed/chunks --artifacts data/processed/extracted --database_url postgresql://postgres:postgres@127.0.0.1:54322/postgres
     deps:
-      - src/app/embed.py
+      - src/app/naiverag/embed.py
       - data/processed/chunks
       - data/processed/extracted
 
-  # graph_build:
-  #   cmd: python3 src/graph_build.py \
-  #     --chunks data/processed/chunks \
-  #     --embeddings data/processed/embeddings \
-  #     --output data/graph/graph.json
-  #   deps:
-  #     - src/graph_build.py
-  #     - data/processed/chunks
-  #     - data/processed/embeddings
-  #   outs:
-  #     - data/graph/graph.json
+  graphmert_corpus:
+    cmd: uv run python src/app/graphmert/corpus.py
+    deps:
+      - src/app/graphmert/corpus.py
+      - data/processed/chunks
+    outs:
+      - data/graphmert/corpus
 
-  # graph_index:
-  #   cmd: python3 src/graph_index.py \
-  #     --graph data/graph/graph.json \
-  #     --output data/graph/index
-  #   deps:
-  #     - src/graph_index.py
-  #     - data/graph/graph.json
-  #   outs:
-  #     - data/graph/index
+  graphmert_embeddings:
+    cmd: uv run python src/app/graphmert/embeddings.py
+    deps:
+      - src/app/graphmert/embeddings.py
+      - data/graphmert/corpus/corpus.json
+    outs:
+      - data/graphmert/embeddings
 
-  # rag_retrieval_eval:
-  #   cmd: python3 src/rag_eval.py \
-  #     --embeddings data/processed/embeddings \
-  #     --graph data/graph/index \
-  #     --queries data/queries/test.json \
-  #     --output results/rag_eval.json
-  #   deps:
-  #     - src/rag_eval.py
-  #     - data/processed/embeddings
-  #     - data/graph/index
-  #     - data/queries/test.json
-  #   outs:
-  #     - data/results/rag_eval.json
+  graphmert_build_graphs:
+    cmd: uv run python src/app/graphmert/build_graphs.py
+    deps:
+      - src/app/graphmert/build_graphs.py
+      - data/graphmert/embeddings/reduced_embeddings.npy
+    outs:
+      - data/graphmert/graphs
+
+  graphmert_train_model:
+    cmd: uv run python src/app/graphmert/train_model.py
+    deps:
+      - src/app/graphmert/train_model.py
+      - data/graphmert/graphs/sentence_transformer_fixed10d_graphs.json
+    outs:
+      - data/graphmert/model
