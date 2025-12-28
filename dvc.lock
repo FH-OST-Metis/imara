@@ -202,3 +202,61 @@ stages:
       hash: md5
       md5: d21b6d55f73e3d4d473473f060a76604
       size: 4213
+  linearrag_chunk:
+    cmd: uv run python src/app/linear_rag/chunk.py --input 
+      data/processed/extracted --output data/processed/linear_rag/chunks
+    deps:
+    - path: data/processed/extracted
+      hash: md5
+      md5: 4065efd980e1243efa3506a32f8c9882.dir
+      size: 5086187
+      nfiles: 6
+    - path: src/app/linear_rag/chunk.py
+      hash: md5
+      md5: 80dd5bc170e3e44a83a1cc601682e978
+      size: 4672
+    params:
+      params.yaml:
+        chunk.chunk_size: 500
+        chunk.overlap: 100
+        chunk.split_by: section
+    outs:
+    - path: data/processed/linear_rag/chunks
+      hash: md5
+      md5: c95209faeebd9dcd59855b660db4052a.dir
+      size: 24551
+      nfiles: 43
+  linearrag_load:
+    cmd: uv run python src/app/linear_rag/load.py --input 
+      data/processed/linear_rag/chunks --artifacts data/processed/extracted 
+      --database_url postgresql://postgres:postgres@127.0.0.1:54322/postgres
+    deps:
+    - path: data/processed/extracted
+      hash: md5
+      md5: 4065efd980e1243efa3506a32f8c9882.dir
+      size: 5086187
+      nfiles: 6
+    - path: data/processed/linear_rag/chunks
+      hash: md5
+      md5: c95209faeebd9dcd59855b660db4052a.dir
+      size: 24551
+      nfiles: 43
+    - path: src/app/linear_rag/load.py
+      hash: md5
+      md5: 560b273db84b787b790662c60e269b47
+      size: 6884
+    params:
+      params.yaml:
+        load.batch_size: 100
+  linearrag_index:
+    cmd: uv run python src/app/linear_rag/index.py --database_url 
+      postgresql://postgres:postgres@127.0.0.1:54322/postgres
+    deps:
+    - path: src/app/linear_rag/index.py
+      hash: md5
+      md5: 657ec6957cc4d671479971ea8f9590c2
+      size: 17635
+    params:
+      params.yaml:
+        index.batch_size: 32
+        index.spacy_model: en_core_web_sm

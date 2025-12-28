@@ -7,6 +7,9 @@ chunk:
   overlap: 100
   split_by: section
 
+load:
+  batch_size: 100
+
 embed:
   model: "bge-m3:567m"
 
@@ -15,6 +18,12 @@ graph:
 
 eval:
   top_k: 5
+
+index:
+  batch_size: 32
+  spacy_model: "en_core_web_sm"
+  max_workers: 4
+  embedding_provider: "ollama"  # Options: "gemini" (3072d) or "ollama" (1024d)
 
 experiment:
   name: "Document Vector Store Pipeline"
