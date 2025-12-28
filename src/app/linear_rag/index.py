@@ -442,7 +442,7 @@ if __name__ == "__main__":
     index_params = load_params("index")
     batch_size = int(index_params.get("batch_size", 32))
     spacy_model = str(index_params.get("spacy_model", "en_core_web_sm"))
-    embedding_provider = str(index_params.get("embedding_provider", "gemini"))
+    embedding_provider = str(index_params.get("embedding_provider", "ollama"))
     
     # MLflow tracking
     mlflow_connect()

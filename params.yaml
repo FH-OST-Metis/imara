@@ -25,5 +25,14 @@ index:
   max_workers: 4
   embedding_provider: "ollama"  # Options: "gemini" (3072d) or "ollama" (1024d)
 
+retrieval:
+  retrieval_top_k: 5  # Number of passages to retrieve
+  max_iterations: 3  # Maximum entity expansion iterations
+  iteration_threshold: 0.1  # Minimum score threshold for entity expansion
+  top_k_sentence: 3  # Top sentences to consider for entity expansion
+  passage_ratio: 0.5  # Weight of DPR score vs entity bonus
+  passage_node_weight: 1.0  # Weight multiplier for passage nodes in PPR
+  damping: 0.85  # PPR damping factor
+
 experiment:
   name: "Document Vector Store Pipeline"
