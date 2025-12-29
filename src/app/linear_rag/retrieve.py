@@ -2,7 +2,7 @@ import argparse
 from pathlib import Path
 import sys
 import logging
-from typing import List, Dict, Set, Tuple, Optional
+from typing import List, Dict, Tuple, Optional
 import numpy as np
 import math
 import os
@@ -23,8 +23,7 @@ import igraph as ig
 
 # Configure logging
 logging.basicConfig(
-    level=logging.INFO,
-    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+    level=logging.INFO, format="%(asctime)s - %(name)s - %(levelname)s - %(message)s"
 )
 logger = logging.getLogger(__name__)
 
@@ -46,25 +45,25 @@ def min_max_normalize(scores: np.ndarray) -> np.ndarray:
 class LinearRAGRetriever:
     """
     LinearRAG retrieval system using knowledge graph and entity-aware search.
-    
+
     Implements the retrieval pipeline from LinearRAG:
     1. Extract seed entities from question using spaCy NER
     2. Expand entities through graph traversal with sentences
     3. Calculate passage scores combining DPR and entity bonuses
     4. Run Personalized PageRank for final ranking
     """
-    
+
     def __init__(
         self,
         conn: PGConnection,
         nlp: Language,
         embedding_provider: str = "ollama",
-        retrieval_config: Optional[Dict] = None
+        retrieval_config: Optional[Dict] = None,
     ):
         self.conn = conn
         self.nlp = nlp
         self.embedding_provider = embedding_provider
-        
+
         # Retrieval configuration
         self.config = retrieval_config or {}
         self.retrieval_top_k = self.config.get("retrieval_top_k", 5)
@@ -74,18 +73,20 @@ class LinearRAGRetriever:
         self.passage_ratio = self.config.get("passage_ratio", 0.5)
         self.passage_node_weight = self.config.get("passage_node_weight", 1.0)
         self.damping = self.config.get("damping", 0.85)
-        
-        logger.info(f"Initializing LinearRAGRetriever with embedding_provider={embedding_provider}")
-        
+
+        logger.info(
+            f"Initializing LinearRAGRetriever with embedding_provider={embedding_provider}"
+        )
+
         # Load embeddings and graph structure
         self._load_embeddings()
         self._load_graph()
         self._build_mappings()
-        
+
     def _load_embeddings(self):
         """Load entity, sentence, and passage embeddings from database."""
         embedding_col = f"{self.embedding_provider}_embedding"
-        
+
         logger.info(f"Loading entity embeddings from {embedding_col}...")
         with self.conn.cursor() as cur:
             cur.execute(f"""
@@ -95,15 +96,15 @@ class LinearRAGRetriever:
                 ORDER BY entity_hash_id
             """)
             entity_rows = cur.fetchall()
-        
+
         self.entity_hash_ids = [row[0] for row in entity_rows]
         self.entity_texts = [row[1] for row in entity_rows]
         self.entity_embeddings = np.array([row[2] for row in entity_rows])
         self.entity_hash_id_to_text = dict(zip(self.entity_hash_ids, self.entity_texts))
         self.entity_hash_id_to_idx = {h: i for i, h in enumerate(self.entity_hash_ids)}
-        
+
         logger.info(f"Loaded {len(self.entity_hash_ids)} entity embeddings")
-        
+
         logger.info(f"Loading sentence embeddings from {embedding_col}...")
         with self.conn.cursor() as cur:
             cur.execute(f"""
@@ -113,15 +114,19 @@ class LinearRAGRetriever:
                 ORDER BY sentence_hash_id
             """)
             sentence_rows = cur.fetchall()
-        
+
         self.sentence_hash_ids = [row[0] for row in sentence_rows]
         self.sentence_texts = [row[1] for row in sentence_rows]
         self.sentence_embeddings = np.array([row[2] for row in sentence_rows])
-        self.sentence_hash_id_to_text = dict(zip(self.sentence_hash_ids, self.sentence_texts))
-        self.sentence_hash_id_to_idx = {h: i for i, h in enumerate(self.sentence_hash_ids)}
-        
+        self.sentence_hash_id_to_text = dict(
+            zip(self.sentence_hash_ids, self.sentence_texts)
+        )
+        self.sentence_hash_id_to_idx = {
+            h: i for i, h in enumerate(self.sentence_hash_ids)
+        }
+
         logger.info(f"Loaded {len(self.sentence_hash_ids)} sentence embeddings")
-        
+
         logger.info(f"Loading passage embeddings from {embedding_col}...")
         with self.conn.cursor() as cur:
             cur.execute(f"""
@@ -132,19 +137,23 @@ class LinearRAGRetriever:
                 ORDER BY dc.chunk_hash_id
             """)
             passage_rows = cur.fetchall()
-        
+
         self.passage_hash_ids = [row[0] for row in passage_rows]
         self.passage_texts = [row[1] for row in passage_rows]
         self.passage_embeddings = np.array([row[2] for row in passage_rows])
-        self.passage_hash_id_to_text = dict(zip(self.passage_hash_ids, self.passage_texts))
-        self.passage_hash_id_to_idx = {h: i for i, h in enumerate(self.passage_hash_ids)}
-        
+        self.passage_hash_id_to_text = dict(
+            zip(self.passage_hash_ids, self.passage_texts)
+        )
+        self.passage_hash_id_to_idx = {
+            h: i for i, h in enumerate(self.passage_hash_ids)
+        }
+
         logger.info(f"Loaded {len(self.passage_hash_ids)} passage embeddings")
-    
+
     def _load_graph(self):
         """Load graph structure from lr_graph_node and lr_graph_edge tables."""
         logger.info("Loading graph structure from database...")
-        
+
         # Load nodes
         with self.conn.cursor() as cur:
             cur.execute("""
@@ -153,21 +162,21 @@ class LinearRAGRetriever:
                 ORDER BY node_hash_id
             """)
             node_rows = cur.fetchall()
-        
+
         # Create igraph
         self.graph = ig.Graph(directed=False)
         node_hash_ids = [row[0] for row in node_rows]
         node_types = [row[1] for row in node_rows]
         node_texts = [row[2] for row in node_rows]
-        
+
         # Add vertices
         self.graph.add_vertices(len(node_hash_ids))
         self.graph.vs["name"] = node_hash_ids
         self.graph.vs["type"] = node_types
         self.graph.vs["content"] = node_texts
-        
+
         logger.info(f"Loaded {len(node_hash_ids)} graph nodes")
-        
+
         # Load edges
         with self.conn.cursor() as cur:
             cur.execute("""
@@ -176,31 +185,35 @@ class LinearRAGRetriever:
                 ORDER BY source_hash_id, target_hash_id
             """)
             edge_rows = cur.fetchall()
-        
+
         # Build edge list
         edges = [(row[0], row[1]) for row in edge_rows]
         weights = [row[3] for row in edge_rows]
-        
+
         self.graph.add_edges(edges)
         self.graph.es["weight"] = weights
-        
+
         logger.info(f"Loaded {len(edges)} graph edges")
-    
+
     def _build_mappings(self):
         """Build mapping structures for efficient lookups."""
         logger.info("Building lookup mappings...")
-        
+
         # Node name to vertex index
-        self.node_name_to_vertex_idx = {v["name"]: v.index for v in self.graph.vs if "name" in v.attributes()}
-        self.vertex_idx_to_node_name = {v.index: v["name"] for v in self.graph.vs if "name" in v.attributes()}
-        
+        self.node_name_to_vertex_idx = {
+            v["name"]: v.index for v in self.graph.vs if "name" in v.attributes()
+        }
+        self.vertex_idx_to_node_name = {
+            v.index: v["name"] for v in self.graph.vs if "name" in v.attributes()
+        }
+
         # Passage node indices
         self.passage_node_indices = [
             self.node_name_to_vertex_idx[passage_id]
             for passage_id in self.passage_hash_ids
             if passage_id in self.node_name_to_vertex_idx
         ]
-        
+
         # Entity to sentence mappings
         with self.conn.cursor() as cur:
             cur.execute("""
@@ -208,16 +221,20 @@ class LinearRAGRetriever:
                 FROM lr_sentence_entity
             """)
             rows = cur.fetchall()
-        
+
         self.sentence_hash_id_to_entity_hash_ids = defaultdict(list)
         self.entity_hash_id_to_sentence_hash_ids = defaultdict(list)
-        
+
         for sentence_hash_id, entity_hash_id in rows:
-            self.sentence_hash_id_to_entity_hash_ids[sentence_hash_id].append(entity_hash_id)
-            self.entity_hash_id_to_sentence_hash_ids[entity_hash_id].append(sentence_hash_id)
-        
+            self.sentence_hash_id_to_entity_hash_ids[sentence_hash_id].append(
+                entity_hash_id
+            )
+            self.entity_hash_id_to_sentence_hash_ids[entity_hash_id].append(
+                sentence_hash_id
+            )
+
         logger.info("Mappings built successfully")
-    
+
     def encode_text(self, text: str) -> np.ndarray:
         """
         Encode text using Gemini or Ollama embedding API.
@@ -229,294 +246,375 @@ class LinearRAGRetriever:
             return self._encode_ollama(text)
         else:
             raise ValueError(f"Unknown embedding_provider: {self.embedding_provider}")
-    
+
     def _encode_gemini(self, text: str) -> np.ndarray:
         """Use Gemini API directly (same as edge function but with RETRIEVAL_QUERY task type)."""
         try:
             import google.generativeai as genai
         except ImportError:
-            raise ImportError("google-generativeai package required. Install with: uv add google-generativeai")
-        
+            raise ImportError(
+                "google-generativeai package required. Install with: uv add google-generativeai"
+            )
+
         api_key = os.getenv("GEMINI_API_KEY")
         if not api_key:
             raise ValueError("GEMINI_API_KEY environment variable not set")
-        
+
         genai.configure(api_key=api_key)
-        
+
         result = genai.embed_content(
             model="models/gemini-embedding-001",
             content=text,
             task_type="retrieval_query",  # Query vs document task type
-            output_dimensionality=3072
+            output_dimensionality=3072,
         )
-        
-        return np.array(result['embedding'])
-    
+
+        return np.array(result["embedding"])
+
     def _encode_ollama(self, text: str) -> np.ndarray:
         """Use Ollama API directly (same as edge function)."""
         try:
             from openai import OpenAI
         except ImportError:
             raise ImportError("openai package required. Install with: uv add openai")
-        
+
         client = OpenAI(
             base_url=os.getenv("OLLAMA_BASE_URL", "http://localhost:11434/v1"),
-            api_key="ollama"  # Required by client but unused by Ollama
+            api_key="ollama",  # Required by client but unused by Ollama
         )
-        
+
         response = client.embeddings.create(
-            model=os.getenv("OLLAMA_MODEL", "bge-m3:567m"),
-            input=text
+            model=os.getenv("OLLAMA_MODEL", "bge-m3:567m"), input=text
         )
-        
+
         return np.array(response.data[0].embedding)
-    
+
     def retrieve(self, questions: List[Dict]) -> List[Dict]:
         """
         Retrieve relevant passages for given questions.
-        
+
         Args:
             questions: List of dicts with 'question' and optional 'answer' keys
-        
+
         Returns:
             List of dicts with retrieval results including ranked passages
         """
         retrieval_results = []
-        
+
         for question_info in questions:
             question = question_info["question"]
             logger.info(f"Retrieving for question: {question[:100]}...")
-            
+
             # Encode question
             question_embedding = self.encode_text(question)
-            
+
             # Get seed entities from question
-            seed_entity_indices, seed_entities, seed_entity_hash_ids, seed_entity_scores = self.get_seed_entities(question, question_embedding)
-            
+            (
+                seed_entity_indices,
+                seed_entities,
+                seed_entity_hash_ids,
+                seed_entity_scores,
+            ) = self.get_seed_entities(question, question_embedding)
+
             if len(seed_entities) > 0:
-                logger.info(f"Found {len(seed_entities)} seed entities: {seed_entities}")
-                sorted_passage_hash_ids, sorted_passage_scores = self.graph_search_with_seed_entities(
-                    question_embedding, seed_entity_indices, seed_entities,
-                    seed_entity_hash_ids, seed_entity_scores
+                logger.info(
+                    f"Found {len(seed_entities)} seed entities: {seed_entities}"
+                )
+                sorted_passage_hash_ids, sorted_passage_scores = (
+                    self.graph_search_with_seed_entities(
+                        question_embedding,
+                        seed_entity_indices,
+                        seed_entities,
+                        seed_entity_hash_ids,
+                        seed_entity_scores,
+                    )
                 )
             else:
                 logger.info("No seed entities found, using dense passage retrieval")
-                sorted_passage_indices, sorted_passage_scores = self.dense_passage_retrieval(question_embedding)
-                sorted_passage_hash_ids = [self.passage_hash_ids[idx] for idx in sorted_passage_indices]
-            
+                sorted_passage_indices, sorted_passage_scores = (
+                    self.dense_passage_retrieval(question_embedding)
+                )
+                sorted_passage_hash_ids = [
+                    self.passage_hash_ids[idx] for idx in sorted_passage_indices
+                ]
+
             # Get top-k passages
-            final_passage_hash_ids = sorted_passage_hash_ids[:self.retrieval_top_k]
-            final_passage_scores = sorted_passage_scores[:self.retrieval_top_k]
-            final_passages = [self.passage_hash_id_to_text[h] for h in final_passage_hash_ids]
-            
+            final_passage_hash_ids = sorted_passage_hash_ids[: self.retrieval_top_k]
+            final_passage_scores = sorted_passage_scores[: self.retrieval_top_k]
+            final_passages = [
+                self.passage_hash_id_to_text[h] for h in final_passage_hash_ids
+            ]
+
             result = {
                 "question": question,
                 "sorted_passage": final_passages,
                 "sorted_passage_scores": final_passage_scores,
-                "gold_answer": question_info.get("answer", "")
+                "gold_answer": question_info.get("answer", ""),
             }
             retrieval_results.append(result)
-        
+
         return retrieval_results
-    
-    def get_seed_entities(self, question: str, question_embedding: np.ndarray) -> Tuple[List[int], List[str], List[str], List[float]]:
+
+    def get_seed_entities(
+        self, question: str, question_embedding: np.ndarray
+    ) -> Tuple[List[int], List[str], List[str], List[float]]:
         """Extract seed entities from question using spaCy NER and match to knowledge base."""
         doc = self.nlp(question)
         question_entities = [ent.text.strip() for ent in doc.ents if ent.text.strip()]
-        
+
         if len(question_entities) == 0:
             return [], [], [], []
-        
-        logger.info(f"Extracted {len(question_entities)} entities from question: {question_entities}")
-        
+
+        logger.info(
+            f"Extracted {len(question_entities)} entities from question: {question_entities}"
+        )
+
         # Encode question entities
-        question_entity_embeddings = np.array([self.encode_text(entity) for entity in question_entities])
-        
+        question_entity_embeddings = np.array(
+            [self.encode_text(entity) for entity in question_entities]
+        )
+
         similarities = np.dot(self.entity_embeddings, question_entity_embeddings.T)
-        
+
         seed_entity_indices = []
         seed_entity_texts = []
         seed_entity_hash_ids = []
         seed_entity_scores = []
-        
+
         for query_entity_idx in range(len(question_entities)):
             entity_scores = similarities[:, query_entity_idx]
             best_entity_idx = np.argmax(entity_scores)
             best_entity_score = entity_scores[best_entity_idx]
             best_entity_hash_id = self.entity_hash_ids[best_entity_idx]
             best_entity_text = self.entity_hash_id_to_text[best_entity_hash_id]
-            
+
             seed_entity_indices.append(best_entity_idx)
             seed_entity_texts.append(best_entity_text)
             seed_entity_hash_ids.append(best_entity_hash_id)
             seed_entity_scores.append(best_entity_score)
-        
-        return seed_entity_indices, seed_entity_texts, seed_entity_hash_ids, seed_entity_scores
-    
+
+        return (
+            [int(i) for i in seed_entity_indices],
+            seed_entity_texts,
+            seed_entity_hash_ids,
+            seed_entity_scores,
+        )
+
     def graph_search_with_seed_entities(
         self,
         question_embedding: np.ndarray,
         seed_entity_indices: List[int],
         seed_entities: List[str],
         seed_entity_hash_ids: List[str],
-        seed_entity_scores: List[float]
+        seed_entity_scores: List[float],
     ) -> Tuple[List[str], List[float]]:
         """Perform graph-based search starting from seed entities."""
         entity_weights, actived_entities = self.calculate_entity_scores(
-            question_embedding, seed_entity_indices, seed_entities,
-            seed_entity_hash_ids, seed_entity_scores
+            question_embedding,
+            seed_entity_indices,
+            seed_entities,
+            seed_entity_hash_ids,
+            seed_entity_scores,
         )
-        passage_weights = self.calculate_passage_scores(question_embedding, actived_entities)
+        passage_weights = self.calculate_passage_scores(
+            question_embedding, actived_entities
+        )
         node_weights = entity_weights + passage_weights
-        
-        ppr_sorted_passage_hash_ids, ppr_sorted_passage_scores = self.run_ppr(node_weights)
+
+        ppr_sorted_passage_hash_ids, ppr_sorted_passage_scores = self.run_ppr(
+            node_weights
+        )
         return ppr_sorted_passage_hash_ids, ppr_sorted_passage_scores
-    
+
     def calculate_entity_scores(
         self,
         question_embedding: np.ndarray,
         seed_entity_indices: List[int],
         seed_entities: List[str],
         seed_entity_hash_ids: List[str],
-        seed_entity_scores: List[float]
+        seed_entity_scores: List[float],
     ) -> Tuple[np.ndarray, Dict]:
         """Calculate entity scores through iterative expansion via sentences."""
         actived_entities = {}
         entity_weights = np.zeros(len(self.graph.vs["name"]))
-        
+
         # Initialize with seed entities
         for seed_entity_idx, seed_entity, seed_entity_hash_id, seed_entity_score in zip(
             seed_entity_indices, seed_entities, seed_entity_hash_ids, seed_entity_scores
         ):
-            actived_entities[seed_entity_hash_id] = (seed_entity_idx, seed_entity_score, 1)
+            actived_entities[seed_entity_hash_id] = (
+                seed_entity_idx,
+                seed_entity_score,
+                1,
+            )
             seed_entity_node_idx = self.node_name_to_vertex_idx[seed_entity_hash_id]
             entity_weights[seed_entity_node_idx] = seed_entity_score
-        
+
         used_sentence_hash_ids = set()
         current_entities = actived_entities.copy()
         iteration = 1
-        
+
         # Iterative expansion
         while len(current_entities) > 0 and iteration < self.max_iterations:
             new_entities = {}
-            
-            for entity_hash_id, (entity_id, entity_score, tier) in current_entities.items():
+
+            for entity_hash_id, (
+                entity_id,
+                entity_score,
+                tier,
+            ) in current_entities.items():
                 if entity_score < self.iteration_threshold:
                     continue
-                
+
                 # Get sentences containing this entity
                 sentence_hash_ids = [
-                    sid for sid in self.entity_hash_id_to_sentence_hash_ids[entity_hash_id]
+                    sid
+                    for sid in self.entity_hash_id_to_sentence_hash_ids[entity_hash_id]
                     if sid not in used_sentence_hash_ids
                 ]
-                
+
                 if not sentence_hash_ids:
                     continue
-                
+
                 # Calculate sentence similarities
-                sentence_indices = [self.sentence_hash_id_to_idx[sid] for sid in sentence_hash_ids]
+                sentence_indices = [
+                    self.sentence_hash_id_to_idx[sid] for sid in sentence_hash_ids
+                ]
                 sentence_embeddings = self.sentence_embeddings[sentence_indices]
-                question_emb = question_embedding.reshape(-1, 1) if len(question_embedding.shape) == 1 else question_embedding
-                sentence_similarities = np.dot(sentence_embeddings, question_emb).flatten()
-                
+                question_emb = (
+                    question_embedding.reshape(-1, 1)
+                    if len(question_embedding.shape) == 1
+                    else question_embedding
+                )
+                sentence_similarities = np.dot(
+                    sentence_embeddings, question_emb
+                ).flatten()
+
                 # Get top-k sentences
-                top_sentence_indices = np.argsort(sentence_similarities)[::-1][:self.top_k_sentence]
-                
+                top_sentence_indices = np.argsort(sentence_similarities)[::-1][
+                    : self.top_k_sentence
+                ]
+
                 for top_sentence_index in top_sentence_indices:
                     top_sentence_hash_id = sentence_hash_ids[top_sentence_index]
                     top_sentence_score = sentence_similarities[top_sentence_index]
                     used_sentence_hash_ids.add(top_sentence_hash_id)
-                    
+
                     # Get entities in this sentence
-                    entity_hash_ids_in_sentence = self.sentence_hash_id_to_entity_hash_ids[top_sentence_hash_id]
-                    
+                    entity_hash_ids_in_sentence = (
+                        self.sentence_hash_id_to_entity_hash_ids[top_sentence_hash_id]
+                    )
+
                     for next_entity_hash_id in entity_hash_ids_in_sentence:
                         next_entity_score = entity_score * top_sentence_score
-                        
+
                         if next_entity_score < self.iteration_threshold:
                             continue
-                        
-                        next_entity_node_idx = self.node_name_to_vertex_idx[next_entity_hash_id]
+
+                        next_entity_node_idx = self.node_name_to_vertex_idx[
+                            next_entity_hash_id
+                        ]
                         entity_weights[next_entity_node_idx] += next_entity_score
-                        new_entities[next_entity_hash_id] = (next_entity_node_idx, next_entity_score, iteration + 1)
-            
+                        new_entities[next_entity_hash_id] = (
+                            next_entity_node_idx,
+                            next_entity_score,
+                            iteration + 1,
+                        )
+
             actived_entities.update(new_entities)
             current_entities = new_entities.copy()
             iteration += 1
-        
-        logger.info(f"Entity expansion completed: {len(actived_entities)} entities activated")
+
+        logger.info(
+            f"Entity expansion completed: {len(actived_entities)} entities activated"
+        )
         return entity_weights, actived_entities
-    
+
     def calculate_passage_scores(
-        self,
-        question_embedding: np.ndarray,
-        actived_entities: Dict
+        self, question_embedding: np.ndarray, actived_entities: Dict
     ) -> np.ndarray:
         """Calculate passage scores combining DPR and entity bonuses."""
         passage_weights = np.zeros(len(self.graph.vs["name"]))
-        
+
         # Dense passage retrieval scores
-        dpr_passage_indices, dpr_passage_scores = self.dense_passage_retrieval(question_embedding)
-        dpr_passage_scores = min_max_normalize(np.array(dpr_passage_scores))
-        
+        dpr_passage_indices, dpr_passage_scores = self.dense_passage_retrieval(
+            question_embedding
+        )
+        dpr_passage_scores_list: List[float] = min_max_normalize(np.array(dpr_passage_scores)).tolist()
+
         for i, dpr_passage_index in enumerate(dpr_passage_indices):
             total_entity_bonus = 0
             passage_hash_id = self.passage_hash_ids[dpr_passage_index]
-            dpr_passage_score = dpr_passage_scores[i]
+            dpr_passage_score = dpr_passage_scores_list[i]
             passage_text_lower = self.passage_hash_id_to_text[passage_hash_id].lower()
-            
+
             # Calculate entity bonuses
-            for entity_hash_id, (entity_id, entity_score, tier) in actived_entities.items():
+            for entity_hash_id, (
+                entity_id,
+                entity_score,
+                tier,
+            ) in actived_entities.items():
                 entity_lower = self.entity_hash_id_to_text[entity_hash_id].lower()
                 entity_occurrences = passage_text_lower.count(entity_lower)
-                
+
                 if entity_occurrences > 0:
                     denom = tier if tier >= 1 else 1
-                    entity_bonus = entity_score * math.log(1 + entity_occurrences) / denom
+                    entity_bonus = (
+                        entity_score * math.log(1 + entity_occurrences) / denom
+                    )
                     total_entity_bonus += entity_bonus
-            
+
             # Combined score
-            passage_score = (
-                self.passage_ratio * dpr_passage_score +
-                math.log(1 + total_entity_bonus)
+            passage_score = self.passage_ratio * dpr_passage_score + math.log(
+                1 + total_entity_bonus
             )
             passage_node_idx = self.node_name_to_vertex_idx[passage_hash_id]
             passage_weights[passage_node_idx] = passage_score * self.passage_node_weight
-        
+
         return passage_weights
-    
+
     def run_ppr(self, node_weights: np.ndarray) -> Tuple[List[str], List[float]]:
         """Run Personalized PageRank with node weights as reset probabilities."""
-        reset_prob = np.where(np.isnan(node_weights) | (node_weights < 0), 0, node_weights)
-        
+        reset_prob = np.where(
+            np.isnan(node_weights) | (node_weights < 0), 0, node_weights
+        )
+
         pagerank_scores = self.graph.personalized_pagerank(
             vertices=range(len(self.node_name_to_vertex_idx)),
             damping=self.damping,
             directed=False,
-            weights='weight',
+            weights="weight",
             reset=reset_prob,
-            implementation='prpack'
+            implementation="prpack",
         )
-        
+
         # Extract passage scores
-        doc_scores = np.array([pagerank_scores[idx] for idx in self.passage_node_indices])
+        doc_scores = np.array(
+            [pagerank_scores[idx] for idx in self.passage_node_indices]
+        )
         sorted_indices_in_doc_scores = np.argsort(doc_scores)[::-1]
         sorted_passage_scores = doc_scores[sorted_indices_in_doc_scores]
-        
+
         sorted_passage_hash_ids = [
             self.vertex_idx_to_node_name[self.passage_node_indices[i]]
             for i in sorted_indices_in_doc_scores
         ]
-        
+
         return sorted_passage_hash_ids, sorted_passage_scores.tolist()
-    
-    def dense_passage_retrieval(self, question_embedding: np.ndarray) -> Tuple[List[int], List[float]]:
+
+    def dense_passage_retrieval(
+        self, question_embedding: np.ndarray
+    ) -> Tuple[List[int], List[float]]:
         """Dense passage retrieval using cosine similarity."""
         question_emb = question_embedding.reshape(1, -1)
-        question_passage_similarities = np.dot(self.passage_embeddings, question_emb.T).flatten()
+        question_passage_similarities = np.dot(
+            self.passage_embeddings, question_emb.T
+        ).flatten()
         sorted_passage_indices = np.argsort(question_passage_similarities)[::-1]
-        sorted_passage_scores = question_passage_similarities[sorted_passage_indices].tolist()
-        return sorted_passage_indices, sorted_passage_scores
+        sorted_passage_scores = question_passage_similarities[
+            sorted_passage_indices
+        ].tolist()
+        return sorted_passage_indices.tolist(), sorted_passage_scores
 
 
 def main(
@@ -524,33 +622,35 @@ def main(
     spacy_model: str,
     embedding_provider: str,
     retrieval_config: Dict,
-    question: str
+    question: str,
 ):
     """
     Main entry point for LinearRAG retrieval.
-    
+
     Demonstrates retrieval for a single question.
     """
     logger.info(f"Loading spaCy model: {spacy_model}")
     nlp = spacy.load(spacy_model)
-    
+
     logger.info(f"Connecting to database: {database_url}")
     conn = _connect(database_url)
-    
+
     try:
         retriever = LinearRAGRetriever(conn, nlp, embedding_provider, retrieval_config)
-        
+
         questions = [{"question": question, "answer": ""}]
         results = retriever.retrieve(questions)
-        
+
         logger.info("=" * 80)
         logger.info(f"Question: {question}")
         logger.info("-" * 80)
-        for i, (passage, score) in enumerate(zip(results[0]["sorted_passage"], results[0]["sorted_passage_scores"]), 1):
+        for i, (passage, score) in enumerate(
+            zip(results[0]["sorted_passage"], results[0]["sorted_passage_scores"]), 1
+        ):
             logger.info(f"\nRank {i} (score={score:.4f}):")
             logger.info(f"{passage[:200]}...")
         logger.info("=" * 80)
-        
+
     finally:
         conn.close()
 
@@ -559,25 +659,27 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(
         description="LinearRAG retrieval: graph-based passage ranking"
     )
-    
-    parser.add_argument("--database_url", type=str, required=True,
-                       help="PostgreSQL database URL")
-    parser.add_argument("--question", type=str, required=True,
-                       help="Question to retrieve passages for")
-    
+
+    parser.add_argument(
+        "--database_url", type=str, required=True, help="PostgreSQL database URL"
+    )
+    parser.add_argument(
+        "--question", type=str, required=True, help="Question to retrieve passages for"
+    )
+
     args = parser.parse_args()
-    
+
     # Load parameters
     index_params = load_params("index")
     retrieval_params = load_params("retrieval")
-    
+
     spacy_model = str(index_params.get("spacy_model", "en_core_web_sm"))
     embedding_provider = str(index_params.get("embedding_provider", "ollama"))
-    
+
     main(
         args.database_url,
         spacy_model,
         embedding_provider,
         retrieval_params,
-        args.question
+        args.question,
     )

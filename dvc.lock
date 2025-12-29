@@ -202,61 +202,164 @@ stages:
       hash: md5
       md5: d21b6d55f73e3d4d473473f060a76604
       size: 4213
-  linearrag_chunk:
-    cmd: uv run python src/app/linear_rag/chunk.py --input 
-      data/processed/extracted --output data/processed/linear_rag/chunks
+  generate_queries:
+    cmd: uv run open-rag-eval generate-queries --config query_gen_config.yaml
     deps:
     - path: data/processed/extracted
       hash: md5
       md5: 4065efd980e1243efa3506a32f8c9882.dir
       size: 5086187
       nfiles: 6
-    - path: src/app/linear_rag/chunk.py
+    - path: query_gen_config.yaml
       hash: md5
-      md5: 80dd5bc170e3e44a83a1cc601682e978
-      size: 4672
+      md5: 0d8c0c18d51c68a7f3e3963582c87571
+      size: 1356
     params:
-      params.yaml:
-        chunk.chunk_size: 500
-        chunk.overlap: 100
-        chunk.split_by: section
+      query_gen_config.yaml:
+        generation.n_questions: 10
+        generation.questions_per_doc: 10
+        model.name: models/gemini-2.5-flash
+        model.type: GeminiModel
     outs:
-    - path: data/processed/linear_rag/chunks
+    - path: data/eval/queries.csv
       hash: md5
-      md5: c95209faeebd9dcd59855b660db4052a.dir
-      size: 24551
-      nfiles: 43
-  linearrag_load:
-    cmd: uv run python src/app/linear_rag/load.py --input data/processed/chunks 
-      --artifacts data/processed/extracted --database_url 
-      postgresql://postgres:postgres@127.0.0.1:54322/postgres
+      md5: e9db32d9fdc0df8a73c6aa87d81b194b
+      size: 1207
+  graphmert_generate_answers:
+    cmd: uv run python src/app/eval_open_rag.py --system graphmert --queries 
+      data/eval/queries.csv --output data/eval/graphmert/generated_answers.csv
     deps:
+    - path: data/eval/queries.csv
+      hash: md5
+      md5: e9db32d9fdc0df8a73c6aa87d81b194b
+      size: 1207
     - path: data/processed/chunks
       hash: md5
       md5: c95209faeebd9dcd59855b660db4052a.dir
       size: 24551
       nfiles: 43
-    - path: data/processed/extracted
+    - path: src/app/eval_open_rag.py
       hash: md5
-      md5: 4065efd980e1243efa3506a32f8c9882.dir
-      size: 5086187
-      nfiles: 6
-    - path: src/app/linear_rag/load.py
+      md5: 0ca14fbdb94dd08713620c053fcd44a7
+      size: 12750
+    - path: src/app/graphmert/corpus.py
       hash: md5
-      md5: 560b273db84b787b790662c60e269b47
-      size: 6884
+      md5: 165de504a23a3164d6440cf993123fda
+      size: 1293
+    - path: src/app/graphmert/inference.py
+      hash: md5
+      md5: cc5c00fd2f71f04ae9968d1f02e71697
+      size: 7241
+    - path: src/app/graphmert/train_model.py
+      hash: md5
+      md5: 514a2be1ab2d6f34b4e027fcf4214b50
+      size: 6114
+    - path: src/app/utils/params_helper.py
+      hash: md5
+      md5: 63ae89e1b9f548569371e1c50daa52b6
+      size: 224
     params:
       params.yaml:
-        load.batch_size: 100
-  linearrag_index:
-    cmd: uv run python src/app/linear_rag/index.py --database_url 
-      postgresql://postgres:postgres@127.0.0.1:54322/postgres
+        eval.top_k: 5
+    outs:
+    - path: data/eval/graphmert/generated_answers.csv
+      hash: md5
+      md5: 6228497163931c6fb436368d51cdcda9
+      size: 54880
+  naiverag_generate_answers:
+    cmd: uv run python src/app/eval_open_rag.py --system naiverag --queries 
+      data/eval/queries.csv --output data/eval/naiverag/generated_answers.csv
     deps:
-    - path: src/app/linear_rag/index.py
+    - path: data/eval/queries.csv
       hash: md5
-      md5: 900f630c01520268424af42f468afcb1
-      size: 17777
+      md5: e9db32d9fdc0df8a73c6aa87d81b194b
+      size: 1207
+    - path: data/processed/chunks
+      hash: md5
+      md5: c95209faeebd9dcd59855b660db4052a.dir
+      size: 24551
+      nfiles: 43
+    - path: src/app/embedder.py
+      hash: md5
+      md5: 67e5243b0780cf22eb5fa9d16f15c31d
+      size: 4006
+    - path: src/app/eval_open_rag.py
+      hash: md5
+      md5: 0ca14fbdb94dd08713620c053fcd44a7
+      size: 12750
+    - path: src/app/utils/params_helper.py
+      hash: md5
+      md5: 63ae89e1b9f548569371e1c50daa52b6
+      size: 224
     params:
       params.yaml:
-        index.batch_size: 32
-        index.spacy_model: en_core_web_sm
+        eval.top_k: 5
+    outs:
+    - path: data/eval/naiverag/generated_answers.csv
+      hash: md5
+      md5: 17728d1ae96bda331eec10aa24f35eb9
+      size: 104020
+  graphmert_eval:
+    cmd: uv run open-rag-eval eval --config configs/open_rag_eval_graphmert.yaml
+    deps:
+    - path: configs/open_rag_eval_graphmert.yaml
+      hash: md5
+      md5: f244ad3639b2115b45fcdebeac6cdf76
+      size: 740
+    - path: data/eval/graphmert/generated_answers.csv
+      hash: md5
+      md5: 6228497163931c6fb436368d51cdcda9
+      size: 54880
+    - path: data/eval/queries.csv
+      hash: md5
+      md5: e9db32d9fdc0df8a73c6aa87d81b194b
+      size: 1207
+    params:
+      configs/open_rag_eval_graphmert.yaml:
+        evaluator.0.model.name: gemini-2.5-flash
+        evaluator.0.model.type: GeminiModel
+        evaluator.0.options.k_values:
+        - 1
+        - 3
+        - 5
+    outs:
+    - path: data/eval/graphmert/TRECEvaluator-metrics.png
+      hash: md5
+      md5: 67e18dd0a4f7d9678712b1ec24ea1e5a
+      size: 305552
+    - path: data/eval/graphmert/results.csv
+      hash: md5
+      md5: 28fc7d1e285b064ca1b3dd37f38af8df
+      size: 58998
+  naiverag_eval:
+    cmd: uv run open-rag-eval eval --config configs/open_rag_eval_naiverag.yaml
+    deps:
+    - path: configs/open_rag_eval_naiverag.yaml
+      hash: md5
+      md5: d0bfd76b931db77bb23aa50b066f17e2
+      size: 758
+    - path: data/eval/naiverag/generated_answers.csv
+      hash: md5
+      md5: 17728d1ae96bda331eec10aa24f35eb9
+      size: 104020
+    - path: data/eval/queries.csv
+      hash: md5
+      md5: e9db32d9fdc0df8a73c6aa87d81b194b
+      size: 1207
+    params:
+      configs/open_rag_eval_naiverag.yaml:
+        evaluator.0.model.name: gemini-2.5-flash
+        evaluator.0.model.type: GeminiModel
+        evaluator.0.options.k_values:
+        - 1
+        - 3
+        - 5
+    outs:
+    - path: data/eval/naiverag/TRECEvaluator-metrics.png
+      hash: md5
+      md5: 4eef9104cb4bfe4c33c9aad3e899a7d5
+      size: 303381
+    - path: data/eval/naiverag/results.csv
+      hash: md5
+      md5: 5cf37c246ba7f194987a0ec63165234f
+      size: 115760
