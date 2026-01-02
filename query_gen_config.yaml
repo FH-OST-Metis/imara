@@ -1,0 +1,38 @@
+# Query generation config for this repo using open-rag-eval (standard/local)
+
+# Use local markdown/text documents produced by the pipeline as source
+# Here we point to the Docling outputs under data/processed/out
+
+document_source:
+  type: "LocalFileSource"
+  options:
+    path: "data/processed/extracted" # directory with .md/.txt exports
+    file_extensions: [".txt", ".md"]
+    min_doc_size: 500 # minimum document size in characters
+    max_num_docs: null # null = use all docs
+
+# LLM model for query generation (Gemini)
+model:
+  type: "GeminiModel"
+  name: "models/gemini-2.5-flash"
+  api_key: ${oc.env:GEMINI_API_KEY}
+
+# Query generation parameters (standard defaults)
+generation:
+  n_questions: 10 # total queries to generate
+  min_words: 5 # minimum words per query
+  max_words: 25 # maximum words per query
+  questions_per_doc: 10 # max queries per document
+
+  # Question type distribution (weights auto-normalized)
+  question_types:
+    directly_answerable: 25 # answerable directly from text
+    reasoning_required: 25 # require reasoning/inference
+    unanswerable: 25 # not answerable from text
+    partially_answerable: 25 # partially covered by text
+
+# Output configuration: write queries.csv into data/eval/
+output:
+  format: "csv" # or "jsonl"
+  base_filename: "data/eval/queries" # produces data/eval/queries.csv
+  include_metadata: false
