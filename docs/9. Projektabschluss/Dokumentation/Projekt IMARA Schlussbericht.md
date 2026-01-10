@@ -101,24 +101,27 @@ angetroffene Herausforderungen
 
 **Massnahme 1:** Optimierung der Parameter. Die optimierte Version der Parameter ist massiv schneller und viel genauer.
 
-![alt text](image-6.png)
+<img src="image-6.png" alt="Differenzen 1"  width="50%" height="50%">
 
 Die unterschiede sind z.T. ganze Tabellen.
 
-![alt text](image-7.png)
+<img src="image-7.png" alt="Differenzen 2"  width="50%" height="50%">
 
-Problematische Parameter:
-![alt text](image-8.png)
+problematische Parameter:
+<img src="image-8.png" alt="problematische Parameter"  width="50%" height="50%">
 
 erfolgreiche Parameter:
-![alt text](image-9.png)
+<img src="image-9.png" alt="erfolgreiche Parameter"  width="50%" height="50%">
 
 **Challenge:** Die 16GB VRAM waren nicht genug, um alle features von docling zu unterstützen. Das verursachte periodische Endless-loop's in Docling serve.
+
 **Massnahme 1:** Der Verzicht auf die Container-Version "Docling serve" und die Verwendung direkt in Python.
+
 **Massnahme 2:** Die Ausführung von Docling auf der CPU, um das VRAM-Limit zu umgehen
 
 **Challenge:** Die 16GB VRAM waren nicht genug, um alle features von docling zu unterstützen. Das verursachte periodische Endless-loop's in Docling serve.
 Die cloudcode_cli.exe in der VSCode-Umgebung hat durch einen etremen RAM-Verbrauch im Hintergrund die Ausführung von docling verhindert. freeze, not started, ... <https://forum.cursor.com/t/hight-memory-consumption-on-cloudcode-cli/106122>
+
 **Massnahme 1:** Ein Uninstall von cloudcode_cli.exe war unumgänglich.
 
 **Challenge:** Das parsen von Formeln in Docling mit CPU oder GPU ist sehr langsam. Den Verzicht auf die Extraktion der Formeln war keine Option, da eine maximale Qualität des Extrakts abgestrebt wurde, um die over-all Performance nicht zu beeinträchtigen.
@@ -214,7 +217,8 @@ build_graph.py
 
 LinearRAG: Linear Graph Retrieval-Augmented Generation on Large-scale Corpora - A relation-free graph construction method for efficient GraphRAG.
 
-![alt text](image.png)
+<img src="image.png" alt="linearRAG Workflow"  width="50%" height="50%">
+
 
 ✅ Context-Preserving: Relation-free graph construction, relying on lightweight entity recognition and semantic linking to achieve comprehensive contextual comprehension.
 ✅ Complex Reasoning: Enables deep retrieval via semantic bridging, achieving multi-hop reasoning in a single retrieval pass without requiring explicit relational graphs.
@@ -339,22 +343,22 @@ Konkret streben wir zuverlässige domänenspezifische Wissensgraphen (KGs) an, d
 
 **GraphMERT Node Embeddings (t-SNE View)**
 
-![alt text](image-1.png)
+<img src="image-1.png" alt="GraphMERT Node Embeddings (t-SNE View)"  width="40%" height="40%">
 
 **GraphMERT Semantic Graph Visualization**
 
-![alt text](image-2.png)
+<img src="image-2.png" alt="GraphMERT Semantic Graph Visualization"  width="40%" height="40%">
 
 **Query search on the graphs results**
 Das ist es, was wir wollen, da die Suche im Graphen linear ist und auf verkettetem Wissen basiert, wobei die Knoten Daten über sich selbst enthalten.
 
 ***Ein perfektes Resultat***
 
-![alt text](image-3.png)
+<img src="image-3.png" alt="Ein perfektes Resultat"  width="30%" height="30%">
 
 ***Ein fast perfektes Resultat***
 
-![alt text](image-4.png)
+<img src="image-4.png" alt="Ein fast perfektes Resultat"  width="30%" height="30%">
 
 - **Extraktion:** Umwandlung von Text in Entitäten und Relationen.
 -
@@ -373,7 +377,7 @@ Das ist es, was wir wollen, da die Suche im Graphen linear ist und auf verkettet
 
 Beschreibung der Pipeline von der PDF-Eingabe bis zur Antwortgenerierung.
 
-![alt text](image-5.png)
+<img src="image-5.png" alt="IMARA Pipeline"  width="50%" height="50%">
 
 ### 5.2 Verwendete Hardware
 
