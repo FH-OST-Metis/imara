@@ -167,12 +167,12 @@ stages:
     - path: data/processed/extracted
       hash: md5
       md5: 2b597a1b3021010b926d35600555ddc4.dir
-      size: 27163434807
+      size: 27059869438
       nfiles: 12955
     - path: src/app/naiverag/chunk.py
       hash: md5
-      md5: dd784bc94e1b3a2ded7b6a482559241c
-      size: 3810
+      md5: f879183e47c88d6e7b788e3ba723828d
+      size: 3696
     params:
       params.yaml:
         chunk.chunk_size: 500
@@ -181,9 +181,9 @@ stages:
     outs:
     - path: data/processed/chunks
       hash: md5
-      md5: c95209faeebd9dcd59855b660db4052a.dir
-      size: 24551
-      nfiles: 43
+      md5: 97d328068fbd9307ce5e3db94b1beeb2.dir
+      size: 159631484
+      nfiles: 278692
   naiverag_embed:
     cmd: uv run python src/app/naiverag/embed.py --input data/processed/chunks 
       --artifacts data/processed/extracted --database_url 
