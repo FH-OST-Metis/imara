@@ -5,18 +5,21 @@ stages:
       - src/app/prep_pipeline.py
 
   extract:
-    cmd: uv run python src/app/extract.py --input data/raw/documents --output data/processed/extracted
+    cmd: uv run python src/app/extract.py --input data/raw/documents --output
+      data/processed/extracted
     deps:
-      - src/app/extract.py
       - data/raw/documents
+      - src/app/extract.py
     outs:
       - data/processed/extracted
     params:
       - extract.batch_size
       - extract.source_handling
+    frozen: true
 
   naiverag_chunk:
-    cmd: uv run python src/app/naiverag/chunk.py --input data/processed/extracted --output data/processed/chunks
+    cmd: uv run python src/app/naiverag/chunk.py --input
+      data/processed/extracted --output data/processed/chunks
     deps:
       - src/app/naiverag/chunk.py
       - data/processed/extracted
@@ -28,7 +31,9 @@ stages:
       - chunk.split_by
 
   naiverag_embed:
-    cmd: uv run python src/app/naiverag/embed.py --input data/processed/chunks --artifacts data/processed/extracted --database_url postgresql://postgres:postgres@127.0.0.1:54322/postgres
+    cmd: uv run python src/app/naiverag/embed.py --input data/processed/chunks
+      --artifacts data/processed/extracted --database_url
+      postgresql://postgres:postgres@127.0.0.1:54322/postgres
     deps:
       - src/app/naiverag/embed.py
       - data/processed/chunks
