@@ -7,12 +7,12 @@ stages:
     - path: data/raw/documents
       hash: md5
       md5: b99cf919d7316a6142a381d38dce66a6.dir
-      size: 3718756308
+      size: 3615190939
       nfiles: 1001
     - path: src/app/extract.py
       hash: md5
-      md5: 761712377ea358982dc56e919dbcf6e7
-      size: 16113
+      md5: ad4d553b94723e18e22baeb9bdea90e1
+      size: 15715
     params:
       params.yaml:
         extract.batch_size: 1
@@ -21,7 +21,7 @@ stages:
     - path: data/processed/extracted
       hash: md5
       md5: 2b597a1b3021010b926d35600555ddc4.dir
-      size: 27163434807
+      size: 27059869438
       nfiles: 12955
   chunk:
     cmd: uv run python src/app/chunk.py --input data/processed/extracted 
