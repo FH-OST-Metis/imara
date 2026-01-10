@@ -5,10 +5,10 @@ stages:
       - src/app/prep_pipeline.py
 
   extract:
-    cmd: uv run python src/app/extract.py --input data/raw/documents/2402.14887v4.pdf --output data/processed/extracted
+    cmd: uv run python src/app/extract.py --input data/raw/documents --output data/processed/extracted
     deps:
       - src/app/extract.py
-      - data/raw/documents/2402.14887v4.pdf
+      - data/raw/documents
     outs:
       - data/processed/extracted
     params:
