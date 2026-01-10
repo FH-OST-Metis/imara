@@ -1,13 +1,14 @@
 schema: '2.0'
 stages:
   extract:
-    cmd: uv run python src/app/extract.py --input 
-      data/raw/documents/2402.14887v4.pdf --output data/processed/extracted
+    cmd: uv run python src/app/extract.py --input data/raw/documents --output 
+      data/processed/extracted
     deps:
-    - path: data/raw/documents/2402.14887v4.pdf
+    - path: data/raw/documents
       hash: md5
-      md5: b74c219cf32c9f0fa128118c3bacf0c2
-      size: 222042
+      md5: b99cf919d7316a6142a381d38dce66a6.dir
+      size: 3718756308
+      nfiles: 1001
     - path: src/app/extract.py
       hash: md5
       md5: 761712377ea358982dc56e919dbcf6e7
