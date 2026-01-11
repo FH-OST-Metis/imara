@@ -20,33 +20,9 @@ stages:
     outs:
     - path: data/processed/extracted
       hash: md5
-      md5: b659ba674f8e0918b8a5b1c57584be4d.dir
-      size: 5089137
-      nfiles: 6
-  chunk:
-    cmd: uv run python src/app/chunk.py --input data/processed/extracted 
-      --output data/processed/chunks
-    deps:
-    - path: data/processed/extracted
-      hash: md5
-      md5: 4065efd980e1243efa3506a32f8c9882.dir
-      size: 5086187
-      nfiles: 6
-    - path: src/app/chunk.py
-      hash: md5
-      md5: f8aeab456396f072ffebffae7e2b1ed1
-      size: 3531
-    params:
-      params.yaml:
-        chunk.chunk_size: 500
-        chunk.overlap: 100
-        chunk.split_by: section
-    outs:
-    - path: data/processed/chunks
-      hash: md5
-      md5: c95209faeebd9dcd59855b660db4052a.dir
-      size: 24551
-      nfiles: 43
+      md5: 2b597a1b3021010b926d35600555ddc4.dir
+      size: 27059869438
+      nfiles: 12955
   embed:
     cmd: uv run python src/app/embed.py --input data/processed/chunks 
       --artifacts data/processed/extracted --database_url 
@@ -54,14 +30,14 @@ stages:
     deps:
     - path: data/processed/chunks
       hash: md5
-      md5: c95209faeebd9dcd59855b660db4052a.dir
-      size: 24551
-      nfiles: 43
+      md5: 97d328068fbd9307ce5e3db94b1beeb2.dir
+      size: 159631484
+      nfiles: 278692
     - path: data/processed/extracted
       hash: md5
-      md5: 4065efd980e1243efa3506a32f8c9882.dir
-      size: 5086187
-      nfiles: 6
+      md5: 2b597a1b3021010b926d35600555ddc4.dir
+      size: 27059869438
+      nfiles: 12955
     - path: src/app/embed.py
       hash: md5
       md5: 7d8ab6ac7c1849135050a89d6ec03655
@@ -78,9 +54,9 @@ stages:
     deps:
     - path: data/processed/chunks
       hash: md5
-      md5: c95209faeebd9dcd59855b660db4052a.dir
-      size: 24551
-      nfiles: 43
+      md5: 97d328068fbd9307ce5e3db94b1beeb2.dir
+      size: 159631484
+      nfiles: 278692
     - path: src/app/graphmert_train.py
       hash: md5
       md5: 217026f724d33bea92e12e5f876af678
@@ -96,9 +72,9 @@ stages:
     deps:
     - path: data/processed/chunks
       hash: md5
-      md5: c95209faeebd9dcd59855b660db4052a.dir
-      size: 24551
-      nfiles: 43
+      md5: 97d328068fbd9307ce5e3db94b1beeb2.dir
+      size: 159631484
+      nfiles: 278692
     - path: src/app/graphmert/corpus.py
       hash: md5
       md5: 165de504a23a3164d6440cf993123fda
@@ -166,9 +142,9 @@ stages:
     deps:
     - path: data/processed/extracted
       hash: md5
-      md5: b659ba674f8e0918b8a5b1c57584be4d.dir
-      size: 5089137
-      nfiles: 6
+      md5: 2b597a1b3021010b926d35600555ddc4.dir
+      size: 27059869438
+      nfiles: 12955
     - path: src/app/naiverag/chunk.py
       hash: md5
       md5: f879183e47c88d6e7b788e3ba723828d
@@ -181,9 +157,9 @@ stages:
     outs:
     - path: data/processed/chunks
       hash: md5
-      md5: c95209faeebd9dcd59855b660db4052a.dir
-      size: 24551
-      nfiles: 43
+      md5: 97d328068fbd9307ce5e3db94b1beeb2.dir
+      size: 159631484
+      nfiles: 278692
   naiverag_embed:
     cmd: uv run python src/app/naiverag/embed.py --input data/processed/chunks 
       --artifacts data/processed/extracted --database_url 
@@ -191,14 +167,14 @@ stages:
     deps:
     - path: data/processed/chunks
       hash: md5
-      md5: c95209faeebd9dcd59855b660db4052a.dir
-      size: 24551
-      nfiles: 43
+      md5: 97d328068fbd9307ce5e3db94b1beeb2.dir
+      size: 159631484
+      nfiles: 278692
     - path: data/processed/extracted
       hash: md5
-      md5: 4065efd980e1243efa3506a32f8c9882.dir
-      size: 5086187
-      nfiles: 6
+      md5: 2b597a1b3021010b926d35600555ddc4.dir
+      size: 27059869438
+      nfiles: 12955
     - path: src/app/naiverag/embed.py
       hash: md5
       md5: d21b6d55f73e3d4d473473f060a76604
@@ -208,9 +184,9 @@ stages:
     deps:
     - path: data/processed/extracted
       hash: md5
-      md5: b659ba674f8e0918b8a5b1c57584be4d.dir
-      size: 5089137
-      nfiles: 6
+      md5: 2b597a1b3021010b926d35600555ddc4.dir
+      size: 27059869438
+      nfiles: 12955
     - path: query_gen_config.yaml
       hash: md5
       md5: 0d8c0c18d51c68a7f3e3963582c87571
@@ -236,9 +212,9 @@ stages:
       size: 1207
     - path: data/processed/chunks
       hash: md5
-      md5: c95209faeebd9dcd59855b660db4052a.dir
-      size: 24551
-      nfiles: 43
+      md5: 97d328068fbd9307ce5e3db94b1beeb2.dir
+      size: 159631484
+      nfiles: 278692
     - path: src/app/eval_open_rag.py
       hash: md5
       md5: 0ca14fbdb94dd08713620c053fcd44a7
@@ -277,9 +253,9 @@ stages:
       size: 1207
     - path: data/processed/chunks
       hash: md5
-      md5: c95209faeebd9dcd59855b660db4052a.dir
-      size: 24551
-      nfiles: 43
+      md5: 97d328068fbd9307ce5e3db94b1beeb2.dir
+      size: 159631484
+      nfiles: 278692
     - path: src/app/embedder.py
       hash: md5
       md5: 67e5243b0780cf22eb5fa9d16f15c31d
@@ -417,14 +393,14 @@ stages:
     deps:
     - path: data/processed/chunks
       hash: md5
-      md5: c95209faeebd9dcd59855b660db4052a.dir
-      size: 24551
-      nfiles: 43
+      md5: 97d328068fbd9307ce5e3db94b1beeb2.dir
+      size: 159631484
+      nfiles: 278692
     - path: data/processed/extracted
       hash: md5
-      md5: b659ba674f8e0918b8a5b1c57584be4d.dir
-      size: 5089137
-      nfiles: 6
+      md5: 2b597a1b3021010b926d35600555ddc4.dir
+      size: 27059869438
+      nfiles: 12955
     - path: src/app/linear_rag/load.py
       hash: md5
       md5: 59d888a4a2df9a1f335496f4d9c54d68
