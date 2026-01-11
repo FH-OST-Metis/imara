@@ -19,9 +19,12 @@ graph:
 eval:
   top_k: 5
 
+generation:
+  max_tokens: 30000
+
 index:
   batch_size: 32
-  spacy_model: "en_core_web_sm"
+  spacy_model: "en_core_sci_md"
   max_workers: 4
   embedding_provider: "ollama"  # Options: "gemini" (3072d) or "ollama" (1024d)
 

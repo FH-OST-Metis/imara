@@ -24,6 +24,8 @@ dependencies = [
 	"en-core-web-sm",
 	"google-generativeai>=0.8.3",
 	"openai>=1.62.2",
+	"python-igraph>=1.0.0",
+	"scispacy>=0.6.2",
 ]
 
 [tool.mypy]

@@ -7,6 +7,7 @@ import numpy as np
 import math
 import os
 from collections import defaultdict
+from openai import OpenAI
 
 # Ensure sibling 'utils' package is importable when running as script via path
 sys.path.append(str(Path(__file__).resolve().parents[1]))  # adds src/app
@@ -78,19 +79,60 @@ class LinearRAGRetriever:
             f"Initializing LinearRAGRetriever with embedding_provider={embedding_provider}"
         )
 
+        # Initialize embedding clients
+        self._init_embedding_clients()
+
         # Load embeddings and graph structure
         self._load_embeddings()
         self._load_graph()
         self._build_mappings()
 
-    def _load_embeddings(self):
-        """Load entity, sentence, and passage embeddings from database."""
-        embedding_col = f"{self.embedding_provider}_embedding"
+    def _init_embedding_clients(self):
+        """Initialize embedding client(s) based on provider."""
+        if self.embedding_provider == "ollama":
+            try:
+                from openai import OpenAI
+            except ImportError:
+                raise ImportError(
+                    "openai package required. Install with: uv add openai"
+                )
+            self.ollama_client = OpenAI(
+                base_url=os.getenv("OLLAMA_BASE_URL", "http://127.0.0.1:11434/v1"),
+                api_key="ollama",
+            )
+        elif self.embedding_provider == "gemini":
+            try:
+                import google.generativeai as genai
+            except ImportError:
+                raise ImportError(
+                    "google-generativeai required. Install with: uv add google-generativeai"
+                )
+            genai.configure(api_key=os.getenv("GEMINI_API_KEY"))
+            self.gemini_client = genai
 
-        logger.info(f"Loading entity embeddings from {embedding_col}...")
+    def _parse_halfvec(self, halfvec_str: str) -> np.ndarray:
+        """Parse PostgreSQL halfvec string to numpy array."""
+        if not halfvec_str:
+            return np.array([])
+        # halfvec is returned as "[0.1,0.2,...]"
+        values = list(map(float, halfvec_str.strip("[]").split(",")))
+        return np.array(values)
+
+    def _format_vector_for_query(self, vector: np.ndarray) -> str:
+        """Format numpy array as pgvector string for SQL queries."""
+        return "[" + ",".join(map(str, vector.flatten())) + "]"
+
+    def _load_embeddings(self):
+        """Load entity, sentence, and passage metadata from database.
+        Embeddings are queried via pgvector for better performance.
+        Sentence embeddings are loaded lazily when needed.
+        """
+        embedding_col = f"embedding_{self.embedding_provider}"
+
+        logger.info(f"Loading entity metadata...")
         with self.conn.cursor() as cur:
             cur.execute(f"""
-                SELECT entity_hash_id, entity_text, {embedding_col}
+                SELECT entity_hash_id, entity_text
                 FROM lr_entity_embedding
                 WHERE {embedding_col} IS NOT NULL
                 ORDER BY entity_hash_id
@@ -98,17 +140,15 @@ class LinearRAGRetriever:
             entity_rows = cur.fetchall()
 
         self.entity_hash_ids = [row[0] for row in entity_rows]
-        self.entity_texts = [row[1] for row in entity_rows]
-        self.entity_embeddings = np.array([row[2] for row in entity_rows])
-        self.entity_hash_id_to_text = dict(zip(self.entity_hash_ids, self.entity_texts))
+        self.entity_hash_id_to_text = {row[0]: row[1] for row in entity_rows}
         self.entity_hash_id_to_idx = {h: i for i, h in enumerate(self.entity_hash_ids)}
 
-        logger.info(f"Loaded {len(self.entity_hash_ids)} entity embeddings")
+        logger.info(f"Loaded {len(self.entity_hash_ids)} entity records")
 
-        logger.info(f"Loading sentence embeddings from {embedding_col}...")
+        logger.info(f"Loading sentence metadata...")
         with self.conn.cursor() as cur:
             cur.execute(f"""
-                SELECT sentence_hash_id, sentence_text, {embedding_col}
+                SELECT sentence_hash_id, sentence_text
                 FROM lr_sentence_embedding
                 WHERE {embedding_col} IS NOT NULL
                 ORDER BY sentence_hash_id
@@ -116,21 +156,21 @@ class LinearRAGRetriever:
             sentence_rows = cur.fetchall()
 
         self.sentence_hash_ids = [row[0] for row in sentence_rows]
-        self.sentence_texts = [row[1] for row in sentence_rows]
-        self.sentence_embeddings = np.array([row[2] for row in sentence_rows])
-        self.sentence_hash_id_to_text = dict(
-            zip(self.sentence_hash_ids, self.sentence_texts)
-        )
+        self.sentence_hash_id_to_text = {row[0]: row[1] for row in sentence_rows}
         self.sentence_hash_id_to_idx = {
             h: i for i, h in enumerate(self.sentence_hash_ids)
         }
 
-        logger.info(f"Loaded {len(self.sentence_hash_ids)} sentence embeddings")
+        # Sentence embeddings loaded lazily
+        self.sentence_embeddings = None
+        self._sentence_embeddings_loaded = False
 
-        logger.info(f"Loading passage embeddings from {embedding_col}...")
+        logger.info(f"Loaded {len(self.sentence_hash_ids)} sentence records")
+
+        logger.info(f"Loading passage metadata...")
         with self.conn.cursor() as cur:
             cur.execute(f"""
-                SELECT dc.chunk_hash_id, dc.content, dc.{embedding_col}
+                SELECT dc.chunk_hash_id, dc.content
                 FROM document_chunk dc
                 WHERE dc.chunk_hash_id IS NOT NULL
                   AND dc.{embedding_col} IS NOT NULL
@@ -139,16 +179,12 @@ class LinearRAGRetriever:
             passage_rows = cur.fetchall()
 
         self.passage_hash_ids = [row[0] for row in passage_rows]
-        self.passage_texts = [row[1] for row in passage_rows]
-        self.passage_embeddings = np.array([row[2] for row in passage_rows])
-        self.passage_hash_id_to_text = dict(
-            zip(self.passage_hash_ids, self.passage_texts)
-        )
+        self.passage_hash_id_to_text = {row[0]: row[1] for row in passage_rows}
         self.passage_hash_id_to_idx = {
             h: i for i, h in enumerate(self.passage_hash_ids)
         }
 
-        logger.info(f"Loaded {len(self.passage_hash_ids)} passage embeddings")
+        logger.info(f"Loaded {len(self.passage_hash_ids)} passage records")
 
     def _load_graph(self):
         """Load graph structure from lr_graph_node and lr_graph_edge tables."""
@@ -186,9 +222,20 @@ class LinearRAGRetriever:
             """)
             edge_rows = cur.fetchall()
 
-        # Build edge list
-        edges = [(row[0], row[1]) for row in edge_rows]
-        weights = [row[3] for row in edge_rows]
+        # Build edge list, filtering edges where both nodes exist
+        node_hash_id_set = set(node_hash_ids)
+        edges = []
+        weights = []
+        for row in edge_rows:
+            source, target = row[0], row[1]
+            if source in node_hash_id_set and target in node_hash_id_set:
+                edges.append((source, target))
+                weights.append(row[3])
+
+        if len(edge_rows) > len(edges):
+            logger.warning(
+                f"Filtered {len(edge_rows) - len(edges)} edges with missing nodes"
+            )
 
         self.graph.add_edges(edges)
         self.graph.es["weight"] = weights
@@ -233,7 +280,54 @@ class LinearRAGRetriever:
                 sentence_hash_id
             )
 
+        # Pre-compute lowercased text for efficient string matching
+        logger.info("Pre-computing lowercased text cache...")
+        self.entity_hash_id_to_text_lower = {
+            h: text.lower() for h, text in self.entity_hash_id_to_text.items()
+        }
+        self.passage_hash_id_to_text_lower = {
+            h: text.lower() for h, text in self.passage_hash_id_to_text.items()
+        }
+
         logger.info("Mappings built successfully")
+
+    def _ensure_sentence_embeddings_loaded(self):
+        """Lazy-load sentence embeddings when first needed for entity expansion."""
+        if self._sentence_embeddings_loaded:
+            return
+
+        logger.info("Loading sentence embeddings for entity expansion...")
+        embedding_col = f"embedding_{self.embedding_provider}"
+
+        with self.conn.cursor() as cur:
+            cur.execute(
+                f"""
+                SELECT sentence_hash_id, {embedding_col}
+                FROM lr_sentence_embedding
+                WHERE {embedding_col} IS NOT NULL
+                  AND sentence_hash_id = ANY(%s)
+                ORDER BY sentence_hash_id
+            """,
+                (self.sentence_hash_ids,),
+            )
+            sentence_rows = cur.fetchall()
+
+        # Pre-allocate array for better performance
+        if sentence_rows:
+            first_embedding = self._parse_halfvec(sentence_rows[0][1])
+            embedding_dim = len(first_embedding)
+            self.sentence_embeddings = np.empty(
+                (len(sentence_rows), embedding_dim), dtype=np.float32
+            )
+            self.sentence_embeddings[0] = first_embedding
+
+            for i in range(1, len(sentence_rows)):
+                self.sentence_embeddings[i] = self._parse_halfvec(sentence_rows[i][1])
+        else:
+            self.sentence_embeddings = np.array([])
+
+        self._sentence_embeddings_loaded = True
+        logger.info(f"Loaded {len(sentence_rows)} sentence embeddings")
 
     def encode_text(self, text: str) -> np.ndarray:
         """
@@ -244,6 +338,18 @@ class LinearRAGRetriever:
             return self._encode_gemini(text)
         elif self.embedding_provider == "ollama":
             return self._encode_ollama(text)
+        else:
+            raise ValueError(f"Unknown embedding_provider: {self.embedding_provider}")
+
+    def encode_texts_batch(self, texts: List[str]) -> np.ndarray:
+        """
+        Encode multiple texts in batch for better performance.
+        Falls back to sequential encoding if batch API not supported.
+        """
+        if self.embedding_provider == "gemini":
+            return self._encode_gemini_batch(texts)
+        elif self.embedding_provider == "ollama":
+            return self._encode_ollama_batch(texts)
         else:
             raise ValueError(f"Unknown embedding_provider: {self.embedding_provider}")
 
@@ -271,13 +377,34 @@ class LinearRAGRetriever:
 
         return np.array(result["embedding"])
 
+    def _encode_gemini_batch(self, texts: List[str]) -> np.ndarray:
+        """Batch encode texts using Gemini API."""
+        try:
+            import google.generativeai as genai
+        except ImportError:
+            raise ImportError(
+                "google-generativeai package required. Install with: uv add google-generativeai"
+            )
+
+        api_key = os.getenv("GEMINI_API_KEY")
+        if not api_key:
+            raise ValueError("GEMINI_API_KEY environment variable not set")
+
+        genai.configure(api_key=api_key)
+
+        # Gemini embed_content supports lists of content
+        result = genai.embed_content(
+            model="models/gemini-embedding-001",
+            content=texts,
+            task_type="retrieval_query",
+            output_dimensionality=3072,
+        )
+
+        # Result contains list of embeddings
+        return np.array([emb["values"] for emb in result["embedding"]])
+
     def _encode_ollama(self, text: str) -> np.ndarray:
         """Use Ollama API directly (same as edge function)."""
-        try:
-            from openai import OpenAI
-        except ImportError:
-            raise ImportError("openai package required. Install with: uv add openai")
-
         client = OpenAI(
             base_url=os.getenv("OLLAMA_BASE_URL", "http://localhost:11434/v1"),
             api_key="ollama",  # Required by client but unused by Ollama
@@ -288,6 +415,20 @@ class LinearRAGRetriever:
         )
 
         return np.array(response.data[0].embedding)
+
+    def _encode_ollama_batch(self, texts: List[str]) -> np.ndarray:
+        """Batch encode texts using Ollama API."""
+        client = OpenAI(
+            base_url=os.getenv("OLLAMA_BASE_URL", "http://localhost:11434/v1"),
+            api_key="ollama",
+        )
+
+        # Ollama supports batch encoding via list input
+        response = client.embeddings.create(
+            model=os.getenv("OLLAMA_MODEL", "bge-m3:567m"), input=texts
+        )
+
+        return np.array([item.embedding for item in response.data])
 
     def retrieve(self, questions: List[Dict]) -> List[Dict]:
         """
@@ -349,6 +490,7 @@ class LinearRAGRetriever:
                 "question": question,
                 "sorted_passage": final_passages,
                 "sorted_passage_scores": final_passage_scores,
+                "sorted_passage_hash_ids": final_passage_hash_ids,
                 "gold_answer": question_info.get("answer", ""),
             }
             retrieval_results.append(result)
@@ -358,7 +500,7 @@ class LinearRAGRetriever:
     def get_seed_entities(
         self, question: str, question_embedding: np.ndarray
     ) -> Tuple[List[int], List[str], List[str], List[float]]:
-        """Extract seed entities from question using spaCy NER and match to knowledge base."""
+        """Extract seed entities from question using spaCy NER and match to knowledge base using pgvector."""
         doc = self.nlp(question)
         question_entities = [ent.text.strip() for ent in doc.ents if ent.text.strip()]
 
@@ -369,29 +511,72 @@ class LinearRAGRetriever:
             f"Extracted {len(question_entities)} entities from question: {question_entities}"
         )
 
-        # Encode question entities
-        question_entity_embeddings = np.array(
-            [self.encode_text(entity) for entity in question_entities]
-        )
+        # Encode question entities in batch for better performance
+        question_entity_embeddings = self.encode_texts_batch(question_entities)
 
-        similarities = np.dot(self.entity_embeddings, question_entity_embeddings.T)
+        # Similarity threshold to filter poor matches
+        similarity_threshold = 0.5
+        embedding_col = f"embedding_{self.embedding_provider}"
 
         seed_entity_indices = []
         seed_entity_texts = []
         seed_entity_hash_ids = []
         seed_entity_scores = []
 
-        for query_entity_idx in range(len(question_entities)):
-            entity_scores = similarities[:, query_entity_idx]
-            best_entity_idx = np.argmax(entity_scores)
-            best_entity_score = entity_scores[best_entity_idx]
-            best_entity_hash_id = self.entity_hash_ids[best_entity_idx]
-            best_entity_text = self.entity_hash_id_to_text[best_entity_hash_id]
+        # Use pgvector to find best matching entity for each question entity
+        with self.conn.cursor() as cur:
+            for query_entity_idx, (question_entity, entity_embedding) in enumerate(
+                zip(question_entities, question_entity_embeddings)
+            ):
+                vector_str = self._format_vector_for_query(entity_embedding)
 
-            seed_entity_indices.append(best_entity_idx)
-            seed_entity_texts.append(best_entity_text)
-            seed_entity_hash_ids.append(best_entity_hash_id)
-            seed_entity_scores.append(best_entity_score)
+                # Use pgvector's cosine distance operator (<=>)
+                # Note: <=> returns distance (0 = identical, 2 = opposite), so we convert to similarity
+                cur.execute(
+                    f"""
+                    SELECT entity_hash_id, entity_text, 
+                           1 - ({embedding_col} <=> %s::vector) / 2 as similarity
+                    FROM lr_entity_embedding
+                    WHERE {embedding_col} IS NOT NULL
+                    ORDER BY {embedding_col} <=> %s::vector
+                    LIMIT 1
+                    """,
+                    (vector_str, vector_str),
+                )
+                row = cur.fetchone()
+
+                if row is None:
+                    logger.warning(f"No entity match found for '{question_entity}'")
+                    continue
+
+                best_entity_hash_id, best_entity_text, best_entity_score = row
+
+                # Skip if similarity is too low
+                if best_entity_score < similarity_threshold:
+                    logger.warning(
+                        f"Low similarity ({best_entity_score:.3f}) for '{question_entity}', skipping"
+                    )
+                    continue
+
+                # Skip if entity has no corresponding graph node
+                if best_entity_hash_id not in self.node_name_to_vertex_idx:
+                    logger.warning(
+                        f"Entity '{best_entity_text}' ({best_entity_hash_id}) not found in graph, skipping"
+                    )
+                    continue
+
+                # Get entity index from hash_id_to_idx mapping
+                if best_entity_hash_id not in self.entity_hash_id_to_idx:
+                    logger.warning(
+                        f"Entity '{best_entity_text}' ({best_entity_hash_id}) not in entity index, skipping"
+                    )
+                    continue
+
+                best_entity_idx = self.entity_hash_id_to_idx[best_entity_hash_id]
+                seed_entity_indices.append(best_entity_idx)
+                seed_entity_texts.append(best_entity_text)
+                seed_entity_hash_ids.append(best_entity_hash_id)
+                seed_entity_scores.append(float(best_entity_score))
 
         return (
             [int(i) for i in seed_entity_indices],
@@ -435,6 +620,9 @@ class LinearRAGRetriever:
         seed_entity_scores: List[float],
     ) -> Tuple[np.ndarray, Dict]:
         """Calculate entity scores through iterative expansion via sentences."""
+        # Ensure sentence embeddings are loaded for entity expansion
+        self._ensure_sentence_embeddings_loaded()
+
         actived_entities = {}
         entity_weights = np.zeros(len(self.graph.vs["name"]))
 
@@ -511,6 +699,10 @@ class LinearRAGRetriever:
                         if next_entity_score < self.iteration_threshold:
                             continue
 
+                        # Skip if entity has no corresponding graph node
+                        if next_entity_hash_id not in self.node_name_to_vertex_idx:
+                            continue
+
                         next_entity_node_idx = self.node_name_to_vertex_idx[
                             next_entity_hash_id
                         ]
@@ -540,13 +732,15 @@ class LinearRAGRetriever:
         dpr_passage_indices, dpr_passage_scores = self.dense_passage_retrieval(
             question_embedding
         )
-        dpr_passage_scores_list: List[float] = min_max_normalize(np.array(dpr_passage_scores)).tolist()
+        dpr_passage_scores_list: List[float] = min_max_normalize(
+            np.array(dpr_passage_scores)
+        ).tolist()
 
         for i, dpr_passage_index in enumerate(dpr_passage_indices):
             total_entity_bonus = 0
             passage_hash_id = self.passage_hash_ids[dpr_passage_index]
             dpr_passage_score = dpr_passage_scores_list[i]
-            passage_text_lower = self.passage_hash_id_to_text[passage_hash_id].lower()
+            passage_text_lower = self.passage_hash_id_to_text_lower[passage_hash_id]
 
             # Calculate entity bonuses
             for entity_hash_id, (
@@ -554,7 +748,7 @@ class LinearRAGRetriever:
                 entity_score,
                 tier,
             ) in actived_entities.items():
-                entity_lower = self.entity_hash_id_to_text[entity_hash_id].lower()
+                entity_lower = self.entity_hash_id_to_text_lower[entity_hash_id]
                 entity_occurrences = passage_text_lower.count(entity_lower)
 
                 if entity_occurrences > 0:
@@ -603,18 +797,43 @@ class LinearRAGRetriever:
         return sorted_passage_hash_ids, sorted_passage_scores.tolist()
 
     def dense_passage_retrieval(
-        self, question_embedding: np.ndarray
+        self, question_embedding: np.ndarray, top_k: Optional[int] = None
     ) -> Tuple[List[int], List[float]]:
-        """Dense passage retrieval using cosine similarity."""
-        question_emb = question_embedding.reshape(1, -1)
-        question_passage_similarities = np.dot(
-            self.passage_embeddings, question_emb.T
-        ).flatten()
-        sorted_passage_indices = np.argsort(question_passage_similarities)[::-1]
-        sorted_passage_scores = question_passage_similarities[
-            sorted_passage_indices
-        ].tolist()
-        return sorted_passage_indices.tolist(), sorted_passage_scores
+        """Dense passage retrieval using pgvector cosine similarity search."""
+        if top_k is None:
+            top_k = len(self.passage_hash_ids)  # Return all for backward compatibility
+
+        embedding_col = f"embedding_{self.embedding_provider}"
+        vector_str = self._format_vector_for_query(question_embedding)
+
+        # Use pgvector's cosine distance operator for fast similarity search
+        with self.conn.cursor() as cur:
+            cur.execute(
+                f"""
+                SELECT chunk_hash_id, 
+                       1 - ({embedding_col} <=> %s::vector) / 2 as similarity
+                FROM document_chunk
+                WHERE {embedding_col} IS NOT NULL
+                  AND chunk_hash_id = ANY(%s)
+                ORDER BY {embedding_col} <=> %s::vector
+                LIMIT %s
+                """,
+                (vector_str, self.passage_hash_ids, vector_str, top_k),
+            )
+            rows = cur.fetchall()
+
+        # Build result matching expected format
+        passage_hash_id_to_rank = {row[0]: idx for idx, row in enumerate(rows)}
+        sorted_passage_indices = [
+            self.passage_hash_id_to_idx[row[0]]
+            for row in rows
+            if row[0] in self.passage_hash_id_to_idx
+        ]
+        sorted_passage_scores = [
+            float(row[1]) for row in rows if row[0] in self.passage_hash_id_to_idx
+        ]
+
+        return sorted_passage_indices, sorted_passage_scores
 
 
 def main(
