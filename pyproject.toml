@@ -9,6 +9,7 @@ dependencies = [
 	"mlflow>=3.6.0",
 	"scikit-learn>=1.3.0",
 	"pandas>=2.0.0",
+	# Numpy 2.x is currently not supported/tested in this project (or by some dependencies), so we intentionally restrict to <2.0.0 until compatibility is verified.
 	"numpy>=1.24.0,<2.0.0",
 	"aiobotocore>=2.11.0",
 	"boto3>=1.40.69",
