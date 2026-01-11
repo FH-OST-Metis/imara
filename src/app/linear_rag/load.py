@@ -119,8 +119,14 @@ def load_chunks(
     # Prepare batch data for insertion
     chunk_records = []
 
-    for chunk_file in chunk_files:
+    for idx, chunk_file in enumerate(chunk_files, 1):
+        logger.info(f"Processing chunk {idx}/{len(chunk_files)}: {chunk_file.name}")
         content = chunk_file.read_text(encoding="utf-8")
+
+        # Sanitize NUL characters (PostgreSQL cannot store them)
+        if "\x00" in content:
+            logger.warning(f"Found NUL characters in {chunk_file.name}, removing them")
+            content = content.replace("\x00", "")
 
         # Parse filename for title and page_ref
         title, page_ref = _parse_chunk_filename(chunk_file.name)
@@ -139,6 +145,7 @@ def load_chunks(
         chunk_records.append((title, page_ref, content, chunk_hash_id, pic_ref))
 
     # Batch insert into document_chunk table
+    logger.info(f"Starting database insertion of {len(chunk_records)} records")
     with conn.cursor() as cur:
         execute_values(
             cur,

@@ -403,8 +403,8 @@ stages:
       nfiles: 12955
     - path: src/app/linear_rag/load.py
       hash: md5
-      md5: 59d888a4a2df9a1f335496f4d9c54d68
-      size: 6615
+      md5: 376a2f2799fcaff349420e3f22549a9d
+      size: 7041
     params:
       params.yaml:
         load.batch_size: 100

@@ -28,6 +28,7 @@ stages:
       - chunk.chunk_size
       - chunk.overlap
       - chunk.split_by
+    frozen: true
 
   naiverag_embed:
     cmd: uv run python src/app/naiverag/embed.py --input data/processed/chunks --artifacts data/processed/extracted --database_url postgresql://postgres:postgres@127.0.0.1:54322/postgres
@@ -44,6 +45,7 @@ stages:
       - data/processed/extracted
     params:
       - load.batch_size
+    frozen: true
 
   linearrag_index:
     cmd: uv run python src/app/linear_rag/index.py --database_url postgresql://postgres:postgres@127.0.0.1:54322/postgres
