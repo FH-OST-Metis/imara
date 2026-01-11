@@ -2,12 +2,11 @@ from __future__ import annotations
 
 from pathlib import Path
 import json
-from typing import List, Tuple, Any
+from typing import List
 import sys
 from datetime import datetime
 
 import numpy as np
-import torch
 from sentence_transformers import SentenceTransformer
 from sklearn.decomposition import PCA
 import mlflow

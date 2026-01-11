@@ -22,8 +22,6 @@
     "editor.defaultFormatter": "denoland.vscode-deno"
   },
   "markdown-pdf.displayHeaderFooter": true,
-  "markdown-pdf.headerTemplate": "<div style=\"font-size: 9pt; margin-left: 1cm;\"><span class=\"title\"></span></div>",
-  "markdown-pdf.footerTemplate": "<div style=\"font-size: 9pt; margin-left: 1cm;\"><span class=\"pageNumber\"></span>/<span class=\"totalPages\"></span></div>",
   "markdown-pdf.margin.top": "1cm",
   "markdown-pdf.margin.bottom": "1cm",
   "markdown-pdf.margin.left": "1cm",
