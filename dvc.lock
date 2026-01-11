@@ -20,9 +20,9 @@ stages:
     outs:
     - path: data/processed/extracted
       hash: md5
-      md5: 2b597a1b3021010b926d35600555ddc4.dir
-      size: 27059869438
-      nfiles: 12955
+      md5: b659ba674f8e0918b8a5b1c57584be4d.dir
+      size: 5089137
+      nfiles: 6
   chunk:
     cmd: uv run python src/app/chunk.py --input data/processed/extracted 
       --output data/processed/chunks
@@ -71,8 +71,8 @@ stages:
     deps:
     - path: src/app/prep_pipeline.py
       hash: md5
-      md5: f8e253bdb6de39aea0139c07679e299b
-      size: 1266
+      md5: ddf23f4d5e8dcaf9ee687f32fd8ca071
+      size: 1231
   graphmert_train:
     cmd: uv run python src/app/graphmert_train.py
     deps:
@@ -101,8 +101,8 @@ stages:
       nfiles: 43
     - path: src/app/graphmert/corpus.py
       hash: md5
-      md5: c54a70b3aaf748e08f8f3356f81e920d
-      size: 1338
+      md5: 165de504a23a3164d6440cf993123fda
+      size: 1293
     outs:
     - path: data/graphmert/corpus
       hash: md5
@@ -118,8 +118,8 @@ stages:
       size: 24852
     - path: src/app/graphmert/embeddings.py
       hash: md5
-      md5: cf77a6a5f18868dfdf0bc4979a122a85
-      size: 2798
+      md5: 192e837c1adbedba9673b5d54d0acb3b
+      size: 2719
     outs:
     - path: data/graphmert/embeddings
       hash: md5
@@ -135,8 +135,8 @@ stages:
       size: 1848
     - path: src/app/graphmert/build_graphs.py
       hash: md5
-      md5: d3b87f270941fbcaef341a027756ccea
-      size: 1622
+      md5: 0a4807da6b4a515a330bd47a7caac6fc
+      size: 1569
     outs:
     - path: data/graphmert/graphs
       hash: md5
@@ -152,8 +152,8 @@ stages:
       size: 14478
     - path: src/app/graphmert/train_model.py
       hash: md5
-      md5: b9812435d9fc2fe12ff73676c686d20c
-      size: 6298
+      md5: 514a2be1ab2d6f34b4e027fcf4214b50
+      size: 6114
     outs:
     - path: data/graphmert/model
       hash: md5
@@ -166,9 +166,9 @@ stages:
     deps:
     - path: data/processed/extracted
       hash: md5
-      md5: 2b597a1b3021010b926d35600555ddc4.dir
-      size: 27059869438
-      nfiles: 12955
+      md5: b659ba674f8e0918b8a5b1c57584be4d.dir
+      size: 5089137
+      nfiles: 6
     - path: src/app/naiverag/chunk.py
       hash: md5
       md5: f879183e47c88d6e7b788e3ba723828d
@@ -181,9 +181,9 @@ stages:
     outs:
     - path: data/processed/chunks
       hash: md5
-      md5: 97d328068fbd9307ce5e3db94b1beeb2.dir
-      size: 159631484
-      nfiles: 278692
+      md5: c95209faeebd9dcd59855b660db4052a.dir
+      size: 24551
+      nfiles: 43
   naiverag_embed:
     cmd: uv run python src/app/naiverag/embed.py --input data/processed/chunks 
       --artifacts data/processed/extracted --database_url 
@@ -196,25 +196,25 @@ stages:
       nfiles: 43
     - path: data/processed/extracted
       hash: md5
-      md5: 2b597a1b3021010b926d35600555ddc4.dir
-      size: 27163434807
-      nfiles: 12955
+      md5: 4065efd980e1243efa3506a32f8c9882.dir
+      size: 5086187
+      nfiles: 6
     - path: src/app/naiverag/embed.py
       hash: md5
-      md5: c92b40b2a35e51b7e4a32a9e989c2e3f
-      size: 4347
+      md5: d21b6d55f73e3d4d473473f060a76604
+      size: 4213
   generate_queries:
     cmd: uv run open-rag-eval generate-queries --config query_gen_config.yaml
     deps:
     - path: data/processed/extracted
       hash: md5
-      md5: 2b597a1b3021010b926d35600555ddc4.dir
-      size: 27163434807
-      nfiles: 12955
+      md5: b659ba674f8e0918b8a5b1c57584be4d.dir
+      size: 5089137
+      nfiles: 6
     - path: query_gen_config.yaml
       hash: md5
-      md5: 989df0e1fbceb07aeea8de44d74e7fe6
-      size: 1394
+      md5: 0d8c0c18d51c68a7f3e3963582c87571
+      size: 1356
     params:
       query_gen_config.yaml:
         generation.n_questions: 10
@@ -224,8 +224,8 @@ stages:
     outs:
     - path: data/eval/queries.csv
       hash: md5
-      md5: e9db32d9fdc0df8a73c6aa87d81b194b
-      size: 1207
+      md5: 2084991e0ff8a8ace44ddf22dce34e19
+      size: 1256
   graphmert_generate_answers:
     cmd: uv run python src/app/eval_open_rag.py --system graphmert --queries 
       data/eval/queries.csv --output data/eval/graphmert/generated_answers.csv
@@ -241,24 +241,24 @@ stages:
       nfiles: 43
     - path: src/app/eval_open_rag.py
       hash: md5
-      md5: 1e99facbdbf1c062f37fa859c364a8af
-      size: 13152
+      md5: 0ca14fbdb94dd08713620c053fcd44a7
+      size: 12750
     - path: src/app/graphmert/corpus.py
       hash: md5
-      md5: c54a70b3aaf748e08f8f3356f81e920d
-      size: 1338
+      md5: 165de504a23a3164d6440cf993123fda
+      size: 1293
     - path: src/app/graphmert/inference.py
       hash: md5
-      md5: 22f2d1f26f315c34a1cca37edd1b1b95
-      size: 7456
+      md5: cc5c00fd2f71f04ae9968d1f02e71697
+      size: 7241
     - path: src/app/graphmert/train_model.py
       hash: md5
-      md5: b9812435d9fc2fe12ff73676c686d20c
-      size: 6298
+      md5: 514a2be1ab2d6f34b4e027fcf4214b50
+      size: 6114
     - path: src/app/utils/params_helper.py
       hash: md5
-      md5: 0388a1d417c9cd336f1a1f7f6b2cdc1e
-      size: 232
+      md5: 63ae89e1b9f548569371e1c50daa52b6
+      size: 224
     params:
       params.yaml:
         eval.top_k: 5
@@ -282,16 +282,16 @@ stages:
       nfiles: 43
     - path: src/app/embedder.py
       hash: md5
-      md5: 00d6dc25817cb92788d8b8a73ba57dd3
-      size: 4126
+      md5: 67e5243b0780cf22eb5fa9d16f15c31d
+      size: 4006
     - path: src/app/eval_open_rag.py
       hash: md5
-      md5: 1e99facbdbf1c062f37fa859c364a8af
-      size: 13152
+      md5: 0ca14fbdb94dd08713620c053fcd44a7
+      size: 12750
     - path: src/app/utils/params_helper.py
       hash: md5
-      md5: 0388a1d417c9cd336f1a1f7f6b2cdc1e
-      size: 232
+      md5: 63ae89e1b9f548569371e1c50daa52b6
+      size: 224
     params:
       params.yaml:
         eval.top_k: 5
@@ -305,8 +305,8 @@ stages:
     deps:
     - path: configs/open_rag_eval_graphmert.yaml
       hash: md5
-      md5: 5942adc6230c787fec4d9e4d80df4152
-      size: 766
+      md5: f244ad3639b2115b45fcdebeac6cdf76
+      size: 740
     - path: data/eval/graphmert/generated_answers.csv
       hash: md5
       md5: 6228497163931c6fb436368d51cdcda9
@@ -337,8 +337,8 @@ stages:
     deps:
     - path: configs/open_rag_eval_naiverag.yaml
       hash: md5
-      md5: fc4ca7b0dd05cf6e89fc71a487f0981a
-      size: 784
+      md5: d0bfd76b931db77bb23aa50b066f17e2
+      size: 758
     - path: data/eval/naiverag/generated_answers.csv
       hash: md5
       md5: 17728d1ae96bda331eec10aa24f35eb9
@@ -364,3 +364,103 @@ stages:
       hash: md5
       md5: 5cf37c246ba7f194987a0ec63165234f
       size: 115760
+  linearrag_generate_answers:
+    cmd: OLLAMA_BASE_URL=http://127.0.0.1:11434/v1 OLLAMA_MODEL=bge-m3:567m uv 
+      run python src/app/eval_open_rag.py --system linearrag --queries 
+      data/eval/queries.csv --output data/eval/linearrag/generated_answers.csv 
+      --database_url postgresql://postgres:postgres@127.0.0.1:54322/postgres
+    deps:
+    - path: data/eval/queries.csv
+      hash: md5
+      md5: 2084991e0ff8a8ace44ddf22dce34e19
+      size: 1256
+    - path: src/app/eval_open_rag.py
+      hash: md5
+      md5: 3848c7a7908a210ad0385119084768c1
+      size: 20343
+    - path: src/app/linear_rag/retrieve.py
+      hash: md5
+      md5: da09fbc5fe67cce2161590efe79b5ab0
+      size: 34074
+    - path: src/app/utils/params_helper.py
+      hash: md5
+      md5: 63ae89e1b9f548569371e1c50daa52b6
+      size: 224
+    params:
+      params.yaml:
+        eval.top_k: 5
+        generation.max_tokens: 30000
+        index.embedding_provider: ollama
+        index.spacy_model: en_core_sci_md
+        retrieval.retrieval_top_k: 5
+    outs:
+    - path: data/eval/linearrag/generated_answers.csv
+      hash: md5
+      md5: c72e6e4f17ef683d3902918fff39a188
+      size: 71548
+  linearrag_index:
+    cmd: uv run python src/app/linear_rag/index.py --database_url 
+      postgresql://postgres:postgres@127.0.0.1:54322/postgres
+    deps:
+    - path: src/app/linear_rag/index.py
+      hash: md5
+      md5: 61521e36b7df712ae2d2a28b25b79c62
+      size: 17601
+    params:
+      params.yaml:
+        index.batch_size: 32
+        index.spacy_model: en_core_sci_md
+  linearrag_load:
+    cmd: uv run python src/app/linear_rag/load.py --input data/processed/chunks 
+      --artifacts data/processed/extracted --database_url 
+      postgresql://postgres:postgres@127.0.0.1:54322/postgres
+    deps:
+    - path: data/processed/chunks
+      hash: md5
+      md5: c95209faeebd9dcd59855b660db4052a.dir
+      size: 24551
+      nfiles: 43
+    - path: data/processed/extracted
+      hash: md5
+      md5: b659ba674f8e0918b8a5b1c57584be4d.dir
+      size: 5089137
+      nfiles: 6
+    - path: src/app/linear_rag/load.py
+      hash: md5
+      md5: 59d888a4a2df9a1f335496f4d9c54d68
+      size: 6615
+    params:
+      params.yaml:
+        load.batch_size: 100
+  linearrag_eval:
+    cmd: uv run open-rag-eval eval --config configs/open_rag_eval_linearrag.yaml
+    deps:
+    - path: configs/open_rag_eval_linearrag.yaml
+      hash: md5
+      md5: 0cd1a0ecdc01fc9218b5cc0638caa06c
+      size: 760
+    - path: data/eval/linearrag/generated_answers.csv
+      hash: md5
+      md5: c72e6e4f17ef683d3902918fff39a188
+      size: 71548
+    - path: data/eval/queries.csv
+      hash: md5
+      md5: 2084991e0ff8a8ace44ddf22dce34e19
+      size: 1256
+    params:
+      configs/open_rag_eval_linearrag.yaml:
+        evaluator.0.model.name: gemini-2.5-flash
+        evaluator.0.model.type: GeminiModel
+        evaluator.0.options.k_values:
+        - 1
+        - 3
+        - 5
+    outs:
+    - path: data/eval/linearrag/TRECEvaluator-metrics.png
+      hash: md5
+      md5: 7cdf38418a4fe382a0d40a0c84afd30d
+      size: 302748
+    - path: data/eval/linearrag/results.csv
+      hash: md5
+      md5: 0a547652bb749bb7800a1468a08abc30
+      size: 83346

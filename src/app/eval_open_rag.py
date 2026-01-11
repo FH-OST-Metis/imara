@@ -25,6 +25,102 @@ from graphmert.inference import (
     graphrag_generate,
 )
 
+# LinearRAG imports
+import psycopg2
+from psycopg2.extensions import connection as PGConnection
+import spacy
+from linear_rag.retrieve import LinearRAGRetriever
+import os
+
+
+def _connect(database_url: str) -> PGConnection:
+    """Connect to Postgres database."""
+    return psycopg2.connect(database_url)
+
+
+def _get_generator(provider: str, config: Dict[str, Any]) -> Any:
+    """Get configured text generator based on provider.
+
+    Args:
+        provider: One of "gpt2", "ollama", "gemini"
+        config: Generation configuration dict with model names and parameters
+
+    Returns:
+        Generator function or client
+    """
+    if provider == "gpt2":
+        return pipeline("text-generation", model="gpt2")
+    elif provider == "ollama":
+        try:
+            from openai import OpenAI
+        except ImportError:
+            raise ImportError(
+                "openai package required for Ollama. Install with: uv add openai"
+            )
+
+        client = OpenAI(
+            base_url=os.getenv("OLLAMA_BASE_URL", "http://127.0.0.1:11434/v1"),
+            api_key="ollama",
+        )
+        return client
+    elif provider == "gemini":
+        try:
+            import google.generativeai as genai
+        except ImportError:
+            raise ImportError(
+                "google-generativeai package required. Install with: uv add google-generativeai"
+            )
+
+        api_key = os.getenv("GEMINI_API_KEY")
+        if not api_key:
+            raise ValueError("GEMINI_API_KEY environment variable not set")
+
+        genai.configure(api_key=api_key)
+        return genai
+    else:
+        raise ValueError(f"Unsupported generation provider: {provider}")
+
+
+def _linearrag_generate_answer(
+    query: str, contexts: List[str], max_tokens: int = 2048
+) -> str:
+    """
+    Generate answer using Gemini with configurable max_tokens.
+
+    Args:
+        query: The question to answer
+        contexts: Retrieved passage contexts
+        max_tokens: Maximum tokens for generation
+
+    Returns:
+        Generated answer text
+    """
+    try:
+        # Build prompt with contexts
+        context_str = "\n\n".join(contexts[:5])  # Limit to top 5 contexts
+        prompt = f"""Based on the following context, please answer the question.
+
+        Context:
+        {context_str}
+
+        Question: {query}
+
+        Answer:"""
+
+        # Generate with configurable max_tokens
+        response = _linearrag_generator.generate_content(
+            prompt,
+            generation_config={
+                "max_output_tokens": max_tokens,
+                "temperature": 0.7,
+            },
+        )
+
+        return response.text.strip()
+
+    except Exception as e:
+        pass
+
 
 def _load_graphmert_model() -> GraphMERTEncoder:
     """Load the trained GraphMERT model weights.
@@ -123,6 +219,23 @@ def _retrieve_with_ids(
 # ----------------------
 
 _naive_generator = pipeline("text-generation", model="gpt2")
+
+
+# ----------------------
+# LinearRAG answer generation
+# ----------------------
+
+try:
+    import google.generativeai as genai
+
+    _genai_api_key = os.getenv("GEMINI_API_KEY")
+    if _genai_api_key:
+        genai.configure(api_key=_genai_api_key)
+        _linearrag_generator = genai.GenerativeModel("gemini-2.5-flash")
+    else:
+        _linearrag_generator = None
+except ImportError:
+    _linearrag_generator = None
 
 
 def _build_naive_corpus(
@@ -281,6 +394,113 @@ def run_graphmert_eval(
                 )
 
 
+def run_linearrag_eval(
+    queries_csv: Path,
+    output_csv: Path,
+    database_url: str,
+    top_k: int,
+    max_tokens: int,
+    index_config: Dict[str, Any],
+    retrieval_config: Dict[str, Any],
+) -> None:
+    """Run LinearRAG evaluation and export results for Open RAG Eval.
+
+    The output CSV follows the schema expected by ``RAGResultsLoader`` in
+    ``open-rag-eval``:
+
+    - query_id
+    - query
+    - query_run
+    - passage_id
+    - passage
+    - generated_answer
+    """
+    if not queries_csv.exists():
+        raise FileNotFoundError(f"Queries CSV not found: {queries_csv}")
+
+    output_csv.parent.mkdir(parents=True, exist_ok=True)
+
+    # Initialize LinearRAG retriever (loads graph from database)
+    spacy_model = str(index_config.get("spacy_model", "en_core_web_sm"))
+    embedding_provider = str(index_config.get("embedding_provider", "ollama"))
+
+    nlp = spacy.load(spacy_model)
+    conn = _connect(database_url)
+
+    try:
+        retriever = LinearRAGRetriever(conn, nlp, embedding_provider, retrieval_config)
+
+        with queries_csv.open("r", encoding="utf-8") as f:
+            reader = csv.DictReader(f)
+            queries: List[Dict[str, str]] = list(reader)
+
+        fieldnames = [
+            "query_id",
+            "query",
+            "query_run",
+            "passage_id",
+            "passage",
+            "generated_answer",
+        ]
+
+        with output_csv.open("w", encoding="utf-8", newline="") as f_out:
+            writer = csv.DictWriter(f_out, fieldnames=fieldnames)
+            writer.writeheader()
+
+            for idx, row in enumerate(queries):
+                raw_query = (row.get("query") or row.get("question") or "").strip()
+                if not raw_query:
+                    continue
+
+                query_id = (row.get("query_id") or row.get("id") or str(idx)).strip()
+                if not query_id:
+                    query_id = str(idx)
+
+                query_run = 1
+
+                # Retrieve passages using LinearRAG
+                results = retriever.retrieve([{"question": raw_query}])
+                result = results[0]
+
+                passages = result["sorted_passage"][:top_k]
+                passage_ids = result["sorted_passage_hash_ids"][:top_k]
+
+                # Generate answer
+                try:
+                    answer = _linearrag_generate_answer(raw_query, passages, max_tokens)
+                except Exception as exc:
+                    answer = f"Generation error: {exc}"
+
+                if not passages:
+                    writer.writerow(
+                        {
+                            "query_id": query_id,
+                            "query": raw_query,
+                            "query_run": query_run,
+                            "passage_id": "NA",
+                            "passage": "",
+                            "generated_answer": answer,
+                        }
+                    )
+                    continue
+
+                for j, (passage_id, passage_text) in enumerate(
+                    zip(passage_ids, passages)
+                ):
+                    writer.writerow(
+                        {
+                            "query_id": query_id,
+                            "query": raw_query,
+                            "query_run": query_run,
+                            "passage_id": str(passage_id),
+                            "passage": passage_text,
+                            "generated_answer": answer if j == 0 else "",
+                        }
+                    )
+    finally:
+        conn.close()
+
+
 def run_naiverag_eval(
     queries_csv: Path,
     output_csv: Path,
@@ -368,7 +588,7 @@ def main() -> None:
     )
     parser.add_argument(
         "--system",
-        choices=["graphmert", "naiverag"],
+        choices=["graphmert", "naiverag", "linearrag"],
         default="graphmert",
         help="Which RAG system to evaluate.",
     )
@@ -384,6 +604,12 @@ def main() -> None:
         default=Path("data/eval/graphmert/generated_answers.csv"),
         help="Where to write the generated answers CSV for open-rag-eval.",
     )
+    parser.add_argument(
+        "--database_url",
+        type=str,
+        default=None,
+        help="PostgreSQL database URL (required for linearrag)",
+    )
 
     args = parser.parse_args()
 
@@ -394,6 +620,25 @@ def main() -> None:
         run_graphmert_eval(args.queries.resolve(), args.output.resolve(), top_k)
     elif args.system == "naiverag":
         run_naiverag_eval(args.queries.resolve(), args.output.resolve(), top_k)
+    elif args.system == "linearrag":
+        if not args.database_url:
+            raise ValueError("--database_url is required for linearrag system")
+
+        generation_config = load_params("generation")
+        max_tokens = int(generation_config.get("max_tokens", 2048))
+
+        index_config = load_params("index")
+        retrieval_config = load_params("retrieval")
+
+        run_linearrag_eval(
+            args.queries.resolve(),
+            args.output.resolve(),
+            args.database_url,
+            top_k,
+            max_tokens,
+            index_config,
+            retrieval_config,
+        )
     else:  # pragma: no cover - protected by argparse choices
         raise NotImplementedError(f"Unsupported system: {args.system}")
 
