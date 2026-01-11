@@ -172,20 +172,51 @@ Einen zweiten Rechner 100% dafür einsetzen.
 
 Detaillierung der Triple-Extraktion und der hierarchischen Retrieval-Struktur.
 
-- **Extraktion:** Umwandlung von Text in Entitäten und Relationen.
--
+## ✨ Features
 
-**Aggregation:** Semantische Aggregation zur Reduzierung von Redundanz.
+- **Semantic Aggregation**: Clusters entities into semantically coherent summaries and constructs explicit relations to form a navigable aggregation-level knowledge network.
+- **Hierarchical, Structure-Guided Retrieval**: Initiates retrieval from fine-grained entities and traverses up the knowledge graph to gather rich, highly relevant evidence efficiently.
+- **Reduced Redundancy**: Optimizes retrieval paths to significantly reduce redundant information—LeanRAG achieves ~46% lower retrieval redundancy compared to flat retrieval baselines (based on benchmark evaluations).
+- **Benchmark Performance**: Demonstrates superior performance across multiple QA benchmarks with improved response quality and retrieval efficiency.
+
+## 🏛️ Architecture Overview
+
+<img src="framework.png" alt="Overview of LeanRAG"  width="50%" height="50%">
+
+LeanRAG’s processing pipeline follows these core stages:
+
+1. **Semantic Aggregation**  
+   - Group low-level entities into clusters; generate summary nodes and build adjacency relations among them for efficient navigation.
+
+2. **Knowledge Graph Construction**  
+   - Construct a multi-layer graph where nodes represent entities and aggregated summaries, with explicit inter-node relations for graph-based traversal.
+
+3. **Query Processing & Hierarchical Retrieval**  
+   - Anchor queries at the most relevant detailed entities ("bottom-up"), then traverse upward through the semantic aggregation graph to collect evidence spans.
+
+4. **Redundancy-Aware Synthesis**  
+   - Streamline retrieval paths and avoid overlapping content, ensuring concise evidence aggregation before generating responses.
+
+5. **Generation**  
+   - Use retrieved, well-structured evidence as input to an LLM to produce coherent, accurate, and contextually grounded answers.
+
+
+
+
+
+- **Extraktion:** Umwandlung von Text in Entitäten und Relationen.
+
 
 ### leanRAG Workflow
 
-file_chunk.py
+    file_chunk.py
 
 1. chunk raw input token-based with 512 Tokens and 64 Tokens overlap
 
 #### **Method 1: CommonKG**
 
-CommonKG/create_kg.py
+    CommonKG/create_kg.py
+
 2. create a list of match words (entities) for each chunk
 3. create a list of "all entities" based on the match words without duplicates
 
@@ -193,19 +224,22 @@ CommonKG/create_kg.py
 2. "next layer entities"
 3. "new triples descriptions"
 
-CommonKG/deal_triple.py
+    CommonKG/deal_triple.py
+
 7. summarize descriptions => relation.jsonl
 
 #### **Method 2: GraphRAG**
 
-GraphExtraction/chunk.py
+    GraphExtraction/chunk.py
+
 2. loads the chunks
 3. performs a "triple extraction" => entity.jsonl, relation.jsonl
 
-GraphExtraction/deal_triple.py
+    GraphExtraction/deal_triple.py
+
 4. deal with duplicates of entries and relations
 
-build_graph.py
+    build_graph.py
 
 1. generating embeddings
 2. clustering lables (based on the embeddings)
