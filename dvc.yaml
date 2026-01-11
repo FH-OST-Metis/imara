@@ -5,15 +5,17 @@ stages:
       - src/app/prep_pipeline.py
 
   extract:
-    cmd: uv run python src/app/extract.py --input data/raw/documents/2402.14887v4.pdf --output data/processed/extracted
+    cmd: uv run python src/app/extract.py --input data/raw/documents --output
+      data/processed/extracted
     deps:
+      - data/raw/documents
       - src/app/extract.py
-      - data/raw/documents/2402.14887v4.pdf
     outs:
       - data/processed/extracted
     params:
       - extract.batch_size
       - extract.source_handling
+    frozen: true
 
   naiverag_chunk:
     cmd: uv run python src/app/naiverag/chunk.py --input data/processed/extracted --output data/processed/chunks

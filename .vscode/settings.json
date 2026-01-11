@@ -20,5 +20,18 @@
   ],
   "[typescript]": {
     "editor.defaultFormatter": "denoland.vscode-deno"
-  }
+  },
+  "markdown-pdf.displayHeaderFooter": true,
+  "markdown-pdf.margin.top": "1cm",
+  "markdown-pdf.margin.bottom": "1cm",
+  "markdown-pdf.margin.left": "1cm",
+  "markdown-pdf.margin.right": "1cm",
+  "markdown-pdf.format": "A4",
+  "markdown-pdf.quality": 100,
+  "markdown-pdf.scale": 1,
+  "markdown-pdf.outputDirectory": "docs/9. Projektabschluss/Dokumentation",
+  "markdown-pdf.convertOnSave": true,
+  "markdown-pdf.convertOnSaveExclude": [
+    "README.md"
+  ]
 }

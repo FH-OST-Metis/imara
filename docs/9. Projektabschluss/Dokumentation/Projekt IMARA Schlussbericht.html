@@ -1,0 +1,724 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Projekt IMARA Schlussbericht.md</title>
+<meta http-equiv="Content-type" content="text/html;charset=UTF-8">
+
+<style>
+/* https://github.com/microsoft/vscode/blob/master/extensions/markdown-language-features/media/markdown.css */
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Microsoft Corporation. All rights reserved.
+ *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
+
+body {
+	font-family: var(--vscode-markdown-font-family, -apple-system, BlinkMacSystemFont, "Segoe WPC", "Segoe UI", "Ubuntu", "Droid Sans", sans-serif);
+	font-size: var(--vscode-markdown-font-size, 14px);
+	padding: 0 26px;
+	line-height: var(--vscode-markdown-line-height, 22px);
+	word-wrap: break-word;
+}
+
+#code-csp-warning {
+	position: fixed;
+	top: 0;
+	right: 0;
+	color: white;
+	margin: 16px;
+	text-align: center;
+	font-size: 12px;
+	font-family: sans-serif;
+	background-color:#444444;
+	cursor: pointer;
+	padding: 6px;
+	box-shadow: 1px 1px 1px rgba(0,0,0,.25);
+}
+
+#code-csp-warning:hover {
+	text-decoration: none;
+	background-color:#007acc;
+	box-shadow: 2px 2px 2px rgba(0,0,0,.25);
+}
+
+body.scrollBeyondLastLine {
+	margin-bottom: calc(100vh - 22px);
+}
+
+body.showEditorSelection .code-line {
+	position: relative;
+}
+
+body.showEditorSelection .code-active-line:before,
+body.showEditorSelection .code-line:hover:before {
+	content: "";
+	display: block;
+	position: absolute;
+	top: 0;
+	left: -12px;
+	height: 100%;
+}
+
+body.showEditorSelection li.code-active-line:before,
+body.showEditorSelection li.code-line:hover:before {
+	left: -30px;
+}
+
+.vscode-light.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(0, 0, 0, 0.15);
+}
+
+.vscode-light.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(0, 0, 0, 0.40);
+}
+
+.vscode-light.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+.vscode-dark.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(255, 255, 255, 0.4);
+}
+
+.vscode-dark.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(255, 255, 255, 0.60);
+}
+
+.vscode-dark.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+.vscode-high-contrast.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(255, 160, 0, 0.7);
+}
+
+.vscode-high-contrast.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(255, 160, 0, 1);
+}
+
+.vscode-high-contrast.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+img {
+	max-width: 100%;
+	max-height: 100%;
+}
+
+a {
+	text-decoration: none;
+}
+
+a:hover {
+	text-decoration: underline;
+}
+
+a:focus,
+input:focus,
+select:focus,
+textarea:focus {
+	outline: 1px solid -webkit-focus-ring-color;
+	outline-offset: -1px;
+}
+
+hr {
+	border: 0;
+	height: 2px;
+	border-bottom: 2px solid;
+}
+
+h1 {
+	padding-bottom: 0.3em;
+	line-height: 1.2;
+	border-bottom-width: 1px;
+	border-bottom-style: solid;
+}
+
+h1, h2, h3 {
+	font-weight: normal;
+}
+
+table {
+	border-collapse: collapse;
+}
+
+table > thead > tr > th {
+	text-align: left;
+	border-bottom: 1px solid;
+}
+
+table > thead > tr > th,
+table > thead > tr > td,
+table > tbody > tr > th,
+table > tbody > tr > td {
+	padding: 5px 10px;
+}
+
+table > tbody > tr + tr > td {
+	border-top: 1px solid;
+}
+
+blockquote {
+	margin: 0 7px 0 5px;
+	padding: 0 16px 0 10px;
+	border-left-width: 5px;
+	border-left-style: solid;
+}
+
+code {
+	font-family: Menlo, Monaco, Consolas, "Droid Sans Mono", "Courier New", monospace, "Droid Sans Fallback";
+	font-size: 1em;
+	line-height: 1.357em;
+}
+
+body.wordWrap pre {
+	white-space: pre-wrap;
+}
+
+pre:not(.hljs),
+pre.hljs code > div {
+	padding: 16px;
+	border-radius: 3px;
+	overflow: auto;
+}
+
+pre code {
+	color: var(--vscode-editor-foreground);
+	tab-size: 4;
+}
+
+/** Theming */
+
+.vscode-light pre {
+	background-color: rgba(220, 220, 220, 0.4);
+}
+
+.vscode-dark pre {
+	background-color: rgba(10, 10, 10, 0.4);
+}
+
+.vscode-high-contrast pre {
+	background-color: rgb(0, 0, 0);
+}
+
+.vscode-high-contrast h1 {
+	border-color: rgb(0, 0, 0);
+}
+
+.vscode-light table > thead > tr > th {
+	border-color: rgba(0, 0, 0, 0.69);
+}
+
+.vscode-dark table > thead > tr > th {
+	border-color: rgba(255, 255, 255, 0.69);
+}
+
+.vscode-light h1,
+.vscode-light hr,
+.vscode-light table > tbody > tr + tr > td {
+	border-color: rgba(0, 0, 0, 0.18);
+}
+
+.vscode-dark h1,
+.vscode-dark hr,
+.vscode-dark table > tbody > tr + tr > td {
+	border-color: rgba(255, 255, 255, 0.18);
+}
+
+</style>
+
+<style>
+/* Tomorrow Theme */
+/* http://jmblog.github.com/color-themes-for-google-code-highlightjs */
+/* Original theme - https://github.com/chriskempson/tomorrow-theme */
+
+/* Tomorrow Comment */
+.hljs-comment,
+.hljs-quote {
+	color: #8e908c;
+}
+
+/* Tomorrow Red */
+.hljs-variable,
+.hljs-template-variable,
+.hljs-tag,
+.hljs-name,
+.hljs-selector-id,
+.hljs-selector-class,
+.hljs-regexp,
+.hljs-deletion {
+	color: #c82829;
+}
+
+/* Tomorrow Orange */
+.hljs-number,
+.hljs-built_in,
+.hljs-builtin-name,
+.hljs-literal,
+.hljs-type,
+.hljs-params,
+.hljs-meta,
+.hljs-link {
+	color: #f5871f;
+}
+
+/* Tomorrow Yellow */
+.hljs-attribute {
+	color: #eab700;
+}
+
+/* Tomorrow Green */
+.hljs-string,
+.hljs-symbol,
+.hljs-bullet,
+.hljs-addition {
+	color: #718c00;
+}
+
+/* Tomorrow Blue */
+.hljs-title,
+.hljs-section {
+	color: #4271ae;
+}
+
+/* Tomorrow Purple */
+.hljs-keyword,
+.hljs-selector-tag {
+	color: #8959a8;
+}
+
+.hljs {
+	display: block;
+	overflow-x: auto;
+	color: #4d4d4c;
+	padding: 0.5em;
+}
+
+.hljs-emphasis {
+	font-style: italic;
+}
+
+.hljs-strong {
+	font-weight: bold;
+}
+</style>
+
+<style>
+/*
+ * Markdown PDF CSS
+ */
+
+ body {
+	font-family: -apple-system, BlinkMacSystemFont, "Segoe WPC", "Segoe UI", "Ubuntu", "Droid Sans", sans-serif, "Meiryo";
+	padding: 0 12px;
+}
+
+pre {
+	background-color: #f8f8f8;
+	border: 1px solid #cccccc;
+	border-radius: 3px;
+	overflow-x: auto;
+	white-space: pre-wrap;
+	overflow-wrap: break-word;
+}
+
+pre:not(.hljs) {
+	padding: 23px;
+	line-height: 19px;
+}
+
+blockquote {
+	background: rgba(127, 127, 127, 0.1);
+	border-color: rgba(0, 122, 204, 0.5);
+}
+
+.emoji {
+	height: 1.4em;
+}
+
+code {
+	font-size: 14px;
+	line-height: 19px;
+}
+
+/* for inline code */
+:not(pre):not(.hljs) > code {
+	color: #C9AE75; /* Change the old color so it seems less like an error */
+	font-size: inherit;
+}
+
+/* Page Break : use <div class="page"/> to insert page break
+-------------------------------------------------------- */
+.page {
+	page-break-after: always;
+}
+
+</style>
+
+<script src="https://unpkg.com/mermaid/dist/mermaid.min.js"></script>
+</head>
+<body>
+  <script>
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: document.body.classList.contains('vscode-dark') || document.body.classList.contains('vscode-high-contrast')
+          ? 'dark'
+          : 'default'
+    });
+  </script>
+<hr>
+<h1 id="projektbericht-imara">Projektbericht: IMARA</h1>
+<h2 id="domain-specific-graphrag-pipeline-with-model-fine-tuning">Domain-specific GraphRAG pipeline with model fine-tuning</h2>
+<p><strong>Modul:</strong> Abschlussarbeit CAS Machine Learning for Software Engineers (ML4SE)</p>
+<p><strong>Datum:</strong> [Aktuelles Datum]</p>
+<p><strong>Autoren:</strong> Marco Allenspach, Lukas Koller, Emanuel Sovrano</p>
+<h2 id="abstract">Abstract</h2>
+<p>Die Einführung von Retrieval-Augmented Generation (RAG) markierte einen bedeutenden Meilenstein in der Anwendung grosser Sprachmodelle (LLM), indem generative Fähigkeiten auf faktischen, externen Daten basierten, um Fehlinterpretationen zu vermeiden und die Relevanz zu erhöhen. Um die Schwächen von RAG der ersten Generation durch die Einführung strukturierter, relationaler Kontexte zu beheben, hat sich jedoch mit AI-Native GraphRAG ein weiterentwickeltes Paradigma etabliert.</p>
+<p>Der rasante branchenweite Wandel hin zu graphenbasierten Architekturen ist eine notwendige Weiterentwicklung, die auf der Erkenntnis beruht, dass eine KI für effektives Denken ein Modell des Anwendungsbereichs benötigt, nicht nur eine Sammlung von Fakten. Der Fortschritt von unreflektierten LLMs zu grundlegenden RAGs löste das Problem der faktischen Fundierung, doch das Versagen rein vektorbasierter RAGs bei komplexen Anfragen zeigte, dass die Struktur des Wissens ebenso wichtig ist wie sein Inhalt. Ein Wissensgraph liefert diese Struktur und transformiert eine passive Dokumentensammlung in ein aktives, abfragefähiges Modell der Welt.</p>
+<hr>
+<h2 id="1-management-summary">1. Management Summary</h2>
+<p><em>(Ca. 0.5 - 1 Seite)</em>
+Zusammenfassung des gesamten Projekts: Problemstellung (Extraktion aus komplexen PDFs), gewählter Lösungsansatz (GraphRAG &amp; Fine-tuning) und die wichtigsten Ergebnisse des Benchmarkings.</p>
+<p>Traditionelle neuronale Netze eignen sich gut zur Kodierung linearer Beziehungen, doch Daten aus der realen Welt sind in der Regel komplex und multidimensional. Graphen sind besser geeignet, höherdimensionale Verbindungen darzustellen, in denen jeder Knoten mit jedem anderen Knoten in Beziehung steht. Dadurch eignen sich Graphen besser zur Speicherung komplexer Beziehungen aus der realen Welt.</p>
+<h2 id="2-einleitung-und-zielsetzung">2. Einleitung und Zielsetzung</h2>
+<p>Das IMARA-Projekt hat zum Ziel, aufzuzeigen wie die Genauigkeit der Abfrage eines graph-basierten RAG-Systems sich verbessert.</p>
+<p>Um eine Grundlage für die Messbarkeit zu haben, wurde OpenRAGBench als Referenzdatensatz ausgewählt.</p>
+<h3 id="defining-the-%22ai-native%22-graphrag-paradigm">Defining the &quot;AI-Native&quot; GraphRAG Paradigm</h3>
+<p>AI-Native GraphRAG represents a specific and powerful subset of graph-based RAG systems. Solutions must automate the entire workflow from unstructured data to a natural language answer, abstracting complexities of graph theory and database management.</p>
+<h2 id="naives-rag">naives RAG</h2>
+<h3 id="die-inh%C3%A4renten-einschr%C3%A4nkungen-von-vektorbasierter-rag">Die inhärenten Einschränkungen von vektorbasierter RAG</h3>
+<p>Konventionelle RAG-Architekturen verlassen sich auf Vektorsimilaritätssuche über ein Korpus von geteiltem Text. Dieser Ansatz behandelt Wissen als eine Sammlung von unzusammenhängenden Fakten und hat Schwierigkeiten mit Fragen, die erfordern:</p>
+<ul>
+<li>Synthese von Informationen aus mehreren Quellen</li>
+<li>Verständnis nuancierter Beziehungen zwischen Entitäten</li>
+<li>Durchführung von Multi-Hop-Reasoning
+Der Kontext, der dem LLM bereitgestellt wird, ist oft eine Liste von Textausschnitten, die keine explizite Darstellung ihrer Verbindungen enthalten.</li>
+</ul>
+<h4 id="kontextuelle-fragmentierung-und-blindheit">Kontextuelle Fragmentierung und Blindheit</h4>
+<p>Das Chunking bricht den natürlichen Informationsfluss willkürlich. Relevanter Kontext kann über verschiedene Chunks, Dokumente oder Abschnitte verstreut sein. Die Vektorsuche, die die Anfrage mit jedem Chunk einzeln vergleicht, versagt oft dabei, diesen vollständigen, verteilten Kontext abzurufen, was zu unvollständigen oder oberflächlichen Antworten führt. Sie versteht semantische Ähnlichkeit, ist jedoch blind für explizite Beziehungen wie Kausalität, Abhängigkeit oder Hierarchie.</p>
+<h4 id="empfindlichkeit-gegen%C3%BCber-der-chunking-strategie">Empfindlichkeit gegenüber der Chunking-Strategie</h4>
+<p>Die Leistung ist hochgradig empfindlich gegenüber der Chunking-Strategie (z.B. Chunk-Grösse, Überlappung). Suboptimale Strategien können übermässiges Rauschen einführen (Chunks zu gross) oder kritischen Kontext verlieren (Chunks zu klein), was umfangreiche und brüchige Anpassungen erfordert.</p>
+<h4 id="unf%C3%A4higkeit-multi-hop-reasoning-durchzuf%C3%BChren">Unfähigkeit, Multi-Hop-Reasoning durchzuführen</h4>
+<p>Es gibt Schwierigkeiten, komplexe Fragen zu beantworten, die &quot;Multi-Hop&quot;-Reasoning erfordern. Zum Beispiel: &quot;Welche Marketingkampagnen wurden von der in dem Q3-Bericht erwähnten Lieferkettenstörung betroffen?&quot; erfordert die Verknüpfung von Störung → betroffene Produkte → Marketingkampagnen. Eine einfache Vektorsuche ist unwahrscheinlich, diese Informationssprünge zu überbrücken.</p>
+<p><strong>Analogie:</strong> Vektorbasierte RAG bietet einem Forscher einen Stapel isolierter Karteikarten, während GraphRAG darauf abzielt, eine umfassende Mindmap zu erstellen und bereitzustellen, die entscheidende Verbindungen aufdeckt.</p>
+<h3 id="21-projekttitel-imara">2.1 Projekttitel: IMARA</h3>
+<h3 id="22-problemstellung">2.2 Problemstellung</h3>
+<p>Die Extraktion und Verarbeitung von Informationen aus unstrukturierten PDF-Dokumenten stellt eine Herausforderung für herkömmliche RAG-Systeme dar.</p>
+<h3 id="23-projektziele">2.3 Projektziele</h3>
+<ul>
+<li>Die Implementation von graphbasierten System und der Vergleich zu klassischen RAG-Systemen</li>
+<li>Der Vergleich zwischen verschiedenen graphbasierten RAG-Systemen</li>
+<li></li>
+</ul>
+<ul>
+<li></li>
+</ul>
+<p><strong>Graph-basiertes RAG:</strong> Aufbau einer Pipeline zur Erstellung dichter Wissensgraphen.</p>
+<ul>
+<li></li>
+</ul>
+<p><strong>Model Fine-tuning:</strong> Optimierung eines LLMs (z.B. Qwen) basierend auf dem Graph.</p>
+<ul>
+<li></li>
+</ul>
+<p><strong>Automation:</strong> End-to-End Automatisierung der Pipeline.
+Eine flexible Pipeline bauen, die bei der Evaluation der verschiedenen RAG-Systeme unterstützt.</p>
+<h2 id="3-datenbasis-und-vorverarbeitung">3. Datenbasis und Vorverarbeitung</h2>
+<h3 id="31-datenquellen">3.1 Datenquellen</h3>
+<p>Beschreibung der verwendeten Datensätze, wie z.B. der <strong>Open RAG Bench Dataset</strong> (Arxiv-Kategorien) oder <strong>PubMedQA</strong>.</p>
+<h3 id="32-pdf-extraktion-mit-docling">3.2 PDF-Extraktion mit Docling</h3>
+<p>Einsatz des <strong>Docling Toolkits</strong> zur effizienten Konvertierung von Dokumenten in maschinenlesbare Formate (Markdown/JSON).</p>
+<p>angetroffene Herausforderungen
+<strong>Challenge:</strong> Die Qualität der Ergebnisse liegt unter den Erwartungen.</p>
+<p><strong>Massnahme 1:</strong> Optimierung der Parameter. Die optimierte Version der Parameter ist massiv schneller und viel genauer.</p>
+<p><img src="image-6.png" alt="alt text"></p>
+<p>Die unterschiede sind z.T. ganze Tabellen.</p>
+<p><img src="image-7.png" alt="alt text"></p>
+<p>Problematische Parameter:
+<img src="image-8.png" alt="alt text"></p>
+<p>erfolgreiche Parameter:
+<img src="image-9.png" alt="alt text"></p>
+<p><strong>Challenge:</strong> Die 16GB VRAM waren nicht genug, um alle features von docling zu unterstützen. Das verursachte periodische Endless-loop's in Docling serve.
+<strong>Massnahme 1:</strong> Der Verzicht auf die Container-Version &quot;Docling serve&quot; und die Verwendung direkt in Python.
+<strong>Massnahme 2:</strong> Die Ausführung von Docling auf der CPU, um das VRAM-Limit zu umgehen</p>
+<p><strong>Challenge:</strong> Die 16GB VRAM waren nicht genug, um alle features von docling zu unterstützen. Das verursachte periodische Endless-loop's in Docling serve.
+Die cloudcode_cli.exe in der VSCode-Umgebung hat durch einen etremen RAM-Verbrauch im Hintergrund die Ausführung von docling verhindert. freeze, not started, ... https://forum.cursor.com/t/hight-memory-consumption-on-cloudcode-cli/106122
+<strong>Massnahme 1:</strong> Ein Uninstall von cloudcode_cli.exe war unumgänglich.</p>
+<p><strong>Challenge:</strong> Das parsen von Formeln in Docling mit CPU oder GPU ist sehr langsam. Den Verzicht auf die Extraktion der Formeln war keine Option, da eine maximale Qualität des Extrakts abgestrebt wurde, um die over-all Performance nicht zu beeinträchtigen.</p>
+<p>Docling Log Ausschnitt:</p>
+<pre><code>[WindowsPath('C:/Users/ML4SE/Desktop/openspec_demo/configs/data/OpenRAGBench/pdfs/2411.02951v2.pdf')]
+2025-12-17 19:08:35,249 - INFO - detected formats: [&lt;InputFormat.PDF: 'pdf'&gt;]
+2025-12-17 19:08:35,259 - INFO - Going to convert document batch...
+2025-12-17 19:08:35,260 - INFO - Processing document 2411.02951v2.pdf
+2025-12-18 01:37:07,514 - INFO - Finished converting document 2411.02951v2.pdf in 23312.29 sec.
+mpve the source file to the target directory
+2025-12-18 01:37:07,940 - INFO - Processed 1 docs, of which 0 failed and 0 were partially converted.
+2025-12-18 01:37:07,948 - INFO - Document conversion complete in 203589.20 seconds. it successfully completed 1 out of 287
+[WindowsPath('C:/Users/ML4SE/Desktop/openspec_demo/configs/data/OpenRAGBench/pdfs/2411.03001v2.pdf')]
+2025-12-18 01:37:07,968 - INFO - detected formats: [&lt;InputFormat.PDF: 'pdf'&gt;]
+2025-12-18 01:37:07,972 - INFO - Going to convert document batch...
+2025-12-18 01:37:07,973 - INFO - Processing document 2411.03001v2.pdf
+2025-12-18 14:22:26,866 - INFO - Finished converting document 2411.03001v2.pdf in 45918.92 sec.
+mpve the source file to the target directory
+2025-12-18 14:22:27,152 - INFO - Processed 1 docs, of which 0 failed and 0 were partially converted.
+2025-12-18 14:22:27,160 - INFO - Document conversion complete in 249508.41 seconds. it successfully completed 1 out of 286
+[WindowsPath('C:/Users/ML4SE/Desktop/openspec_demo/configs/data/OpenRAGBench/pdfs/2411.03166v3.pdf')]
+2025-12-18 14:22:27,193 - INFO - detected formats: [&lt;InputFormat.PDF: 'pdf'&gt;]
+2025-12-18 14:22:27,201 - INFO - Going to convert document batch...
+2025-12-18 14:22:27,202 - INFO - Processing document 2411.03166v3.pdf
+2025-12-19 03:50:46,515 - INFO - Finished converting document 2411.03166v3.pdf in 48499.35 sec.
+mpve the source file to the target directory
+2025-12-19 03:50:47,201 - INFO - Processed 1 docs, of which 0 failed and 0 were partially converted.
+2025-12-19 03:50:47,229 - INFO - Document conversion complete in 298008.48 seconds. it successfully completed 1 out of 285
+[WindowsPath('C:/Users/ML4SE/Desktop/openspec_demo/configs/data/OpenRAGBench/pdfs/2411.03257v3.pdf')]
+2025-12-19 03:50:47,249 - INFO - detected formats: [&lt;InputFormat.PDF: 'pdf'&gt;]
+2025-12-19 03:50:47,257 - INFO - Going to convert document batch...
+2025-12-19 03:50:47,259 - INFO - Processing document 2411.03257v3.pdf
+2025-12-19 23:49:15,094 - INFO - Finished converting document 2411.03257v3.pdf in 71907.86 sec.
+mpve the source file to the target directory
+2025-12-19 23:49:17,939 - INFO - Processed 1 docs, of which 0 failed and 0 were partially converted.
+2025-12-19 23:49:18,034 - INFO - Document conversion complete in 369919.29 seconds. it successfully completed 1 out of 284
+</code></pre>
+<p><strong>Massnahme 1:</strong>
+Einen zweiten Rechner 100% dafür einsetzen.</p>
+<h2 id="4-methodik-und-architektur">4. Methodik und Architektur</h2>
+<h3 id="41-graph-konstruktion">4.1 Graph-Konstruktion</h3>
+<h4 id="411-leanrag-ansatz">4.1.1 LeanRAG Ansatz</h4>
+<p>Detaillierung der Triple-Extraktion und der hierarchischen Retrieval-Struktur.</p>
+<ul>
+<li><strong>Extraktion:</strong> Umwandlung von Text in Entitäten und Relationen.</li>
+<li></li>
+</ul>
+<p><strong>Aggregation:</strong> Semantische Aggregation zur Reduzierung von Redundanz.</p>
+<h3 id="leanrag-workflow">leanRAG Workflow</h3>
+<p>file_chunk.py</p>
+<ol>
+<li>chunk raw input token-based with 512 Tokens and 64 Tokens overlap</li>
+</ol>
+<h4 id="method-1-commonkg"><strong>Method 1: CommonKG</strong></h4>
+<p>CommonKG/create_kg.py
+2. create a list of match words (entities) for each chunk
+3. create a list of &quot;all entities&quot; based on the match words without duplicates</p>
+<ol start="4">
+<li>&quot;new triples&quot; have &quot;subject, predicate, object&quot; triples init with coresponding reference to the chunk of origin</li>
+<li>&quot;next layer entities&quot;</li>
+<li>&quot;new triples descriptions&quot;</li>
+</ol>
+<p>CommonKG/deal_triple.py
+7. summarize descriptions =&gt; relation.jsonl</p>
+<h4 id="method-2-graphrag"><strong>Method 2: GraphRAG</strong></h4>
+<p>GraphExtraction/chunk.py
+2. loads the chunks
+3. performs a &quot;triple extraction&quot; =&gt; entity.jsonl, relation.jsonl</p>
+<p>GraphExtraction/deal_triple.py
+4. deal with duplicates of entries and relations</p>
+<p>build_graph.py</p>
+<ol>
+<li>generating embeddings</li>
+<li>clustering lables (based on the embeddings)</li>
+<li>layer 1 clustering</li>
+<li>layer 2 clustering</li>
+<li>building vector DB</li>
+</ol>
+<h4 id="412-linearrag">4.1.2 LinearRAG</h4>
+<p>LinearRAG: Linear Graph Retrieval-Augmented Generation on Large-scale Corpora - A relation-free graph construction method for efficient GraphRAG.</p>
+<p><img src="image.png" alt="alt text"></p>
+<p>✅ Context-Preserving: Relation-free graph construction, relying on lightweight entity recognition and semantic linking to achieve comprehensive contextual comprehension.
+✅ Complex Reasoning: Enables deep retrieval via semantic bridging, achieving multi-hop reasoning in a single retrieval pass without requiring explicit relational graphs.
+✅ High Scalability: Zero LLM token consumption, faster processing speed, and linear time/space complexity.</p>
+<p><strong>Graphbuilding:</strong></p>
+<ol>
+<li>=&gt; load data</li>
+<li>chunking data</li>
+<li>get named entities - SpacyNER (Named Entity Recognition)</li>
+<li>sentence splitting</li>
+<li>get passages</li>
+<li>get embeddings(sentences, entities, passages)</li>
+<li>build graph
+=&gt; LinearRAG.graphml
+=&gt; ner_results.json
+=&gt; passage_embedding.parquet
+=&gt; dentence_embedding.parquet
+=&gt; entity_embedding.parquet</li>
+</ol>
+<p><strong>Retreival:</strong></p>
+<ol>
+<li>retrieval_results = qa(question)</li>
+</ol>
+<h3 id="linearrag-results">linearRAG Results</h3>
+<p>LinearRAG, Dataset: 2wikimultihop, Results with local GPT-OSS-20b Model</p>
+<p>[passage] Loaded 658 records from ./import\2wikimultihop\passage_embedding.parquet
+[entity] Loaded 40320 records from ./import\2wikimultihop\entity_embedding.parquet
+[sentence] Loaded 21206 records from ./import\2wikimultihop\sentence_embedding.parquet</p>
+<p>2025-12-09 12:16:23,189 - INFO - Evaluation Results:
+2025-12-09 12:16:23,191 - INFO -   LLM Accuracy: 0.7350 (735.0/1000)
+2025-12-09 12:16:23,191 - INFO -   Contain Accuracy: 0.7210 (721/1000)</p>
+<p>LinearRAG, Dataset: 2wikimultihop, Results with online gpt-4o-mini Model</p>
+<p>[passage] Loaded 658 records from ./import\2wikimultihop\passage_embedding.parquet
+[entity] Loaded 40320 records from ./import\2wikimultihop\entity_embedding.parquet
+[sentence] Loaded 21206 records from ./import\2wikimultihop\sentence_embedding.parquet
+Retrieving: 100%|███████████████████████████████████████████████████████████████████████████████| 1000/1000 [02:43&lt;00:00,  6.12it/s]
+QA Reading (Parallel): 100%|████████████████████████████████████████████████████████████████████| 1000/1000 [03:48&lt;00:00,  4.37it/s]
+Evaluating samples: 100%|█████████████████████████████████| 1000/1000 [00:40&lt;00:00, 24.70sample/s, LLM_Acc=0.639, Contain_Acc=0.693]
+2025-12-09 13:34:30,325 - INFO - Evaluation Results:
+2025-12-09 13:34:30,325 - INFO -   LLM Accuracy: 0.6390 (639.0/1000)
+2025-12-09 13:34:30,325 - INFO -   Contain Accuracy: 0.6930 (693/1000)</p>
+<p>LinearRAG, Dataset: 2wikimultihop, Results with remote gemma3:17b Model</p>
+<p>[passage] Loaded 658 records from ./import\2wikimultihop\passage_embedding.parquet
+[entity] Loaded 40320 records from ./import\2wikimultihop\entity_embedding.parquet
+[sentence] Loaded 21206 records from ./import\2wikimultihop\sentence_embedding.parquet
+Retrieving: 100%|███████████████████████████████████████████████████████████████████████████████████████████████| 1000/1000 [03:10&lt;00:00,  5.24it/s]
+QA Reading (Parallel): 100%|██████████████████████████████████████████████████████████████████████████████████| 1000/1000 [1:22:15&lt;00:00,  4.94s/it]
+Evaluating samples: 100%|█████████████████████████████████████████████████| 1000/1000 [03:24&lt;00:00,  4.88sample/s, LLM_Acc=0.240, Contain_Acc=0.351]
+2025-12-09 19:02:34,979 - INFO - Evaluation Results:
+2025-12-09 19:02:34,980 - INFO -   LLM Accuracy: 0.2400 (240.0/1000)
+2025-12-09 19:02:34,981 - INFO -   Contain Accuracy: 0.3510 (351/1000)</p>
+<p>LinearRAG, Dataset: 2wikimultihop, Results with online gpt-4o Model</p>
+<p>[passage] Loaded 658 records from ./import\2wikimultihop\passage_embedding.parquet
+[entity] Loaded 40320 records from ./import\2wikimultihop\entity_embedding.parquet
+[sentence] Loaded 21206 records from ./import\2wikimultihop\sentence_embedding.parquet
+Retrieving: 100%|███████████████████████████████████████████████████████████████████████████████████████████████| 1000/1000 [03:00&lt;00:00,  5.55it/s]
+QA Reading (Parallel): 100%|████████████████████████████████████████████████████████████████████████████████████| 1000/1000 [03:29&lt;00:00,  4.78it/s]
+Evaluating samples: 100%|█████████████████████████████████████████████████| 1000/1000 [00:40&lt;00:00, 24.96sample/s, LLM_Acc=0.590, Contain_Acc=0.755]
+2025-12-09 19:32:14,264 - INFO - Evaluation Results:
+2025-12-09 19:32:14,264 - INFO -   LLM Accuracy: 0.5900 (590.0/1000)
+2025-12-09 19:32:14,265 - INFO -   Contain Accuracy: 0.7550 (755/1000)</p>
+<p>LinearRAG, Dataset: hotpotqa, Results with local GPT-OSS-20b Model</p>
+<p>[passage] Loaded 1311 records from ./import\hotpotqa\passage_embedding.parquet
+[entity] Loaded 66846 records from ./import\hotpotqa\entity_embedding.parquet
+[sentence] Loaded 38455 records from ./import\hotpotqa\sentence_embedding.parquet
+Retrieving: 100%|██████████████████████████████████████████████████████████████████████████████████████████████████████████████| 1000/1000 [03:46&lt;00:00,  4.42it/s]
+QA Reading (Parallel): 100%|█████████████████████████████████████████████████████████████████████████████████████████████████| 1000/1000 [1:51:26&lt;00:00,  6.69s/it]
+Evaluating samples: 100%|████████████████████████████████████████████████████████████████| 1000/1000 [24:59&lt;00:00,  1.50s/sample, LLM_Acc=0.771, Contain_Acc=0.662]
+2025-12-10 20:59:41,463 - INFO - Evaluation Results:
+2025-12-10 20:59:41,463 - INFO -   LLM Accuracy: 0.7710 (771.0/1000)
+2025-12-10 20:59:41,463 - INFO -   Contain Accuracy: 0.6620 (662/1000)</p>
+<p>LinearRAG, Dataset: musique, Results with local GPT-OSS-20b Model</p>
+<p>[passage] Loaded 1354 records from ./import\musique\passage_embedding.parquet
+[entity] Loaded 67532 records from ./import\musique\entity_embedding.parquet
+[sentence] Loaded 39110 records from ./import\musique\sentence_embedding.parquet
+Retrieving: 100%|██████████████████████████████████████████████████████████████████████████████████████████████| 1000/1000 [03:15&lt;00:00,  5.13it/s]
+QA Reading (Parallel): 100%|█████████████████████████████████████████████████████████████████████████████████| 1000/1000 [3:51:21&lt;00:00, 13.88s/it]
+Evaluating samples: 100%|████████████████████████████████████████████████| 1000/1000 [17:39&lt;00:00,  1.06s/sample, LLM_Acc=0.642, Contain_Acc=0.317]
+2025-12-11 02:00:28,341 - INFO - Evaluation Results:
+2025-12-11 02:00:28,342 - INFO -   LLM Accuracy: 0.6420 (642.0/1000)
+2025-12-11 02:00:28,342 - INFO -   Contain Accuracy: 0.3170 (317/1000)</p>
+<p>LinearRAG, Dataset: medical, Results with local GPT-OSS-20b Model</p>
+<p>[passage] Loaded 225 records from ./import\medical\passage_embedding.parquet
+[entity] Loaded 9033 records from ./import\medical\entity_embedding.parquet
+[sentence] Loaded 8985 records from ./import\medical\sentence_embedding.parquet
+Retrieving: 100%|██████████████████████████████████████████████████████████████████████████████████████████████| 2062/2062 [06:03&lt;00:00,  5.67it/s]
+QA Reading (Parallel): 100%|███████████████████████████████████████████████████████████████████████████████████| 2062/2062 [10:51&lt;00:00,  3.17it/s]
+Evaluating samples: 100%|████████████████████████████████████████████████| 2062/2062 [01:26&lt;00:00, 23.72sample/s, LLM_Acc=0.694, Contain_Acc=0.032]
+2025-12-11 09:33:43,939 - INFO - Evaluation Results:
+2025-12-11 09:33:43,939 - INFO -   LLM Accuracy: 0.6940 (1431.0/2062)
+2025-12-11 09:33:43,939 - INFO -   Contain Accuracy: 0.0320 (66/2062)</p>
+<h4 id="413-graphmert">4.1.3 GraphMERT</h4>
+<p>GraphMERT: Effiziente und skalierbare Gewinnung zuverlässiger Wissensgraphen aus unstrukturierten Daten</p>
+<p>Ein einfaches Beispiel für eine Testimplementierung des Princeton GraphMERT-Papers.</p>
+<p>https://arxiv.org/abs/2510.09580</p>
+<p>Seit fast drei Jahrzehnten erforschen Wissenschaftler Anwendungen neurosymbolischer künstlicher Intelligenz (KI), da symbolische Komponenten Abstraktion und neuronale Komponenten Generalisierung ermöglichen. Die Kombination beider Komponenten verspricht rasante Fortschritte in der KI. Dieses Potenzial konnte das Feld jedoch bisher nicht ausschöpfen, da die meisten neurosymbolischen KI-Frameworks nicht skalierbar sind. Zudem schränken die impliziten Repräsentationen und das approximative Schliessen neuronaler Ansätze Interpretierbarkeit und Vertrauen ein. Wissensgraphen (KGs), die als Goldstandard für die Repräsentation expliziten semantischen Wissens gelten, können die symbolische Seite abdecken. Die automatische Ableitung zuverlässiger KGs aus Textkorpora stellt jedoch weiterhin eine Herausforderung dar. Wir begegnen diesen Herausforderungen mit GraphMERT, einem kompakten, rein grafischen Encoder-Modell, das hochwertige KGs aus unstrukturierten Textkorpora und seinen eigenen internen Repräsentationen generiert.</p>
+<p>GraphMERT und sein äquivalenter Wissensgraph bilden einen modularen neurosymbolischen Stack: neuronales Lernen von Abstraktionen; symbolische Wissensgraphen für verifizierbares Schliessen. GraphMERT + Wissensgraph ist das erste effiziente und skalierbare neurosymbolische Modell, das höchste Benchmark-Genauigkeit und überlegene symbolische Repräsentationen im Vergleich zu Basismodellen erzielt.</p>
+<p>Konkret streben wir zuverlässige domänenspezifische Wissensgraphen (KGs) an, die sowohl (1) faktisch korrekt (mit Herkunftsnachweis) als auch (2) valide (ontologiekonsistente Relationen mit domänenspezifischer Semantik) sind. Wenn ein grosses Sprachmodell (LLM), z. B. Qwen3-32B, domänenspezifische KGs generiert, weist es aufgrund seiner hohen Sensitivität, seiner geringen Domänenexpertise und fehlerhafter Relationen Defizite in der Zuverlässigkeit auf. Anhand von Texten aus PubMed-Artikeln zum Thema Diabetes erzielt unser GraphMERT-Modell mit 80 Millionen Parametern einen KG mit einem FActScore von 69,8 %; ein LLM-Basismodell mit 32 Milliarden Parametern erreicht hingegen nur einen FActScore von 40,2 %. Der GraphMERT-KG erzielt zudem einen höheren ValidityScore von 68,8 % gegenüber 43,0 % beim LLM-Basismodell.</p>
+<p><strong>GraphMERT Node Embeddings (t-SNE View)</strong></p>
+<p><img src="image-1.png" alt="alt text"></p>
+<p><strong>GraphMERT Semantic Graph Visualization</strong></p>
+<p><img src="image-2.png" alt="alt text"></p>
+<p><strong>Query search on the graphs results</strong>
+Das ist es, was wir wollen, da die Suche im Graphen linear ist und auf verkettetem Wissen basiert, wobei die Knoten Daten über sich selbst enthalten.</p>
+<p><em><strong>Ein perfektes Resultat</strong></em></p>
+<p><img src="image-3.png" alt="alt text"></p>
+<p><em><strong>Ein fast perfektes Resultat</strong></em></p>
+<p><img src="image-4.png" alt="alt text"></p>
+<ul>
+<li><strong>Extraktion:</strong> Umwandlung von Text in Entitäten und Relationen.</li>
+<li></li>
+</ul>
+<p><strong>Aggregation:</strong> Semantische Aggregation zur Reduzierung von Redundanz.</p>
+<h3 id="42-fine-tuning-strategie">4.2 Fine-tuning Strategie</h3>
+<ul>
+<li>
+<p>Verwendung des <strong>Unsloth Frameworks</strong> für ressourceneffizientes Training.</p>
+</li>
+<li>
+<p>Integration von Ansätzen wie <strong>GraphRAFT</strong> oder <strong>GraphMERT</strong> zur Distillation von Wissen in kleine, domänenspezifische Modelle.</p>
+</li>
+</ul>
+<h2 id="5-implementierung">5. Implementierung</h2>
+<h3 id="51-systemarchitektur">5.1 Systemarchitektur</h3>
+<p>Beschreibung der Pipeline von der PDF-Eingabe bis zur Antwortgenerierung.</p>
+<p><img src="image-5.png" alt="alt text"></p>
+<h3 id="52-verwendete-hardware">5.2 Verwendete Hardware</h3>
+<p>Dokumentation der genutzten Ressourcen (z.B. 1x 4090 Desktop, M3 Pro 24GB) .
+1 HP EliteBook X G11  =&gt; Massenextraktion mit Docling
+Prozessor Intel 5U</p>
+<p>1 Lenovo Notbook Legion 9 16IRX8
+Prozessor	13th Gen Intel(R) Core(TM) i9-13980HX (2.20 GHz)
+Installierter RAM	32.0 GB (31.7 GB verwendbar)
+GPU     Nvidia RTX4090 Mobile mit 16GB VRAM</p>
+<h2 id="6-evaluation-und-benchmarking">6. Evaluation und Benchmarking</h2>
+<h3 id="61-benchmark-design">6.1 Benchmark-Design</h3>
+<ul>
+<li></li>
+</ul>
+<p><strong>Ansatz 1:</strong> Generierung eines Testdatensatzes mittels Synthetic Data Generation (SDG) und Evaluierung durch ein &quot;LLM als Judge&quot;.</p>
+<ul>
+<li></li>
+</ul>
+<p><strong>Ansatz 2:</strong> Nutzung publizierter Benchmarks wie dem Open RAG Benchmark.</p>
+<h3 id="62-ergebnisse">6.2 Ergebnisse</h3>
+<p>Vergleich der Performance: Standard RAG vs. IMARA GraphRAG vs. Fine-tuned Model.</p>
+<h2 id="7-diskussion-der-ergebnisse">7. Diskussion der Ergebnisse</h2>
+<ul>
+<li>
+<p>Qualität der generierten Graphen.</p>
+</li>
+<li>
+<p>Effektivität des Fine-tunings im Vergleich zu GPT-basierten Modellen.</p>
+</li>
+<li>
+<p>Ressourcenverbrauch und Skalierbarkeit.</p>
+</li>
+</ul>
+<h2 id="8-risikomanagement-und-lessons-learned">8. Risikomanagement und Lessons Learned</h2>
+<p>Reflektion über die im Antrag identifizierten Risiken:</p>
+<ul>
+<li>
+<p>Datenqualität und Graph-Dichte.</p>
+</li>
+<li>
+<p>Rechenintensität des Fine-tunings.</p>
+</li>
+<li>
+<p>Teamkoordination.</p>
+</li>
+</ul>
+<h2 id="9-fazit-und-ausblick">9. Fazit und Ausblick</h2>
+<p>Zusammenfassung, ob ein 80M domänenspezifisches Modell tatsächlich größere Modelle übertreffen konnte, und mögliche nächste Schritte.</p>
+<h2 id="10-referenzen">10. Referenzen</h2>
+<ul>
+<li>
+<p>[1] Docling: An Efficient Open-Source Toolkit.</p>
+</li>
+<li>
+<p>[2] LeanRAG: Knowledge-Graph-Based Generation.</p>
+</li>
+<li>
+<p>[3] GraphMERT: Efficient Distillation of Reliable KGs.</p>
+</li>
+<li>
+<p>... (Weitere Quellen gemäß Antrag).</p>
+</li>
+</ul>
+<h2 id="11-glossar">11. Glossar</h2>
+<p>xxx</p>
+<hr>
+<h3 id="tipps-f%C3%BCr-die-ausarbeitung">Tipps für die Ausarbeitung:</h3>
+<ul>
+<li><strong>Visualisierungen:</strong> Nutzt die Grafiken aus eurem Zwischenbericht (LeanRAG/Docling Architektur), um die technischen Sektionen (Kapitel 3 &amp; 4) zu füllen.</li>
+<li><strong>Code-Beispiele:</strong> Fügt kurze Snippets eurer Automatisierungslösung oder der Unsloth-Konfiguration in Kapitel 5 ein.</li>
+<li><strong>Metriken:</strong> In Kapitel 6 solltet ihr Tabellen mit Latenzzeiten und Genauigkeitswerten (Accuracy/F1) eurer Benchmarks zeigen.</li>
+</ul>
+<p><strong>Soll ich dir beim Ausformulieren eines spezifischen Kapitels (z.B. der Methodik oder der Evaluation) behilflich sein?</strong></p>
+
+</body>
+</html>
