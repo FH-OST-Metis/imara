@@ -15,23 +15,11 @@ stages:
       - extract.batch_size
       - extract.source_handling
 
-  linearrag_chunk:
-    cmd: uv run python src/app/linear_rag/chunk.py --input data/processed/extracted --output data/processed/linear_rag/chunks
-    deps:
-      - src/app/linear_rag/chunk.py
-      - data/processed/extracted
-    outs:
-      - data/processed/linear_rag/chunks
-    params:
-      - chunk.chunk_size
-      - chunk.overlap
-      - chunk.split_by
-
   linearrag_load:
-    cmd: uv run python src/app/linear_rag/load.py --input data/processed/linear_rag/chunks --artifacts data/processed/extracted --database_url postgresql://postgres:postgres@127.0.0.1:54322/postgres
+    cmd: uv run python src/app/linear_rag/load.py --input data/processed/chunks --artifacts data/processed/extracted --database_url postgresql://postgres:postgres@127.0.0.1:54322/postgres
     deps:
       - src/app/linear_rag/load.py
-      - data/processed/linear_rag/chunks
+      - data/processed/chunks
       - data/processed/extracted
     params:
       - load.batch_size
