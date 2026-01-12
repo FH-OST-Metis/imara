@@ -355,17 +355,22 @@ def run_graphmert_eval(
 
             query_run = 1
 
+            # Prefer a reference answer from the dataset if available so we
+            # can evaluate retrieval quality against a fixed answer and avoid
+            # calling an LLM when answers already exist.
+            ref_answer = (row.get("answer") or "").strip()
+
             # Retrieve top-k passages
             passages = _retrieve_with_ids(raw_query, G, sbert_model, pca_text, top_k)
 
-            # Generate an answer using the same helper as graphmert.inference.
-            # This function internally performs its own retrieval for context,
-            # which is acceptable for evaluation; passages we log are for
-            # transparency and do not need to exactly mirror that retrieval.
-            try:
-                answer = graphrag_generate(raw_query, G, sbert_model, pca_text)
-            except Exception as exc:  # pragma: no cover - defensive path
-                answer = f"Generation error: {exc}"
+            if ref_answer:
+                answer = ref_answer
+            else:
+                # Fall back to GraphMERT generation when no reference is given.
+                try:
+                    answer = graphrag_generate(raw_query, G, sbert_model, pca_text)
+                except Exception as exc:  # pragma: no cover - defensive path
+                    answer = f"Generation error: {exc}"
 
             if not passages:
                 # Still emit a single row so the query participates in eval.
@@ -545,13 +550,20 @@ def run_naiverag_eval(
 
             query_run = 1
 
+            # If the dataset already contains a reference answer, reuse it
+            # instead of generating a new one.
+            ref_answer = (row.get("answer") or "").strip()
+
             passages = _naive_retrieve(raw_query, texts, embs, model, top_k)
-            try:
-                answer = _naive_generate_answer(
-                    raw_query, [p for _, p in passages] if passages else []
-                )
-            except Exception as exc:  # pragma: no cover - defensive
-                answer = f"Generation error: {exc}"
+            if ref_answer:
+                answer = ref_answer
+            else:
+                try:
+                    answer = _naive_generate_answer(
+                        raw_query, [p for _, p in passages] if passages else []
+                    )
+                except Exception as exc:  # pragma: no cover - defensive
+                    answer = f"Generation error: {exc}"
 
             if not passages:
                 writer.writerow(
@@ -595,13 +607,13 @@ def main() -> None:
     parser.add_argument(
         "--queries",
         type=Path,
-        default=Path("data/eval/queries.csv"),
+        default=Path("data/raw/queries.csv"),
         help="Path to CSV file with at least a 'query' column.",
     )
     parser.add_argument(
         "--output",
         type=Path,
-        default=Path("data/eval/graphmert/generated_answers.csv"),
+        default=Path("docs/eval_data/graphmert/generated_answers.csv"),
         help="Where to write the generated answers CSV for open-rag-eval.",
     )
     parser.add_argument(

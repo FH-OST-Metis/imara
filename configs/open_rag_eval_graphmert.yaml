@@ -1,6 +1,6 @@
 # Evaluation config for running open-rag-eval on the GraphMERT RAG pipeline
 
-input_queries: "data/eval/queries.csv"
+input_queries: "data/raw/queries.csv"
 results_folder: "data/eval/graphmert"
 
 # This is the CSV produced by src/app/eval_open_rag.py

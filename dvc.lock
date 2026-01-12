@@ -204,9 +204,9 @@ stages:
       size: 1256
   graphmert_generate_answers:
     cmd: uv run python src/app/eval_open_rag.py --system graphmert --queries 
-      data/eval/queries.csv --output data/eval/graphmert/generated_answers.csv
+      docs/Eval_data.csv --output data/eval/graphmert/generated_answers.csv
     deps:
-    - path: data/eval/queries.csv
+    - path: docs/Eval_data.csv
       hash: md5
       md5: e9db32d9fdc0df8a73c6aa87d81b194b
       size: 1207
@@ -245,9 +245,9 @@ stages:
       size: 54880
   naiverag_generate_answers:
     cmd: uv run python src/app/eval_open_rag.py --system naiverag --queries 
-      data/eval/queries.csv --output data/eval/naiverag/generated_answers.csv
+      docs/Eval_data.csv --output data/eval/naiverag/generated_answers.csv
     deps:
-    - path: data/eval/queries.csv
+    - path: docs/Eval_data.csv
       hash: md5
       md5: e9db32d9fdc0df8a73c6aa87d81b194b
       size: 1207
@@ -287,7 +287,7 @@ stages:
       hash: md5
       md5: 6228497163931c6fb436368d51cdcda9
       size: 54880
-    - path: data/eval/queries.csv
+    - path: docs/Eval_data.csv
       hash: md5
       md5: e9db32d9fdc0df8a73c6aa87d81b194b
       size: 1207
@@ -319,7 +319,7 @@ stages:
       hash: md5
       md5: 17728d1ae96bda331eec10aa24f35eb9
       size: 104020
-    - path: data/eval/queries.csv
+    - path: docs/Eval_data.csv
       hash: md5
       md5: e9db32d9fdc0df8a73c6aa87d81b194b
       size: 1207

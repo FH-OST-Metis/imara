@@ -143,7 +143,7 @@ stages:
     cmd: >-
       uv run python src/app/eval_open_rag.py
       --system graphmert
-      --queries data/eval/queries.csv
+      --queries data/raw/queries.csv
       --output data/eval/graphmert/generated_answers.csv
     deps:
       - src/app/eval_open_rag.py
@@ -152,7 +152,7 @@ stages:
       - src/app/graphmert/train_model.py
       - src/app/utils/params_helper.py
       - data/processed/chunks
-      - data/eval/queries.csv
+      - data/raw/queries.csv
     outs:
       - data/eval/graphmert/generated_answers.csv
     params:
@@ -164,7 +164,7 @@ stages:
       --config configs/open_rag_eval_graphmert.yaml
     deps:
       - configs/open_rag_eval_graphmert.yaml
-      - data/eval/queries.csv
+      - data/raw/queries.csv
       - data/eval/graphmert/generated_answers.csv
     outs:
       - data/eval/graphmert/results.csv
@@ -179,14 +179,14 @@ stages:
     cmd: >-
       uv run python src/app/eval_open_rag.py
       --system naiverag
-      --queries data/eval/queries.csv
+      --queries data/raw/queries.csv
       --output data/eval/naiverag/generated_answers.csv
     deps:
       - src/app/eval_open_rag.py
       - src/app/embedder.py
       - src/app/utils/params_helper.py
       - data/processed/chunks
-      - data/eval/queries.csv
+      - data/raw/queries.csv
     outs:
       - data/eval/naiverag/generated_answers.csv
     params:
@@ -198,11 +198,11 @@ stages:
       --config configs/open_rag_eval_naiverag.yaml
     deps:
       - configs/open_rag_eval_naiverag.yaml
-      - data/eval/queries.csv
+      - data/raw/queries.csv
       - data/eval/naiverag/generated_answers.csv
     outs:
       - data/eval/naiverag/results.csv
-      - data/eval/naiverag/TRECEvaluator-metrics.png
+      - data/eval/naiverag/TRECEEvaluator-metrics.png
     params:
       - configs/open_rag_eval_naiverag.yaml:
           - evaluator.0.model.type
