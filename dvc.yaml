@@ -202,7 +202,7 @@ stages:
       - data/eval/naiverag/generated_answers.csv
     outs:
       - data/eval/naiverag/results.csv
-      - data/eval/naiverag/TRECEEvaluator-metrics.png
+      - data/eval/naiverag/metrics.png
     params:
       - configs/open_rag_eval_naiverag.yaml:
           - evaluator.0.model.type

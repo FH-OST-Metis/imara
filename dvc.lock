@@ -332,7 +332,7 @@ stages:
         - 3
         - 5
     outs:
-    - path: data/eval/naiverag/TRECEvaluator-metrics.png
+    - path: data/eval/naiverag/metrics.png
       hash: md5
       md5: 4eef9104cb4bfe4c33c9aad3e899a7d5
       size: 303381
