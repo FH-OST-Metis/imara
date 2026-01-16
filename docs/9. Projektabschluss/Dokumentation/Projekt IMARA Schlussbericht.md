@@ -101,17 +101,17 @@ angetroffene Herausforderungen
 
 **Massnahme 1:** Optimierung der Parameter. Die optimierte Version der Parameter ist massiv schneller und viel genauer.
 
-<img src="image-6.png" alt="Differenzen 1"  width="50%" height="50%">
+<img src="image-6.png" alt="Differenzen 1"  width="100%" height="100%">
 
 Die unterschiede sind z.T. ganze Tabellen.
 
-<img src="image-7.png" alt="Differenzen 2"  width="50%" height="50%">
+<img src="image-7.png" alt="Differenzen 2"  width="100%" height="100%">
 
 problematische Parameter:
-<img src="image-8.png" alt="problematische Parameter"  width="50%" height="50%">
+<img src="image-8.png" alt="problematische Parameter"  width="100%" height="100%">
 
 erfolgreiche Parameter:
-<img src="image-9.png" alt="erfolgreiche Parameter"  width="50%" height="50%">
+<img src="image-9.png" alt="erfolgreiche Parameter"  width="100%" height="100%">
 
 **Challenge:** Die 16GB VRAM waren nicht genug, um alle features von docling zu unterstützen. Das verursachte periodische Endless-loop's in Docling serve.
 
@@ -180,7 +180,7 @@ Detaillierung der Triple-Extraktion und der hierarchischen Retrieval-Struktur.
 
 ## 🏛️ Architecture Overview
 
-<img src="framework.png" alt="Overview of LeanRAG"  width="50%" height="50%">
+<img src="framework.png" alt="Overview of LeanRAG"  width="100%" height="100%">
 
 LeanRAG’s processing pipeline follows these core stages:
 
@@ -250,7 +250,7 @@ LeanRAG’s processing pipeline follows these core stages:
 
 LinearRAG: Linear Graph Retrieval-Augmented Generation on Large-scale Corpora - A relation-free graph construction method for efficient GraphRAG.
 
-<img src="image.png" alt="linearRAG Workflow"  width="50%" height="50%">
+<img src="image.png" alt="linearRAG Workflow"  width="100%" height="100%">
 
 
 ✅ Context-Preserving: Relation-free graph construction, relying on lightweight entity recognition and semantic linking to achieve comprehensive contextual comprehension.
@@ -376,22 +376,22 @@ Konkret streben wir zuverlässige domänenspezifische Wissensgraphen (KGs) an, d
 
 **GraphMERT Node Embeddings (t-SNE View)**
 
-<img src="image-1.png" alt="GraphMERT Node Embeddings (t-SNE View)"  width="40%" height="40%">
+<img src="image-1.png" alt="GraphMERT Node Embeddings (t-SNE View)"  width="100%" height="100%">
 
 **GraphMERT Semantic Graph Visualization**
 
-<img src="image-2.png" alt="GraphMERT Semantic Graph Visualization"  width="40%" height="40%">
+<img src="image-2.png" alt="GraphMERT Semantic Graph Visualization"  width="100%" height="100%">
 
 **Query search on the graphs results**
 Das ist es, was wir wollen, da die Suche im Graphen linear ist und auf verkettetem Wissen basiert, wobei die Knoten Daten über sich selbst enthalten.
 
 ***Ein perfektes Resultat***
 
-<img src="image-3.png" alt="Ein perfektes Resultat"  width="30%" height="30%">
+<img src="image-3.png" alt="Ein perfektes Resultat"  width="100%" height="100%">
 
 ***Ein fast perfektes Resultat***
 
-<img src="image-4.png" alt="Ein fast perfektes Resultat"  width="30%" height="30%">
+<img src="image-4.png" alt="Ein fast perfektes Resultat"  width="100%" height="100%">
 
 - **Extraktion:** Umwandlung von Text in Entitäten und Relationen.
 -
@@ -410,7 +410,7 @@ Das ist es, was wir wollen, da die Suche im Graphen linear ist und auf verkettet
 
 Beschreibung der Pipeline von der PDF-Eingabe bis zur Antwortgenerierung.
 
-<img src="image-5.png" alt="IMARA Pipeline"  width="50%" height="50%">
+<img src="image-5.png" alt="IMARA Pipeline"  width="100%" height="100%">
 
 ### 5.2 Verwendete Hardware
 
@@ -459,7 +459,7 @@ Reflektion über die im Antrag identifizierten Risiken:
 
 ## 9. Fazit und Ausblick
 
-Zusammenfassung, ob ein 80M domänenspezifisches Modell tatsächlich größere Modelle übertreffen konnte, und mögliche nächste Schritte.
+Zusammenfassung, ob ein 80M domänenspezifisches Modell tatsächlich grössere Modelle übertreffen konnte, und mögliche nächste Schritte.
 
 
 ### Ausblick:
@@ -491,7 +491,7 @@ https://github.com/DEEP-PolyU/LinearRAG
 https://github.com/creativeautomaton/graphMERT-python
 
 
-- ... (Weitere Quellen gemäß Antrag).
+- ... (Weitere Quellen gemäss Antrag).
 
 ## 11. Glossar
 
