@@ -119,8 +119,7 @@ erfolgreiche Parameter:
 
 **Massnahme 2:** Die Ausführung von Docling auf der CPU, um das VRAM-Limit zu umgehen
 
-**Challenge:** Die 16GB VRAM waren nicht genug, um alle features von docling zu unterstützen. Das verursachte periodische Endless-loop's in Docling serve.
-Die cloudcode_cli.exe in der VSCode-Umgebung hat durch einen etremen RAM-Verbrauch im Hintergrund die Ausführung von docling verhindert. freeze, not started, ... <https://forum.cursor.com/t/hight-memory-consumption-on-cloudcode-cli/106122>
+**Challenge:** Die cloudcode_cli.exe in der VSCode-Umgebung hat durch einen etremen RAM-Verbrauch im Hintergrund die Ausführung von docling verhindert. freeze, not started, ... <https://forum.cursor.com/t/hight-memory-consumption-on-cloudcode-cli/106122>
 
 **Massnahme 1:** Ein Uninstall von cloudcode_cli.exe war unumgänglich.
 
@@ -462,13 +461,35 @@ Reflektion über die im Antrag identifizierten Risiken:
 
 Zusammenfassung, ob ein 80M domänenspezifisches Modell tatsächlich größere Modelle übertreffen konnte, und mögliche nächste Schritte.
 
+
+### Ausblick:
+Aus den Ergebnissen konnten folgende Ansätze für die weitere Entwicklung abgeleitet werden:
+
+- Die Qualität eine Knowledge Graphen wird hauptsächlich durch die Qualität der Entities beeinflusst. Ein Ansatz, um das Problem der sprachliche Mehrdeutigkeit im Label der Entities ist, diese durch Attribute, abgeleitet aus dem Kontext, zu differenzieren. Ein Beispiel ist: "Der Müller hat dem Beruf eines Maurers" - Die Entity "Müller" ist folglich eine Maurer mit dem Familiennamen "Müller" und nicht eine Person mit dem Beruf Müller. 
+
+- Für eine produktive Lösung, sollten möglichst viele Verarbeitungsschritte im Scope eines einzelnen Dokuments (vor-)verarbeitet werden, bis und mit entity-relation Triples. Dies bringt folgende Vorteile mit sich:
+  - Eine kontinuierliche Erweiterung des Graphen durch Vorverarbeitete Datensätze.
+  - Parallelisierung
+  - Die Möglichkeit, zu Entfernen, wenn Datensätze ungültig werden vereinfacht. Mögliche Gründe sind Fehler in den Daten oder Zeitbasierte Daten würde durch aktuellere ersetzt.
+  - Mehrere Graphen können mit minimalem Offset für verschiedene Berechtigungsstufen erzeugt werden.
+- Der Einfluss von Raum und Zeit muss systematisch im Graph-Modell berücksichtigt werden. z.B. Schwierigkeiten mit der Atmung werden auf Meereshöhe anders interpretiert wi eauf dem Everest. Aktienkurse sind abhängig von der Zeit oder auch sich mit 100km/h zu bewegen war um 1900 rasend schnell und heute eher Durchsschnitt.
+- Für eine Knowledge Base mit verschiedenen Sprachen, können entities nur mit einer semantisch korrekten Übersetzung zusammengeführt werden. Um ständige Übrsetzungen zuwischen den Sprachen zu verhindern, könnte eine höhere Hierarchie mit einem Konzept-Graph repräsentiert werden. das heisst einzelne Fakten werden als Knowledge Graph dargestellt und darüber auf Konzepte abgebildet.
+- Das Clustering identischer Relationen zu einem Hypergraph ist ein weiterer Ansatz, Teilgraphen zusammen zu führen, ohne sich die Möglichkeit zu verbauen Teile wieder zu entfernen. Ebenso können wahrscheinliche Relationen abgeleitet werden. (vom Hypergraph zurück zum Knowledge Graph)
+
 ## 10. Referenzen
 
 - [1] Docling: An Efficient Open-Source Toolkit.
+https://www.docling.ai/
 
 - [2] LeanRAG: Knowledge-Graph-Based Generation.
+https://github.com/KnowledgeXLab/LeanRAG
 
-- [3] GraphMERT: Efficient Distillation of Reliable KGs.
+- [3] LinearRAG: A relation-free graph constrcution method for efficient GraphRAG.
+https://github.com/DEEP-PolyU/LinearRAG
+
+- [4] GraphMERT: Efficient Distillation of Reliable KGs.
+https://github.com/creativeautomaton/graphMERT-python
+
 
 - ... (Weitere Quellen gemäß Antrag).
 
