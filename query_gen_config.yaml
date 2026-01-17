@@ -19,6 +19,7 @@ model:
 
 # Query generation parameters (standard defaults)
 generation:
+  generate_expected_answers: true
   n_questions: 10 # total queries to generate
   min_words: 5 # minimum words per query
   max_words: 25 # maximum words per query
