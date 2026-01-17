@@ -92,80 +92,19 @@ Eine flexible Pipeline bauen, die bei der Evaluation der verschiedenen RAG-Syste
 
 Beschreibung der verwendeten Datensätze, wie z.B. der **Open RAG Bench Dataset** (Arxiv-Kategorien) oder **PubMedQA**.
 
-### 3.2 PDF-Extraktion mit Docling
 
-Einsatz des **Docling Toolkits** zur effizienten Konvertierung von Dokumenten in maschinenlesbare Formate (Markdown/JSON).
-
-angetroffene Herausforderungen
-**Challenge:** Die Qualität der Ergebnisse liegt unter den Erwartungen.
-
-**Massnahme 1:** Optimierung der Parameter. Die optimierte Version der Parameter ist massiv schneller und viel genauer.
-
-<img src="image-6.png" alt="Differenzen 1"  width="100%" height="100%">
-
-Die unterschiede sind z.T. ganze Tabellen.
-
-<img src="image-7.png" alt="Differenzen 2"  width="100%" height="100%">
-
-problematische Parameter:
-<img src="image-8.png" alt="problematische Parameter"  width="100%" height="100%">
-
-erfolgreiche Parameter:
-<img src="image-9.png" alt="erfolgreiche Parameter"  width="100%" height="100%">
-
-**Challenge:** Die 16GB VRAM waren nicht genug, um alle features von docling zu unterstützen. Das verursachte periodische Endless-loop's in Docling serve.
-
-**Massnahme 1:** Der Verzicht auf die Container-Version "Docling serve" und die Verwendung direkt in Python.
-
-**Massnahme 2:** Die Ausführung von Docling auf der CPU, um das VRAM-Limit zu umgehen
-
-**Challenge:** Die cloudcode_cli.exe in der VSCode-Umgebung hat durch einen etremen RAM-Verbrauch im Hintergrund die Ausführung von docling verhindert. freeze, not started, ... <https://forum.cursor.com/t/hight-memory-consumption-on-cloudcode-cli/106122>
-
-**Massnahme 1:** Ein Uninstall von cloudcode_cli.exe war unumgänglich.
-
-**Challenge:** Das parsen von Formeln in Docling mit CPU oder GPU ist sehr langsam. Den Verzicht auf die Extraktion der Formeln war keine Option, da eine maximale Qualität des Extrakts abgestrebt wurde, um die over-all Performance nicht zu beeinträchtigen.
-
-Docling Log Ausschnitt:
-
-    [WindowsPath('C:/Users/ML4SE/Desktop/openspec_demo/configs/data/OpenRAGBench/pdfs/2411.02951v2.pdf')]
-    2025-12-17 19:08:35,249 - INFO - detected formats: [<InputFormat.PDF: 'pdf'>]
-    2025-12-17 19:08:35,259 - INFO - Going to convert document batch...
-    2025-12-17 19:08:35,260 - INFO - Processing document 2411.02951v2.pdf
-    2025-12-18 01:37:07,514 - INFO - Finished converting document 2411.02951v2.pdf in 23312.29 sec.
-    mpve the source file to the target directory
-    2025-12-18 01:37:07,940 - INFO - Processed 1 docs, of which 0 failed and 0 were partially converted.
-    2025-12-18 01:37:07,948 - INFO - Document conversion complete in 203589.20 seconds. it successfully completed 1 out of 287
-    [WindowsPath('C:/Users/ML4SE/Desktop/openspec_demo/configs/data/OpenRAGBench/pdfs/2411.03001v2.pdf')]
-    2025-12-18 01:37:07,968 - INFO - detected formats: [<InputFormat.PDF: 'pdf'>]
-    2025-12-18 01:37:07,972 - INFO - Going to convert document batch...
-    2025-12-18 01:37:07,973 - INFO - Processing document 2411.03001v2.pdf
-    2025-12-18 14:22:26,866 - INFO - Finished converting document 2411.03001v2.pdf in 45918.92 sec.
-    mpve the source file to the target directory
-    2025-12-18 14:22:27,152 - INFO - Processed 1 docs, of which 0 failed and 0 were partially converted.
-    2025-12-18 14:22:27,160 - INFO - Document conversion complete in 249508.41 seconds. it successfully completed 1 out of 286
-    [WindowsPath('C:/Users/ML4SE/Desktop/openspec_demo/configs/data/OpenRAGBench/pdfs/2411.03166v3.pdf')]
-    2025-12-18 14:22:27,193 - INFO - detected formats: [<InputFormat.PDF: 'pdf'>]
-    2025-12-18 14:22:27,201 - INFO - Going to convert document batch...
-    2025-12-18 14:22:27,202 - INFO - Processing document 2411.03166v3.pdf
-    2025-12-19 03:50:46,515 - INFO - Finished converting document 2411.03166v3.pdf in 48499.35 sec.
-    mpve the source file to the target directory
-    2025-12-19 03:50:47,201 - INFO - Processed 1 docs, of which 0 failed and 0 were partially converted.
-    2025-12-19 03:50:47,229 - INFO - Document conversion complete in 298008.48 seconds. it successfully completed 1 out of 285
-    [WindowsPath('C:/Users/ML4SE/Desktop/openspec_demo/configs/data/OpenRAGBench/pdfs/2411.03257v3.pdf')]
-    2025-12-19 03:50:47,249 - INFO - detected formats: [<InputFormat.PDF: 'pdf'>]
-    2025-12-19 03:50:47,257 - INFO - Going to convert document batch...
-    2025-12-19 03:50:47,259 - INFO - Processing document 2411.03257v3.pdf
-    2025-12-19 23:49:15,094 - INFO - Finished converting document 2411.03257v3.pdf in 71907.86 sec.
-    mpve the source file to the target directory
-    2025-12-19 23:49:17,939 - INFO - Processed 1 docs, of which 0 failed and 0 were partially converted.
-    2025-12-19 23:49:18,034 - INFO - Document conversion complete in 369919.29 seconds. it successfully completed 1 out of 284
-
-**Massnahme 1:**
-Einen zweiten Rechner 100% dafür einsetzen.
 
 ## 4. Methodik und Architektur
 
-### 4.1 Graph-Konstruktion
+### 4.1 PDF-Extraktion mit Docling
+
+Einsatz des **Docling Toolkits** zur effizienten Konvertierung von Dokumenten in maschinenlesbare Formate (Markdown/JSON).
+
+![alt text](image-10.png)
+
+
+
+### 4.2 Graph-Konstruktion
 
 #### 4.1.1 LeanRAG Ansatz
 
@@ -332,14 +271,18 @@ Beschreibung der Pipeline von der PDF-Eingabe bis zur Antwortgenerierung.
 
 ### 5.2 Verwendete Hardware
 
-Dokumentation der genutzten Ressourcen (z.B. 1x 4090 Desktop, M3 Pro 24GB) .
+1 Lenovo Tower i9-14900, RAM 64.0 GB, GPU 4090 Desktop 16GB VRAM.
+1 Generic Tower i9-14900, RAM 256.0 RAM, 3x RTX 6000 48.0GB VRAM =>Total 144GB VRAM
 1 HP EliteBook X G11  => Massenextraktion mit Docling
-Prozessor Intel 5U
+Prozessor Intel 5U, RAM 32.0GB
 
 1 Lenovo Notbook Legion 9 16IRX8
 Prozessor 13th Gen Intel(R) Core(TM) i9-13980HX (2.20 GHz)
 Installierter RAM 32.0 GB (31.7 GB verwendbar)
 GPU     Nvidia RTX4090 Mobile mit 16GB VRAM
+1 MacBook M3 Pro RAM 32.0 GB shared
+1 Generic Tower RAM64.0 GB, GPU Nvidia RTX5060TI 16GB VRAM
+1 Lenovo T14 RAM, OS Pop!_OS 22.04 LTS, GPU embedded
 
 ## 6. Evaluation und Benchmarking
 
@@ -356,6 +299,82 @@ GPU     Nvidia RTX4090 Mobile mit 16GB VRAM
 ### 6.2 Ergebnisse
 
 Vergleich der Performance: Standard RAG vs. IMARA GraphRAG vs. Fine-tuned Model.
+
+==============================================
+### Docling Results
+angetroffene Herausforderungen
+**Challenge:** Die Qualität der Ergebnisse liegt unter den Erwartungen.
+
+**Massnahme 1:** Optimierung der Parameter. Die optimierte Version der Parameter ist massiv schneller und viel genauer.
+
+<img src="image-6.png" alt="Differenzen 1"  width="100%" height="100%">
+
+Die unterschiede sind z.T. ganze Tabellen.
+
+<img src="image-7.png" alt="Differenzen 2"  width="100%" height="100%">
+
+problematische Parameter:
+<img src="image-8.png" alt="problematische Parameter"  width="100%" height="100%">
+
+erfolgreiche Parameter:
+<img src="image-9.png" alt="erfolgreiche Parameter"  width="100%" height="100%">
+
+**Challenge:** Die 16GB VRAM waren nicht genug, um alle features von docling zu unterstützen. Das verursachte periodische Endless-loop's in Docling serve.
+
+**Massnahme 1:** Der Verzicht auf die Container-Version "Docling serve" und die Verwendung direkt in Python.
+
+**Massnahme 2:** Die Ausführung von Docling auf der CPU, um das VRAM-Limit zu umgehen
+
+**Challenge:** Die cloudcode_cli.exe in der VSCode-Umgebung hat durch einen etremen RAM-Verbrauch im Hintergrund die Ausführung von docling verhindert. freeze, not started, ... <https://forum.cursor.com/t/hight-memory-consumption-on-cloudcode-cli/106122>
+
+**Massnahme 1:** Ein Uninstall von cloudcode_cli.exe war unumgänglich.
+
+**Challenge:** Das parsen von Formeln in Docling mit CPU oder GPU ist sehr langsam. Den Verzicht auf die Extraktion der Formeln war keine Option, da eine maximale Qualität des Extrakts abgestrebt wurde, um die over-all Performance nicht zu beeinträchtigen.
+
+Docling Log Ausschnitt:
+
+    [WindowsPath('C:/Users/ML4SE/Desktop/openspec_demo/configs/data/OpenRAGBench/pdfs/2411.02951v2.pdf')]
+    2025-12-17 19:08:35,249 - INFO - detected formats: [<InputFormat.PDF: 'pdf'>]
+    2025-12-17 19:08:35,259 - INFO - Going to convert document batch...
+    2025-12-17 19:08:35,260 - INFO - Processing document 2411.02951v2.pdf
+    2025-12-18 01:37:07,514 - INFO - Finished converting document 2411.02951v2.pdf in 23312.29 sec.
+    mpve the source file to the target directory
+    2025-12-18 01:37:07,940 - INFO - Processed 1 docs, of which 0 failed and 0 were partially converted.
+    2025-12-18 01:37:07,948 - INFO - Document conversion complete in 203589.20 seconds. it successfully completed 1 out of 287
+    [WindowsPath('C:/Users/ML4SE/Desktop/openspec_demo/configs/data/OpenRAGBench/pdfs/2411.03001v2.pdf')]
+    2025-12-18 01:37:07,968 - INFO - detected formats: [<InputFormat.PDF: 'pdf'>]
+    2025-12-18 01:37:07,972 - INFO - Going to convert document batch...
+    2025-12-18 01:37:07,973 - INFO - Processing document 2411.03001v2.pdf
+    2025-12-18 14:22:26,866 - INFO - Finished converting document 2411.03001v2.pdf in 45918.92 sec.
+    mpve the source file to the target directory
+    2025-12-18 14:22:27,152 - INFO - Processed 1 docs, of which 0 failed and 0 were partially converted.
+    2025-12-18 14:22:27,160 - INFO - Document conversion complete in 249508.41 seconds. it successfully completed 1 out of 286
+    [WindowsPath('C:/Users/ML4SE/Desktop/openspec_demo/configs/data/OpenRAGBench/pdfs/2411.03166v3.pdf')]
+    2025-12-18 14:22:27,193 - INFO - detected formats: [<InputFormat.PDF: 'pdf'>]
+    2025-12-18 14:22:27,201 - INFO - Going to convert document batch...
+    2025-12-18 14:22:27,202 - INFO - Processing document 2411.03166v3.pdf
+    2025-12-19 03:50:46,515 - INFO - Finished converting document 2411.03166v3.pdf in 48499.35 sec.
+    mpve the source file to the target directory
+    2025-12-19 03:50:47,201 - INFO - Processed 1 docs, of which 0 failed and 0 were partially converted.
+    2025-12-19 03:50:47,229 - INFO - Document conversion complete in 298008.48 seconds. it successfully completed 1 out of 285
+    [WindowsPath('C:/Users/ML4SE/Desktop/openspec_demo/configs/data/OpenRAGBench/pdfs/2411.03257v3.pdf')]
+    2025-12-19 03:50:47,249 - INFO - detected formats: [<InputFormat.PDF: 'pdf'>]
+    2025-12-19 03:50:47,257 - INFO - Going to convert document batch...
+    2025-12-19 03:50:47,259 - INFO - Processing document 2411.03257v3.pdf
+    2025-12-19 23:49:15,094 - INFO - Finished converting document 2411.03257v3.pdf in 71907.86 sec.
+    mpve the source file to the target directory
+    2025-12-19 23:49:17,939 - INFO - Processed 1 docs, of which 0 failed and 0 were partially converted.
+    2025-12-19 23:49:18,034 - INFO - Document conversion complete in 369919.29 seconds. it successfully completed 1 out of 284
+
+**Massnahme 1:**
+Einen zweiten Rechner 100% dafür einsetzen.
+
+
+
+==============================================
+### leanRAG Results
+Ressourcenbedarf nach den Refactoring (Schritt tripple extraction):
+![alt text](image-11.png)
 
 ==============================================
 ### linearRAG Results
@@ -562,8 +581,8 @@ Aus den Ergebnissen konnten folgende Ansätze für die weitere Entwicklung abgel
 
 ### Tipps für die Ausarbeitung
 
-- **Visualisierungen:** Nutzt die Grafiken aus eurem Zwischenbericht (LeanRAG/Docling Architektur), um die technischen Sektionen (Kapitel 3 & 4) zu füllen.
+
 - **Code-Beispiele:** Fügt kurze Snippets eurer Automatisierungslösung oder der Unsloth-Konfiguration in Kapitel 5 ein.
 - **Metriken:** In Kapitel 6 solltet ihr Tabellen mit Latenzzeiten und Genauigkeitswerten (Accuracy/F1) eurer Benchmarks zeigen.
 
-**Soll ich dir beim Ausformulieren eines spezifischen Kapitels (z.B. der Methodik oder der Evaluation) behilflich sein?**
+
