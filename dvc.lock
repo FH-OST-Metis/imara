@@ -341,23 +341,22 @@ stages:
       md5: 8ec5d72c71c4c6f55b9bcab23e43cd0f
       size: 103577
   linearrag_generate_answers:
-    cmd: OLLAMA_BASE_URL=http://127.0.0.1:11434/v1 OLLAMA_MODEL=bge-m3:567m uv 
-      run python src/app/eval_open_rag.py --system linearrag --queries 
+    cmd: uv run python src/app/eval_open_rag.py --system linearrag --queries 
       data/eval/queries.csv --output data/eval/linearrag/generated_answers.csv 
       --database_url postgresql://postgres:postgres@127.0.0.1:54322/postgres
     deps:
     - path: data/eval/queries.csv
       hash: md5
-      md5: 2084991e0ff8a8ace44ddf22dce34e19
-      size: 1256
+      md5: 56be9e8e14f5a755c9a50bc07f4e0cc7
+      size: 4081
     - path: src/app/eval_open_rag.py
       hash: md5
-      md5: 3848c7a7908a210ad0385119084768c1
-      size: 20343
+      md5: a96e27ee4f5c3c57237280dcc0b9db4a
+      size: 20193
     - path: src/app/linear_rag/retrieve.py
       hash: md5
-      md5: da09fbc5fe67cce2161590efe79b5ab0
-      size: 34074
+      md5: 8e782964def7e849058dc53b9a7bf35b
+      size: 34125
     - path: src/app/utils/params_helper.py
       hash: md5
       md5: 63ae89e1b9f548569371e1c50daa52b6
@@ -372,8 +371,8 @@ stages:
     outs:
     - path: data/eval/linearrag/generated_answers.csv
       hash: md5
-      md5: c72e6e4f17ef683d3902918fff39a188
-      size: 71548
+      md5: 4bcf3953e3f2933f51f16fd4e1f39a27
+      size: 3166
   linearrag_index:
     cmd: uv run python src/app/linear_rag/index.py --database_url 
       postgresql://postgres:postgres@127.0.0.1:54322/postgres

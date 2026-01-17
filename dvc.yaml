@@ -45,13 +45,13 @@ stages:
     params:
       - load.batch_size
 
-  # linearrag_index:
-  #   cmd: uv run python src/app/linear_rag/index.py --database_url postgresql://postgres:postgres@127.0.0.1:54322/postgres
-  #   deps:
-  #     - src/app/linear_rag/index.py
-  #   params:
-  #     - index.batch_size
-  #     - index.spacy_model
+  linearrag_index:
+    cmd: uv run python src/app/linear_rag/index.py --database_url postgresql://postgres:postgres@127.0.0.1:54322/postgres
+    deps:
+      - src/app/linear_rag/index.py
+    params:
+      - index.batch_size
+      - index.spacy_model
 
   generate_queries:
     cmd: uv run open-rag-eval generate-queries --config query_gen_config.yaml
@@ -67,45 +67,43 @@ stages:
           - generation.n_questions
           - generation.questions_per_doc
 
-  # linearrag_generate_answers:
-  #   cmd: >-
-  #     OLLAMA_BASE_URL=http://127.0.0.1:11434/v1
-  #     OLLAMA_MODEL=bge-m3:567m
-  #     uv run python src/app/eval_open_rag.py
-  #     --system linearrag
-  #     --queries data/eval/queries.csv
-  #     --output data/eval/linearrag/generated_answers.csv
-  #     --database_url postgresql://postgres:postgres@127.0.0.1:54322/postgres
-  #   deps:
-  #     - src/app/eval_open_rag.py
-  #     - src/app/linear_rag/retrieve.py
-  #     - src/app/utils/params_helper.py
-  #     - data/eval/queries.csv
-  #   outs:
-  #     - data/eval/linearrag/generated_answers.csv
-  #   params:
-  #     - eval.top_k
-  #     - generation.max_tokens
-  #     - retrieval.retrieval_top_k
-  #     - index.spacy_model
-  #     - index.embedding_provider
+  linearrag_generate_answers:
+    cmd: >-
+      uv run python src/app/eval_open_rag.py
+      --system linearrag
+      --queries data/eval/queries.csv
+      --output data/eval/linearrag/generated_answers.csv
+      --database_url postgresql://postgres:postgres@127.0.0.1:54322/postgres
+    deps:
+      - src/app/eval_open_rag.py
+      - src/app/linear_rag/retrieve.py
+      - src/app/utils/params_helper.py
+      - data/eval/queries.csv
+    outs:
+      - data/eval/linearrag/generated_answers.csv
+    params:
+      - eval.top_k
+      - generation.max_tokens
+      - retrieval.retrieval_top_k
+      - index.spacy_model
+      - index.embedding_provider
 
-  # linearrag_eval:
-  #   cmd: >-
-  #     uv run open-rag-eval eval
-  #     --config configs/open_rag_eval_linearrag.yaml
-  #   deps:
-  #     - configs/open_rag_eval_linearrag.yaml
-  #     - data/eval/queries.csv
-  #     - data/eval/linearrag/generated_answers.csv
-  #   outs:
-  #     - data/eval/linearrag/results.csv
-  #     - data/eval/linearrag/TRECEvaluator-metrics.png
-  #   params:
-  #     - configs/open_rag_eval_linearrag.yaml:
-  #         - evaluator.0.model.type
-  #         - evaluator.0.model.name
-  #         - evaluator.0.options.k_values
+  linearrag_eval:
+    cmd: >-
+      uv run open-rag-eval eval
+      --config configs/open_rag_eval_linearrag.yaml
+    deps:
+      - configs/open_rag_eval_linearrag.yaml
+      - data/eval/queries.csv
+      - data/eval/linearrag/generated_answers.csv
+    outs:
+      - data/eval/linearrag/results.csv
+      - data/eval/linearrag/TRECEvaluator-metrics.png
+    params:
+      - configs/open_rag_eval_linearrag.yaml:
+          - evaluator.0.model.type
+          - evaluator.0.model.name
+          - evaluator.0.options.k_values
 
   graphmert_corpus:
     cmd: uv run python src/app/graphmert/corpus.py
