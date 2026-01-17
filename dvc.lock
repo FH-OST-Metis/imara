@@ -249,21 +249,21 @@ stages:
     deps:
     - path: data/eval/queries.csv
       hash: md5
-      md5: e9db32d9fdc0df8a73c6aa87d81b194b
-      size: 1207
+      md5: 56be9e8e14f5a755c9a50bc07f4e0cc7
+      size: 4081
     - path: data/processed/chunks
       hash: md5
-      md5: 97d328068fbd9307ce5e3db94b1beeb2.dir
-      size: 159631484
-      nfiles: 278692
+      md5: b3fd5b1369d991ccf8c917283af28719.dir
+      size: 458580
+      nfiles: 848
     - path: src/app/embedder.py
       hash: md5
       md5: 67e5243b0780cf22eb5fa9d16f15c31d
       size: 4006
     - path: src/app/eval_open_rag.py
       hash: md5
-      md5: 0ca14fbdb94dd08713620c053fcd44a7
-      size: 12750
+      md5: a96e27ee4f5c3c57237280dcc0b9db4a
+      size: 20193
     - path: src/app/utils/params_helper.py
       hash: md5
       md5: 63ae89e1b9f548569371e1c50daa52b6
@@ -274,8 +274,8 @@ stages:
     outs:
     - path: data/eval/naiverag/generated_answers.csv
       hash: md5
-      md5: 17728d1ae96bda331eec10aa24f35eb9
-      size: 104020
+      md5: 9cbd25251219c1a459e601e026156bc2
+      size: 94682
   graphmert_eval:
     cmd: uv run open-rag-eval eval --config configs/open_rag_eval_graphmert.yaml
     deps:
@@ -285,12 +285,12 @@ stages:
       size: 740
     - path: data/eval/graphmert/generated_answers.csv
       hash: md5
-      md5: 6228497163931c6fb436368d51cdcda9
-      size: 54880
+      md5: c4de34e8c1111827f6a83e3111499c65
+      size: 37360
     - path: data/eval/queries.csv
       hash: md5
-      md5: e9db32d9fdc0df8a73c6aa87d81b194b
-      size: 1207
+      md5: 56be9e8e14f5a755c9a50bc07f4e0cc7
+      size: 4081
     params:
       configs/open_rag_eval_graphmert.yaml:
         evaluator.0.model.name: gemini-2.5-flash
@@ -302,12 +302,12 @@ stages:
     outs:
     - path: data/eval/graphmert/TRECEvaluator-metrics.png
       hash: md5
-      md5: 67e18dd0a4f7d9678712b1ec24ea1e5a
-      size: 305552
+      md5: 46453f858bff5c9b6333a757ff044c33
+      size: 306220
     - path: data/eval/graphmert/results.csv
       hash: md5
-      md5: 28fc7d1e285b064ca1b3dd37f38af8df
-      size: 58998
+      md5: 4b54d63d1d425cd6aca68f7ff6efeaea
+      size: 40849
   naiverag_eval:
     cmd: uv run open-rag-eval eval --config configs/open_rag_eval_naiverag.yaml
     deps:
@@ -317,12 +317,12 @@ stages:
       size: 758
     - path: data/eval/naiverag/generated_answers.csv
       hash: md5
-      md5: 17728d1ae96bda331eec10aa24f35eb9
-      size: 104020
+      md5: 9cbd25251219c1a459e601e026156bc2
+      size: 94682
     - path: data/eval/queries.csv
       hash: md5
-      md5: e9db32d9fdc0df8a73c6aa87d81b194b
-      size: 1207
+      md5: 56be9e8e14f5a755c9a50bc07f4e0cc7
+      size: 4081
     params:
       configs/open_rag_eval_naiverag.yaml:
         evaluator.0.model.name: gemini-2.5-flash
@@ -334,12 +334,12 @@ stages:
     outs:
     - path: data/eval/naiverag/TRECEvaluator-metrics.png
       hash: md5
-      md5: 4eef9104cb4bfe4c33c9aad3e899a7d5
-      size: 303381
+      md5: 69cbafccfb4fe4e32e51599bd94159c7
+      size: 304286
     - path: data/eval/naiverag/results.csv
       hash: md5
-      md5: 5cf37c246ba7f194987a0ec63165234f
-      size: 115760
+      md5: 8ec5d72c71c4c6f55b9bcab23e43cd0f
+      size: 103577
   linearrag_generate_answers:
     cmd: OLLAMA_BASE_URL=http://127.0.0.1:11434/v1 OLLAMA_MODEL=bge-m3:567m uv 
       run python src/app/eval_open_rag.py --system linearrag --queries 
