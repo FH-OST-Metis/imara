@@ -71,17 +71,14 @@ Die Extraktion und Verarbeitung von Informationen aus unstrukturierten PDF-Dokum
 
 - Die Implementation von graphbasierten System und der Vergleich zu klassischen RAG-Systemen
 - Der Vergleich zwischen verschiedenen graphbasierten RAG-Systemen
--
 
--
 
 **Graph-basiertes RAG:** Aufbau einer Pipeline zur Erstellung dichter Wissensgraphen.
+In diesem Projekt werden drei ausprägungen deines graphbasierten RAG-Systems umgesetzt.
+1. **LeanRAG** - basiert auf einem Knowledge Graph mit einer hirarchischen Aggregierung. 
+2. **linearRAG** - relying on lightweight entity recognition and semantic linking
+3. **GraphMERT** - kompaktes, rein grafisches Encoder-Modell, das hochwertige KGs aus unstrukturierten Textkorpora und seinen eigenen internen Repräsentationen generiert
 
--
-
-**Model Fine-tuning:** Optimierung eines LLMs (z.B. Qwen) basierend auf dem Graph.
-
--
 
 **Automation:** End-to-End Automatisierung der Pipeline.
 Eine flexible Pipeline bauen, die bei der Evaluation der verschiedenen RAG-Systeme unterstützt.
