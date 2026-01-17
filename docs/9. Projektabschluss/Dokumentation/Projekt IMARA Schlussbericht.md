@@ -276,6 +276,88 @@ LinearRAG: Linear Graph Retrieval-Augmented Generation on Large-scale Corpora - 
 
 1. retrieval_results = qa(question)
 
+
+
+#### 4.1.3 GraphMERT
+
+GraphMERT: Effiziente und skalierbare Gewinnung zuverlässiger Wissensgraphen aus unstrukturierten Daten
+
+Ein einfaches Beispiel für eine Testimplementierung des Princeton GraphMERT-Papers.
+
+<https://arxiv.org/abs/2510.09580>
+
+Seit fast drei Jahrzehnten erforschen Wissenschaftler Anwendungen neurosymbolischer künstlicher Intelligenz (KI), da symbolische Komponenten Abstraktion und neuronale Komponenten Generalisierung ermöglichen. Die Kombination beider Komponenten verspricht rasante Fortschritte in der KI. Dieses Potenzial konnte das Feld jedoch bisher nicht ausschöpfen, da die meisten neurosymbolischen KI-Frameworks nicht skalierbar sind. Zudem schränken die impliziten Repräsentationen und das approximative Schliessen neuronaler Ansätze Interpretierbarkeit und Vertrauen ein. Wissensgraphen (KGs), die als Goldstandard für die Repräsentation expliziten semantischen Wissens gelten, können die symbolische Seite abdecken. Die automatische Ableitung zuverlässiger KGs aus Textkorpora stellt jedoch weiterhin eine Herausforderung dar. Wir begegnen diesen Herausforderungen mit GraphMERT, einem kompakten, rein grafischen Encoder-Modell, das hochwertige KGs aus unstrukturierten Textkorpora und seinen eigenen internen Repräsentationen generiert.
+
+GraphMERT und sein äquivalenter Wissensgraph bilden einen modularen neurosymbolischen Stack: neuronales Lernen von Abstraktionen; symbolische Wissensgraphen für verifizierbares Schliessen. GraphMERT + Wissensgraph ist das erste effiziente und skalierbare neurosymbolische Modell, das höchste Benchmark-Genauigkeit und überlegene symbolische Repräsentationen im Vergleich zu Basismodellen erzielt.
+
+Konkret streben wir zuverlässige domänenspezifische Wissensgraphen (KGs) an, die sowohl (1) faktisch korrekt (mit Herkunftsnachweis) als auch (2) valide (ontologiekonsistente Relationen mit domänenspezifischer Semantik) sind. Wenn ein grosses Sprachmodell (LLM), z. B. Qwen3-32B, domänenspezifische KGs generiert, weist es aufgrund seiner hohen Sensitivität, seiner geringen Domänenexpertise und fehlerhafter Relationen Defizite in der Zuverlässigkeit auf. Anhand von Texten aus PubMed-Artikeln zum Thema Diabetes erzielt unser GraphMERT-Modell mit 80 Millionen Parametern einen KG mit einem FActScore von 69,8 %; ein LLM-Basismodell mit 32 Milliarden Parametern erreicht hingegen nur einen FActScore von 40,2 %. Der GraphMERT-KG erzielt zudem einen höheren ValidityScore von 68,8 % gegenüber 43,0 % beim LLM-Basismodell.
+
+**GraphMERT Node Embeddings (t-SNE View)**
+
+<img src="image-1.png" alt="GraphMERT Node Embeddings (t-SNE View)"  width="100%" height="100%">
+
+**GraphMERT Semantic Graph Visualization**
+
+<img src="image-2.png" alt="GraphMERT Semantic Graph Visualization"  width="100%" height="100%">
+
+**Query search on the graphs results**
+Das ist es, was wir wollen, da die Suche im Graphen linear ist und auf verkettetem Wissen basiert, wobei die Knoten Daten über sich selbst enthalten.
+
+***Ein perfektes Resultat***
+
+<img src="image-3.png" alt="Ein perfektes Resultat"  width="100%" height="100%">
+
+***Ein fast perfektes Resultat***
+
+<img src="image-4.png" alt="Ein fast perfektes Resultat"  width="100%" height="100%">
+
+- **Extraktion:** Umwandlung von Text in Entitäten und Relationen.
+-
+
+**Aggregation:** Semantische Aggregation zur Reduzierung von Redundanz.
+
+### 4.2 Fine-tuning Strategie
+
+- Verwendung des **Unsloth Frameworks** für ressourceneffizientes Training.
+
+- Integration von Ansätzen wie **GraphRAFT** oder **GraphMERT** zur Distillation von Wissen in kleine, domänenspezifische Modelle.
+
+## 5. Implementierung
+
+### 5.1 Systemarchitektur
+
+Beschreibung der Pipeline von der PDF-Eingabe bis zur Antwortgenerierung.
+
+<img src="image-5.png" alt="IMARA Pipeline"  width="100%" height="100%">
+
+### 5.2 Verwendete Hardware
+
+Dokumentation der genutzten Ressourcen (z.B. 1x 4090 Desktop, M3 Pro 24GB) .
+1 HP EliteBook X G11  => Massenextraktion mit Docling
+Prozessor Intel 5U
+
+1 Lenovo Notbook Legion 9 16IRX8
+Prozessor 13th Gen Intel(R) Core(TM) i9-13980HX (2.20 GHz)
+Installierter RAM 32.0 GB (31.7 GB verwendbar)
+GPU     Nvidia RTX4090 Mobile mit 16GB VRAM
+
+## 6. Evaluation und Benchmarking
+
+### 6.1 Benchmark-Design
+
+-
+
+**Ansatz 1:** Generierung eines Testdatensatzes mittels Synthetic Data Generation (SDG) und Evaluierung durch ein "LLM als Judge".
+
+-
+
+**Ansatz 2:** Nutzung publizierter Benchmarks wie dem Open RAG Benchmark.
+
+### 6.2 Ergebnisse
+
+Vergleich der Performance: Standard RAG vs. IMARA GraphRAG vs. Fine-tuned Model.
+
+==============================================
 ### linearRAG Results
 
 LinearRAG, Dataset: 2wikimultihop, Results with local GPT-OSS-20b Model
@@ -360,84 +442,11 @@ Evaluating samples: 100%|██████████████████�
 2025-12-11 09:33:43,939 - INFO -   LLM Accuracy: 0.6940 (1431.0/2062)
 2025-12-11 09:33:43,939 - INFO -   Contain Accuracy: 0.0320 (66/2062)
 
-#### 4.1.3 GraphMERT
 
-GraphMERT: Effiziente und skalierbare Gewinnung zuverlässiger Wissensgraphen aus unstrukturierten Daten
 
-Ein einfaches Beispiel für eine Testimplementierung des Princeton GraphMERT-Papers.
 
-<https://arxiv.org/abs/2510.09580>
 
-Seit fast drei Jahrzehnten erforschen Wissenschaftler Anwendungen neurosymbolischer künstlicher Intelligenz (KI), da symbolische Komponenten Abstraktion und neuronale Komponenten Generalisierung ermöglichen. Die Kombination beider Komponenten verspricht rasante Fortschritte in der KI. Dieses Potenzial konnte das Feld jedoch bisher nicht ausschöpfen, da die meisten neurosymbolischen KI-Frameworks nicht skalierbar sind. Zudem schränken die impliziten Repräsentationen und das approximative Schliessen neuronaler Ansätze Interpretierbarkeit und Vertrauen ein. Wissensgraphen (KGs), die als Goldstandard für die Repräsentation expliziten semantischen Wissens gelten, können die symbolische Seite abdecken. Die automatische Ableitung zuverlässiger KGs aus Textkorpora stellt jedoch weiterhin eine Herausforderung dar. Wir begegnen diesen Herausforderungen mit GraphMERT, einem kompakten, rein grafischen Encoder-Modell, das hochwertige KGs aus unstrukturierten Textkorpora und seinen eigenen internen Repräsentationen generiert.
 
-GraphMERT und sein äquivalenter Wissensgraph bilden einen modularen neurosymbolischen Stack: neuronales Lernen von Abstraktionen; symbolische Wissensgraphen für verifizierbares Schliessen. GraphMERT + Wissensgraph ist das erste effiziente und skalierbare neurosymbolische Modell, das höchste Benchmark-Genauigkeit und überlegene symbolische Repräsentationen im Vergleich zu Basismodellen erzielt.
-
-Konkret streben wir zuverlässige domänenspezifische Wissensgraphen (KGs) an, die sowohl (1) faktisch korrekt (mit Herkunftsnachweis) als auch (2) valide (ontologiekonsistente Relationen mit domänenspezifischer Semantik) sind. Wenn ein grosses Sprachmodell (LLM), z. B. Qwen3-32B, domänenspezifische KGs generiert, weist es aufgrund seiner hohen Sensitivität, seiner geringen Domänenexpertise und fehlerhafter Relationen Defizite in der Zuverlässigkeit auf. Anhand von Texten aus PubMed-Artikeln zum Thema Diabetes erzielt unser GraphMERT-Modell mit 80 Millionen Parametern einen KG mit einem FActScore von 69,8 %; ein LLM-Basismodell mit 32 Milliarden Parametern erreicht hingegen nur einen FActScore von 40,2 %. Der GraphMERT-KG erzielt zudem einen höheren ValidityScore von 68,8 % gegenüber 43,0 % beim LLM-Basismodell.
-
-**GraphMERT Node Embeddings (t-SNE View)**
-
-<img src="image-1.png" alt="GraphMERT Node Embeddings (t-SNE View)"  width="100%" height="100%">
-
-**GraphMERT Semantic Graph Visualization**
-
-<img src="image-2.png" alt="GraphMERT Semantic Graph Visualization"  width="100%" height="100%">
-
-**Query search on the graphs results**
-Das ist es, was wir wollen, da die Suche im Graphen linear ist und auf verkettetem Wissen basiert, wobei die Knoten Daten über sich selbst enthalten.
-
-***Ein perfektes Resultat***
-
-<img src="image-3.png" alt="Ein perfektes Resultat"  width="100%" height="100%">
-
-***Ein fast perfektes Resultat***
-
-<img src="image-4.png" alt="Ein fast perfektes Resultat"  width="100%" height="100%">
-
-- **Extraktion:** Umwandlung von Text in Entitäten und Relationen.
--
-
-**Aggregation:** Semantische Aggregation zur Reduzierung von Redundanz.
-
-### 4.2 Fine-tuning Strategie
-
-- Verwendung des **Unsloth Frameworks** für ressourceneffizientes Training.
-
-- Integration von Ansätzen wie **GraphRAFT** oder **GraphMERT** zur Distillation von Wissen in kleine, domänenspezifische Modelle.
-
-## 5. Implementierung
-
-### 5.1 Systemarchitektur
-
-Beschreibung der Pipeline von der PDF-Eingabe bis zur Antwortgenerierung.
-
-<img src="image-5.png" alt="IMARA Pipeline"  width="100%" height="100%">
-
-### 5.2 Verwendete Hardware
-
-Dokumentation der genutzten Ressourcen (z.B. 1x 4090 Desktop, M3 Pro 24GB) .
-1 HP EliteBook X G11  => Massenextraktion mit Docling
-Prozessor Intel 5U
-
-1 Lenovo Notbook Legion 9 16IRX8
-Prozessor 13th Gen Intel(R) Core(TM) i9-13980HX (2.20 GHz)
-Installierter RAM 32.0 GB (31.7 GB verwendbar)
-GPU     Nvidia RTX4090 Mobile mit 16GB VRAM
-
-## 6. Evaluation und Benchmarking
-
-### 6.1 Benchmark-Design
-
--
-
-**Ansatz 1:** Generierung eines Testdatensatzes mittels Synthetic Data Generation (SDG) und Evaluierung durch ein "LLM als Judge".
-
--
-
-**Ansatz 2:** Nutzung publizierter Benchmarks wie dem Open RAG Benchmark.
-
-### 6.2 Ergebnisse
-
-Vergleich der Performance: Standard RAG vs. IMARA GraphRAG vs. Fine-tuned Model.
 
 ## 7. Diskussion der Ergebnisse
 
