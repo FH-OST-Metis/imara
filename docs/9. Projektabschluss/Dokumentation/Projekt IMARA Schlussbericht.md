@@ -481,25 +481,29 @@ Aus den Ergebnissen konnten folgende Ansätze für die weitere Entwicklung abgel
 ## 10. Referenzen
 
 - [1] Docling: An Efficient Open-Source Toolkit.
-https://www.docling.ai/
+    https://arxiv.org/abs/2501.17887 Docling: An Efficient Open-Source Toolkit for AI-driven Document Conversion
+    https://www.docling.ai/
+    https://docling-project.github.io/docling/
 
 - [2] LeanRAG: Knowledge-Graph-Based Generation.
-https://github.com/KnowledgeXLab/LeanRAG
+    https://arxiv.org/abs/2508.10391 Knowledge-Graph-Based Generation with Semantic Aggregation and Hierarchical Retrieval
+    https://github.com/KnowledgeXLab/LeanRAG
 
 - [3] LinearRAG: A relation-free graph constrcution method for efficient GraphRAG.
-https://github.com/DEEP-PolyU/LinearRAG
+    https://arxiv.org/abs/2510.10114 LinearRAG: Linear Graph Retrieval Augmented Generation on Large-scale Corpora
+    https://github.com/DEEP-PolyU/LinearRAG
 
 - [4] GraphMERT: Efficient Distillation of Reliable KGs.
-https://github.com/creativeautomaton/graphMERT-python
+    https://arxiv.org/abs/2510.09580 GraphMERT: Efficient and Scalable Distillation of Reliable Knowledge Graphs from Unstructured Data
+    https://github.com/creativeautomaton/graphMERT-python
+
+- [5] Open RAG Bench Dataset
+    https://github.com/vectara/open-rag-bench Open RAG Benchmark (1000 PDFs, 3000 Queries): A Multimodal PDF Dataset for Comprehensive RAG Evaluation
 
 
 - ... (Weitere Quellen gemäss Antrag).
 
-## 11. Glossar
 
-Hier ist ein Glossar, das spezifisch auf den Begriffen, Technologien und Konzepten basiert, die im vorliegenden Projektbericht (IMARA) verwendet werden. Es ist alphabetisch sortiert, um es direkt in Kapitel 11 einfügen zu können.
-
----
 
 ## 11. Glossar
 
