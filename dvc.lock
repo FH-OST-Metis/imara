@@ -20,9 +20,9 @@ stages:
     outs:
     - path: data/processed/extracted
       hash: md5
-      md5: 2b597a1b3021010b926d35600555ddc4.dir
-      size: 27059869438
-      nfiles: 12955
+      md5: 2fd66098f33b1fa4f54622de2ee7e74d.dir
+      size: 131543751
+      nfiles: 60
   embed:
     cmd: uv run python src/app/embed.py --input data/processed/chunks 
       --artifacts data/processed/extracted --database_url 
