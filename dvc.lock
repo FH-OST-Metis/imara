@@ -245,25 +245,25 @@ stages:
       size: 54880
   naiverag_generate_answers:
     cmd: uv run python src/app/eval_open_rag.py --system naiverag --queries 
-      docs/Eval_data.csv --output data/eval/naiverag/generated_answers.csv
+      data/raw/queries.csv --output data/eval/naiverag/generated_answers.csv
     deps:
-    - path: docs/Eval_data.csv
-      hash: md5
-      md5: e9db32d9fdc0df8a73c6aa87d81b194b
-      size: 1207
     - path: data/processed/chunks
       hash: md5
       md5: 97d328068fbd9307ce5e3db94b1beeb2.dir
       size: 159631484
       nfiles: 278692
+    - path: data/raw/queries.csv
+      hash: md5
+      md5: 0fcbfd4d0044a908fbf5de26a2ba4e61
+      size: 1215879
     - path: src/app/embedder.py
       hash: md5
       md5: 67e5243b0780cf22eb5fa9d16f15c31d
       size: 4006
     - path: src/app/eval_open_rag.py
       hash: md5
-      md5: 0ca14fbdb94dd08713620c053fcd44a7
-      size: 12750
+      md5: 3d9d28c888aaf524acd071c729800658
+      size: 20623
     - path: src/app/utils/params_helper.py
       hash: md5
       md5: 63ae89e1b9f548569371e1c50daa52b6
@@ -274,8 +274,8 @@ stages:
     outs:
     - path: data/eval/naiverag/generated_answers.csv
       hash: md5
-      md5: 17728d1ae96bda331eec10aa24f35eb9
-      size: 104020
+      md5: bb63e6db9a76c6d42c23be03b9324665
+      size: 12630913
   graphmert_eval:
     cmd: uv run open-rag-eval eval --config configs/open_rag_eval_graphmert.yaml
     deps:
