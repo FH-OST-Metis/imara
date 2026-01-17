@@ -473,6 +473,28 @@ Die Persistenzschicht basiert auf PostgreSQL unter Verwendung der `pgvector` Ext
 
 **Ansatz 2:** Nutzung publizierter Benchmarks wie dem Open RAG Benchmark.
 
+#### 6.1.1 OpenRAGBench Linear RAG Graph
+
+Für die Evaluierung mittels OpenRAGBench wurde ein spezifischer Graph basierend auf einem Korpus von **1001 wissenschaftlichen Publikationen** (Arxiv) erstellt. Die Graph-Konstruktion erfolgte vollständig deterministisch unter Verwendung des `scispaCy` Modells, ohne die Verwendung von LLM-Token für die Extraktion. Als Evaluator kam der `TRECEvaluator` in Kombination mit `Gemini-2.5-flash` zum Einsatz, wie in der Konfiguration definiert.
+
+Die nachfolgende Tabelle fasst die Metriken des erstellten Linear RAG Graphen zusammen und verdeutlicht die Skalierbarkeit des Ansatzes:
+
+| Metrik | Wert | Beschreibung |
+| :--- | :--- | :--- |
+| **Rohdaten** | | |
+| Anzahl Dokumente (Papers) | 1,001 | Korpusgrösse |
+| Verarbeitetes Datenvolumen | 25.6 MB | Raw text bytes |
+| Passages (Chunks) | 278,692 | Erzeugte Textabschnitte |
+| **Extraktion (scispaCy)** | | |
+| Extrahierte Sätze | 1,198,328 | Identifizierte Sentence Units |
+| Extrahierte Entitäten (Total) | 3,650,438 | Inkl. Duplikate über alle Chunks |
+| Eindeutige Entitäten | 596,824 | Unique Nodes im Graphen |
+| **Graph Topologie** | | |
+| **Graph Nodes (Total)** | **1,751,262** | Summe aus Passage, Sentence & Entity Nodes |
+| **Graph Edges (Total)** | **7,370,454** | Strukturelle & statistische Verbindungen |
+
+Die hohe Anzahl an Kanten (über 7.3 Millionen) im Verhältnis zu den Knoten zeigt die hohe Dichte der Vernetzung, die durch den algorithmischen Ansatz ("Relation-free") erreicht wurde. Bemerkenswert ist, dass trotz der Extraktion von über 3.6 Millionen Entitäten die Verarbeitung rein CPU-basiert und effizient erfolgte.
+
 ### 6.2 Ergebnisse
 
 Vergleich der Performance: Standard RAG vs. IMARA GraphRAG vs. Fine-tuned Model.
