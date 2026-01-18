@@ -476,6 +476,15 @@ Die beobachtete Sparsität impliziert eine nahezu lineare Skalierung von Speiche
 
 Durch den Verzicht auf LLM-basierte Relationsextraktion erreicht LinearRAG eine hohe Reproduzierbarkeit und vollständige Unabhängigkeit von Tokenkosten. Diese Eigenschaften positionieren den Ansatz als skalierbare Alternative innerhalb des Spektrums graphbasierter RAG-Systeme, insbesondere in Szenarien, in denen deterministisches Verhalten und Kostenkontrolle im Vordergrund stehen.
 
+### 6.3.4 OpenRAG Eval Benchmark vs. Naive RAG
+Dieser Abschnitt vergleicht die Ergebnisse der IMARA-Implementierung von LinearRAG mit dem Naive RAG im Rahmen der OpenRAG Eval.
+
+Hinweis: Aus Ressourcengründen wurde der Graph mit vollständigen Embeddings exemplarisch für 5 Publikationen und 10 Queries berechnet. Die Ergebnisse lassen dennoch bereits deutliche Tendenzen erkennen.
+
+<img src="assets/linearrag_naiverag_eval.png" width="49%" height="49%" />
+
+*Abbildung 13: TRECE Benchmark OpenRAG - Linear RAG vs. Naive RAG.*
+
 ### 6.4 GraphMERT
 
 !TODO: @Marco
@@ -483,10 +492,6 @@ Durch den Verzicht auf LLM-basierte Relationsextraktion erreicht LinearRAG eine 
 ### 6.5 LeanRAG
 
 !TODO: @Marco
-
-### 6.6 Benchmark
-
-!TODO:
 
 ## 7. Conclusion / Fazit
 

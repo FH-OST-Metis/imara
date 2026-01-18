@@ -1,0 +1,979 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Projekt IMARA Schlussbericht.md</title>
+<meta http-equiv="Content-type" content="text/html;charset=UTF-8">
+
+<style>
+/* https://github.com/microsoft/vscode/blob/master/extensions/markdown-language-features/media/markdown.css */
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Microsoft Corporation. All rights reserved.
+ *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
+
+body {
+	font-family: var(--vscode-markdown-font-family, -apple-system, BlinkMacSystemFont, "Segoe WPC", "Segoe UI", "Ubuntu", "Droid Sans", sans-serif);
+	font-size: var(--vscode-markdown-font-size, 14px);
+	padding: 0 26px;
+	line-height: var(--vscode-markdown-line-height, 22px);
+	word-wrap: break-word;
+}
+
+#code-csp-warning {
+	position: fixed;
+	top: 0;
+	right: 0;
+	color: white;
+	margin: 16px;
+	text-align: center;
+	font-size: 12px;
+	font-family: sans-serif;
+	background-color:#444444;
+	cursor: pointer;
+	padding: 6px;
+	box-shadow: 1px 1px 1px rgba(0,0,0,.25);
+}
+
+#code-csp-warning:hover {
+	text-decoration: none;
+	background-color:#007acc;
+	box-shadow: 2px 2px 2px rgba(0,0,0,.25);
+}
+
+body.scrollBeyondLastLine {
+	margin-bottom: calc(100vh - 22px);
+}
+
+body.showEditorSelection .code-line {
+	position: relative;
+}
+
+body.showEditorSelection .code-active-line:before,
+body.showEditorSelection .code-line:hover:before {
+	content: "";
+	display: block;
+	position: absolute;
+	top: 0;
+	left: -12px;
+	height: 100%;
+}
+
+body.showEditorSelection li.code-active-line:before,
+body.showEditorSelection li.code-line:hover:before {
+	left: -30px;
+}
+
+.vscode-light.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(0, 0, 0, 0.15);
+}
+
+.vscode-light.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(0, 0, 0, 0.40);
+}
+
+.vscode-light.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+.vscode-dark.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(255, 255, 255, 0.4);
+}
+
+.vscode-dark.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(255, 255, 255, 0.60);
+}
+
+.vscode-dark.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+.vscode-high-contrast.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(255, 160, 0, 0.7);
+}
+
+.vscode-high-contrast.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(255, 160, 0, 1);
+}
+
+.vscode-high-contrast.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+img {
+	max-width: 100%;
+	max-height: 100%;
+}
+
+a {
+	text-decoration: none;
+}
+
+a:hover {
+	text-decoration: underline;
+}
+
+a:focus,
+input:focus,
+select:focus,
+textarea:focus {
+	outline: 1px solid -webkit-focus-ring-color;
+	outline-offset: -1px;
+}
+
+hr {
+	border: 0;
+	height: 2px;
+	border-bottom: 2px solid;
+}
+
+h1 {
+	padding-bottom: 0.3em;
+	line-height: 1.2;
+	border-bottom-width: 1px;
+	border-bottom-style: solid;
+}
+
+h1, h2, h3 {
+	font-weight: normal;
+}
+
+table {
+	border-collapse: collapse;
+}
+
+table > thead > tr > th {
+	text-align: left;
+	border-bottom: 1px solid;
+}
+
+table > thead > tr > th,
+table > thead > tr > td,
+table > tbody > tr > th,
+table > tbody > tr > td {
+	padding: 5px 10px;
+}
+
+table > tbody > tr + tr > td {
+	border-top: 1px solid;
+}
+
+blockquote {
+	margin: 0 7px 0 5px;
+	padding: 0 16px 0 10px;
+	border-left-width: 5px;
+	border-left-style: solid;
+}
+
+code {
+	font-family: Menlo, Monaco, Consolas, "Droid Sans Mono", "Courier New", monospace, "Droid Sans Fallback";
+	font-size: 1em;
+	line-height: 1.357em;
+}
+
+body.wordWrap pre {
+	white-space: pre-wrap;
+}
+
+pre:not(.hljs),
+pre.hljs code > div {
+	padding: 16px;
+	border-radius: 3px;
+	overflow: auto;
+}
+
+pre code {
+	color: var(--vscode-editor-foreground);
+	tab-size: 4;
+}
+
+/** Theming */
+
+.vscode-light pre {
+	background-color: rgba(220, 220, 220, 0.4);
+}
+
+.vscode-dark pre {
+	background-color: rgba(10, 10, 10, 0.4);
+}
+
+.vscode-high-contrast pre {
+	background-color: rgb(0, 0, 0);
+}
+
+.vscode-high-contrast h1 {
+	border-color: rgb(0, 0, 0);
+}
+
+.vscode-light table > thead > tr > th {
+	border-color: rgba(0, 0, 0, 0.69);
+}
+
+.vscode-dark table > thead > tr > th {
+	border-color: rgba(255, 255, 255, 0.69);
+}
+
+.vscode-light h1,
+.vscode-light hr,
+.vscode-light table > tbody > tr + tr > td {
+	border-color: rgba(0, 0, 0, 0.18);
+}
+
+.vscode-dark h1,
+.vscode-dark hr,
+.vscode-dark table > tbody > tr + tr > td {
+	border-color: rgba(255, 255, 255, 0.18);
+}
+
+</style>
+
+<style>
+/* Tomorrow Theme */
+/* http://jmblog.github.com/color-themes-for-google-code-highlightjs */
+/* Original theme - https://github.com/chriskempson/tomorrow-theme */
+
+/* Tomorrow Comment */
+.hljs-comment,
+.hljs-quote {
+	color: #8e908c;
+}
+
+/* Tomorrow Red */
+.hljs-variable,
+.hljs-template-variable,
+.hljs-tag,
+.hljs-name,
+.hljs-selector-id,
+.hljs-selector-class,
+.hljs-regexp,
+.hljs-deletion {
+	color: #c82829;
+}
+
+/* Tomorrow Orange */
+.hljs-number,
+.hljs-built_in,
+.hljs-builtin-name,
+.hljs-literal,
+.hljs-type,
+.hljs-params,
+.hljs-meta,
+.hljs-link {
+	color: #f5871f;
+}
+
+/* Tomorrow Yellow */
+.hljs-attribute {
+	color: #eab700;
+}
+
+/* Tomorrow Green */
+.hljs-string,
+.hljs-symbol,
+.hljs-bullet,
+.hljs-addition {
+	color: #718c00;
+}
+
+/* Tomorrow Blue */
+.hljs-title,
+.hljs-section {
+	color: #4271ae;
+}
+
+/* Tomorrow Purple */
+.hljs-keyword,
+.hljs-selector-tag {
+	color: #8959a8;
+}
+
+.hljs {
+	display: block;
+	overflow-x: auto;
+	color: #4d4d4c;
+	padding: 0.5em;
+}
+
+.hljs-emphasis {
+	font-style: italic;
+}
+
+.hljs-strong {
+	font-weight: bold;
+}
+</style>
+
+<style>
+/*
+ * Markdown PDF CSS
+ */
+
+ body {
+	font-family: -apple-system, BlinkMacSystemFont, "Segoe WPC", "Segoe UI", "Ubuntu", "Droid Sans", sans-serif, "Meiryo";
+	padding: 0 12px;
+}
+
+pre {
+	background-color: #f8f8f8;
+	border: 1px solid #cccccc;
+	border-radius: 3px;
+	overflow-x: auto;
+	white-space: pre-wrap;
+	overflow-wrap: break-word;
+}
+
+pre:not(.hljs) {
+	padding: 23px;
+	line-height: 19px;
+}
+
+blockquote {
+	background: rgba(127, 127, 127, 0.1);
+	border-color: rgba(0, 122, 204, 0.5);
+}
+
+.emoji {
+	height: 1.4em;
+}
+
+code {
+	font-size: 14px;
+	line-height: 19px;
+}
+
+/* for inline code */
+:not(pre):not(.hljs) > code {
+	color: #C9AE75; /* Change the old color so it seems less like an error */
+	font-size: inherit;
+}
+
+/* Page Break : use <div class="page"/> to insert page break
+-------------------------------------------------------- */
+.page {
+	page-break-after: always;
+}
+
+</style>
+
+<script src="https://unpkg.com/mermaid/dist/mermaid.min.js"></script>
+</head>
+<body>
+  <script>
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: document.body.classList.contains('vscode-dark') || document.body.classList.contains('vscode-high-contrast')
+          ? 'dark'
+          : 'default'
+    });
+  </script>
+<h1 id="projektbericht-imara">Projektbericht: IMARA</h1>
+<p><strong>Modul:</strong> Abschlussarbeit CAS Machine Learning for Software Engineers (ML4SE)</p>
+<p><strong>Datum:</strong> 18.01.2026</p>
+<p><strong>Autoren:</strong> Marco Allenspach, Lukas Koller, Emanuel Sovrano</p>
+<div style="page-break-after: always;"></div>
+<h2 id="abstract">Abstract</h2>
+<p>Retrieval-Augmented Generation (RAG) erweitert grosse Sprachmodelle um externes Wissen, stösst jedoch in rein vektorbasierten Ausprägungen bei komplexen, mehrschrittigen Anfragen an konzeptionelle Grenzen. Insbesondere fehlt eine explizite Modellierung von Beziehungen zwischen Entitäten. Graphbasierte RAG-Ansätze adressieren dieses Defizit, indem Wissen strukturiert und traversierbar repräsentiert wird.</p>
+<p>Diese Arbeit untersucht graphbasierte RAG-Architekturen anhand des Projekts IMARA. Auf Basis wissenschaftlicher PDFs wird eine End-to-End-Pipeline von der Dokumentenextraktion über die Graphkonstruktion bis zur Evaluation aufgebaut. Klassisches RAG wird mit mehreren GraphRAG-Varianten verglichen. Die Evaluation erfolgt reproduzierbar mit OpenRAGBench und OpenRAG-Eval.</p>
+<div style="page-break-after: always;"></div>
+<h2 id="inhaltsverzeichnis">Inhaltsverzeichnis</h2>
+<ul>
+<li><a href="#projektbericht-imara">Projektbericht: IMARA</a>
+<ul>
+<li><a href="#abstract">Abstract</a></li>
+<li><a href="#inhaltsverzeichnis">Inhaltsverzeichnis</a></li>
+<li><a href="#1-einleitung">1. Einleitung</a>
+<ul>
+<li><a href="#11-problemstellung">1.1 Problemstellung</a></li>
+<li><a href="#12-projektziele">1.2 Projektziele</a></li>
+</ul>
+</li>
+<li><a href="#2-stand-der-technik">2. Stand der Technik</a>
+<ul>
+<li><a href="#21-leanrag">2.1 LeanRAG</a></li>
+<li><a href="#22-linearrag">2.2 LinearRAG</a></li>
+<li><a href="#23-graphmert">2.3 GraphMERT</a></li>
+<li><a href="#24-openragbench-und-openrag-eval">2.4 OpenRAGBench und OpenRAG-Eval</a></li>
+</ul>
+</li>
+<li><a href="#3-hintergrund--background">3. Hintergrund / Background</a>
+<ul>
+<li><a href="#31-grenzen-vektorbasierten-naiven-rags">3.1 Grenzen vektorbasierten (naiven) RAGs</a>
+<ul>
+<li><a href="#311-kontextuelle-fragmentierung">3.1.1 Kontextuelle Fragmentierung**</a></li>
+<li><a href="#312-abh%C3%A4ngigkeit-von-der-chunking-strategie">3.1.2 Abhängigkeit von der Chunking-Strategie</a></li>
+<li><a href="#313-eingeschr%C3%A4nktes-multi-hop-reasoning">3.1.3 Eingeschränktes Multi-Hop-Reasoning</a></li>
+</ul>
+</li>
+<li><a href="#32-das-ai-native-graphrag-paradigma">3.2 Das AI-Native GraphRAG-Paradigma</a></li>
+</ul>
+</li>
+<li><a href="#4-methodik--umsetzung">4. Methodik / Umsetzung</a>
+<ul>
+<li><a href="#41-hardware">4.1 Hardware</a></li>
+<li><a href="#42-datenbasis">4.2 Datenbasis</a></li>
+<li><a href="#43-systemarchitektur">4.3 Systemarchitektur</a></li>
+<li><a href="#44-pdf-extraktion-docling">4.4 PDF-Extraktion (Docling)</a>
+<ul>
+<li><a href="#441-konfiguration-und-parameter">4.4.1 Konfiguration und Parameter</a></li>
+<li><a href="#442-technische-umsetzung-und-designentscheidungen">4.4.2 Technische Umsetzung und Designentscheidungen</a></li>
+</ul>
+</li>
+<li><a href="#45-naives-rag-baseline">4.5 Naives RAG (Baseline)</a>
+<ul>
+<li><a href="#451-chunking-und-datenpersistierung">4.5.1 Chunking und Datenpersistierung</a></li>
+<li><a href="#452-embedding-retrieval-und-baseline-charakter">4.5.2 Embedding, Retrieval und Baseline-Charakter</a></li>
+</ul>
+</li>
+<li><a href="#46-linearrag">4.6 LinearRAG</a>
+<ul>
+<li><a href="#461-datenaufbereitung--loading">4.6.1 Datenaufbereitung &amp; Loading</a></li>
+<li><a href="#462-graph-konstruktion">4.6.2 Graph-Konstruktion</a></li>
+<li><a href="#463-hybrid-retrieval-algorithmus">4.6.3 Hybrid Retrieval-Algorithmus</a></li>
+<li><a href="#464-physisches-datenmodell">4.6.4 Physisches Datenmodell</a></li>
+</ul>
+</li>
+<li><a href="#47-graphmert">4.7 GraphMERT</a></li>
+<li><a href="#48-evaluierungs-design">4.8 Evaluierungs-Design</a></li>
+</ul>
+</li>
+<li><a href="#5-resultate">5. Resultate</a>
+<ul>
+<li><a href="#51-pdf-extraktion-mit-docling">5.1 PDF-Extraktion mit Docling</a></li>
+<li><a href="#52-naives-rag">5.2 Naives RAG</a></li>
+<li><a href="#53-linearrag">5.3 LinearRAG</a>
+<ul>
+<li><a href="#531-ausgangslage">5.3.1 Ausgangslage</a></li>
+<li><a href="#532-graphstruktur-und-umfang">5.3.2 Graphstruktur und Umfang</a></li>
+<li><a href="#533-tf-idf-gewichtung">5.3.3 TF-IDF-Gewichtung</a></li>
+<li><a href="#534-graph-sparsit%C3%A4t">5.3.4 Graph-Sparsität</a></li>
+<li><a href="#535-zusammenfassung-zentraler-graphmetriken">5.3.5 Zusammenfassung zentraler Graphmetriken</a></li>
+</ul>
+</li>
+<li><a href="#54-graphmert">5.4 GraphMERT</a></li>
+<li><a href="#55-leanrag">5.5 LeanRAG</a></li>
+<li><a href="#55-benchmark">5.5 Benchmark</a></li>
+</ul>
+</li>
+<li><a href="#6-diskussion">6. Diskussion</a>
+<ul>
+<li><a href="#61-docling">6.1 Docling</a></li>
+<li><a href="#62-naives-rag">6.2 naives RAG</a></li>
+<li><a href="#63-linearrag">6.3 LinearRAG</a>
+<ul>
+<li><a href="#631-validierung-des-linearrag-ansatzes">6.3.1 Validierung des LinearRAG-Ansatzes</a></li>
+<li><a href="#632-skalierbarkeitsimplikationen">6.3.2 Skalierbarkeitsimplikationen</a></li>
+<li><a href="#633-einordnung-im-kontext-graphbasierter-rag-systeme">6.3.3 Einordnung im Kontext graphbasierter RAG-Systeme</a></li>
+</ul>
+</li>
+<li><a href="#64-graphmert">6.4 GraphMERT</a></li>
+<li><a href="#65-leanrag">6.5 LeanRAG</a></li>
+<li><a href="#66-benchmark">6.6 Benchmark</a></li>
+</ul>
+</li>
+<li><a href="#7-conclusion--fazit">7. Conclusion / Fazit</a>
+<ul>
+<li><a href="#71-pers%C3%B6nliches-fazit">7.1 Persönliches Fazit</a>
+<ul>
+<li><a href="#711-marco-allenspach">7.1.1 Marco Allenspach</a></li>
+<li><a href="#712-lukas-koller">7.1.2 Lukas Koller</a></li>
+<li><a href="#713-emanuel-sovrano">7.1.3 Emanuel Sovrano</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#8-risikomanagement-und-lessons-learned">8. Risikomanagement und Lessons Learned</a>
+<ul>
+<li><a href="#81-identifizierte-risiken">8.1 Identifizierte Risiken</a></li>
+<li><a href="#82-konkrete-erfahrungen">8.2 Konkrete Erfahrungen</a></li>
+<li><a href="#83-lessons-learned">8.3 Lessons Learned</a></li>
+</ul>
+</li>
+<li><a href="#9-ausblick">9. Ausblick</a></li>
+<li><a href="#glossar">Glossar</a>
+<ul>
+<li><a href="#a--c">A – C</a></li>
+<li><a href="#d--g">D – G</a></li>
+<li><a href="#h--l">H – L</a></li>
+<li><a href="#m--o">M – O</a></li>
+<li><a href="#s--v">S – V</a></li>
+</ul>
+</li>
+<li><a href="#abbildungsverzeichnis">Abbildungsverzeichnis</a></li>
+<li><a href="#literaturverzeichnis">Literaturverzeichnis</a></li>
+</ul>
+</li>
+</ul>
+<div style="page-break-after: always;"></div>
+<h2 id="1-einleitung">1. Einleitung</h2>
+<p>Das Projekt IMARA untersucht die Frage, inwiefern graphbasierte Retrieval-Ansätze die Qualität von RAG-Systemen bei komplexen, wissensintensiven Fragestellungen verbessern können. Der Fokus liegt auf wissenschaftlichen Dokumenten mit hoher struktureller und semantischer Komplexität.</p>
+<p>Ziel ist der systematische Vergleich eines naiven, rein vektorbasierten RAG-Ansatzes mit verschiedenen GraphRAG-Varianten unter kontrollierten Bedingungen. Dazu wird eine reproduzierbare Pipeline aufgebaut, die von der PDF-Extraktion bis zur Evaluation reicht.</p>
+<h3 id="11-problemstellung">1.1 Problemstellung</h3>
+<p>Naive RAG-Architekturen basieren auf Ähnlichkeitssuche über Text-Chunks. Dieser Ansatz weist mehrere Schwächen auf:</p>
+<ul>
+<li>Wissen liegt fragmentiert vor und verliert kontextuelle Zusammenhänge.</li>
+<li>Beziehungen zwischen Entitäten sind implizit und nicht explizit modelliert.</li>
+<li>Multi-Hop-Reasoning über mehrere Dokumente oder Abschnitte ist nur eingeschränkt möglich.</li>
+<li>Die Qualität hängt stark von der Chunking-Strategie ab.</li>
+</ul>
+<p>Gerade wissenschaftliche Publikationen mit Querverweisen, formalen Definitionen und Abhängigkeiten sind so nur unzureichend erschliessbar.</p>
+<h3 id="12-projektziele">1.2 Projektziele</h3>
+<p>Aus dieser Problemstellung leiten sich die Ziele von IMARA ab:</p>
+<ol>
+<li>Aufbau einer graphbasierten RAG Pipeline zur Erstellung dichter Wissensgraphen aus wissenschaftlichen PDFs.</li>
+<li>Systematischer Vergleich klassischer vektorbasierter RAG-Ansätze mit verschiedenen GraphRAG-Varianten (u. a. LeanRAG, LinearRAG, GraphMERT).</li>
+<li>Entwicklung einer flexiblen, wiederholbaren Pipeline vom PDF bis zur Evaluation, inklusive Datenversionierung (DVC), Orchestrierung und MLflow-gestützter Nachvollziehbarkeit.</li>
+<li>Nutzung von OpenRAGBench/OpenRAG-Eval zur objektiven, reproduzierbaren Bewertung unterschiedlicher Varianten.</li>
+</ol>
+<h2 id="2-stand-der-technik">2. Stand der Technik</h2>
+<p>Dieses Kapitel beschreibt relevante Arbeiten und Konzepte im Bereich RAG und GraphRAG.</p>
+<h3 id="21-leanrag">2.1 LeanRAG</h3>
+<p>LeanRAG ist ein graphbasierter RAG-Ansatz, bei dem Entitäten zu semantisch kohärenten Clustern mit explizit modellierten Relationen zusammengefasst werden. Diese Cluster bilden aggregierte Knoten, die als hierarchische Navigationsschicht über dem feingranularen Detailgraphen fungieren. Anfragen werden zunächst auf Entitätsebene verankert und anschliessend über aggregierte Ebenen hinweg erweitert, um relevante Evidenz effizient zu sammeln. Durch diese hierarchische Struktur lässt sich die Redundanz im Retrieval deutlich reduzieren; die Autoren berichten in ihren Benchmarks von einer Reduktion um etwa 46 % gegenüber flachen Baseline-Ansätzen. Der Ansatz wurde von Zhang et al. (2025) vorgestellt und dient im Projekt IMARA als Referenz für einen explizit relationenbasierten GraphRAG-Ansatz mit semantischer Aggregation.</p>
+<img src="file:///Users/emanuel.sovrano/git/ost/arbeit/imara/docs/9. Projektabschluss/Dokumentation/assets/LeanRAG-framework.png" alt="LeanRAG-Framework (&#xFC;bernommen aus Zhang et al., 2025)" width="100%" height="100%">
+<p><em>Abbildung 3: LeanRAG-Framework, übernommen aus Zhang et al. (2025), arXiv:2508.10391.</em></p>
+<h3 id="22-linearrag">2.2 LinearRAG</h3>
+<p>LinearRAG („Linear Graph Retrieval-Augmented Generation on Large-scale Corpora“) verfolgt einen abweichenden Ansatz, bei dem ein relation-freier Graph konstruiert wird, der vollständig ohne LLM-basierte Relationsextraktion auskommt. Entitäten sowie ihre Ko-Vorkommensstrukturen werden stattdessen algorithmisch bestimmt. Die Graphkonstruktion bleibt kontext­erhaltend, da leichtgewichtige Entity Recognition und semantische Verlinkung eingesetzt werden, um Zusammenhänge über Passagen- und Satzgrenzen hinweg zu bewahren. Multi-Hop-Reasoning wird über semantische Brücken im Graphen ermöglicht, ohne dass explizite Relationen modelliert werden müssen. Der Ansatz verursacht keine LLM-Tokenkosten und skaliert linear hinsichtlich Laufzeit und Speicherbedarf. LinearRAG wurde von Li et al. (2025) vorgestellt und bildet im Projekt IMARA den primären GraphRAG-Ansatz, der vollständig implementiert und empirisch evaluiert wurde.</p>
+<img src="file:///Users/emanuel.sovrano/git/ost/arbeit/imara/docs/9. Projektabschluss/Dokumentation/assets/LinearRAG-workflow.png" alt="LinearRAG-Workflow (&#xFC;bernommen aus Li et al., 2025)" width="100%" height="100%">
+<p><em>Abbildung 4: LinearRAG-Workflow, übernommen aus Li et al. (2025), arXiv:2510.10114.</em></p>
+<h3 id="23-graphmert">2.3 GraphMERT</h3>
+<p>GraphMERT adressiert die Skalierbarkeitsprobleme klassischer neurosymbolischer Frameworks und wurde von Belova et al. (2025) vorgeschlagen. Es handelt sich um ein kompaktes, graphbasiertes Encoder-Modell, das aus unstrukturierten Textkorpora hochwertige Wissensgraphen generiert. Dabei werden neuronale Netze zur Erlernung abstrakter Repräsentationen mit symbolischen Strukturen in Form eines Wissensgraphen kombiniert, um nachvollziehbares und verifizierbares Schliessen zu ermöglichen. Ziel ist eine effiziente und skalierbare neurosymbolische Architektur mit hoher faktischer Korrektheit, beispielsweise gemessen mittels FActScore, sowie konsistenten Relationen, bewertet über den ValidityScore.</p>
+<p align="center">
+  <img src="file:///Users/emanuel.sovrano/git/ost/arbeit/imara/docs/9. Projektabschluss/Dokumentation/assets/GraphMERT-node-embeddings.png" alt="GraphMERT Node Embeddings t-SNE View (&#xFC;bernommen aus Belova et al., 2025)" width="49%">
+  <img src="file:///Users/emanuel.sovrano/git/ost/arbeit/imara/docs/9. Projektabschluss/Dokumentation/assets/GraphMERT-semantic-graph-visualization.png" alt="GraphMERT Semantic Graph Visualization (&#xFC;bernommen aus Belova et al., 2025)" width="49%">
+</p>
+<p><em>Abbildung 5: Links GraphMERT Node Embeddings (t-SNE View), rechts GraphMERT Semantic Graph Visualization, jeweils übernommen aus eigenen Versuchen.</em></p>
+<p>Die Abfrage erfolgt direkt auf dem Wissensgraphen und nutzt dessen explizite Struktur. Anstatt isolierte Textsegmente über Vektorähnlichkeit zu vergleichen, traversiert der Suchprozess semantisch angereicherte, verkettete Knoten und unterstützt so linear skalierbares Multi-Hop-Reasoning.</p>
+<p align="center">
+  <img src="file:///Users/emanuel.sovrano/git/ost/arbeit/imara/docs/9. Projektabschluss/Dokumentation/assets/GraphMERT-perfektes-resultat.png" alt="Ein perfektes Resultat" width="49%">
+  <img src="file:///Users/emanuel.sovrano/git/ost/arbeit/imara/docs/9. Projektabschluss/Dokumentation/assets/GraphMERT-fast-perfektes-resultat.png" alt="Ein fast perfektes Resultat" width="49%">
+</p>
+<p><em>Abbildung 6: Query-Suche auf den Graph-Ergebnissen: links ein perfektes, rechts ein fast perfektes Resultat, links übernommen aus Belova et al. (2025) und rechts aus eignen Versuchen.</em></p>
+<p>In der vorgelagerten Extraktion wird unstrukturierter Text in Entitäten und Relationen überführt und anschliessend semantisch aggregiert. Dadurch werden redundante Strukturen reduziert, die Graphkomplexität verringert und die Effizienz des Retrievals erhöht. Im Projekt IMARA dient GraphMERT als Referenzkonzept, das anhand prototypischer Implementierungen und Visualisierungen qualitativ analysiert wurde.</p>
+<h3 id="24-openragbench-und-openrag-eval">2.4 OpenRAGBench und OpenRAG-Eval</h3>
+<p>OpenRAGBench stellt einen umfangreichen Datensatz aus wissenschaftlichen PDFs (arXiv) mit zugehörigen Frage-Antwort-Paaren bereit und bildet die Grundlage für reproduzierbare Benchmarks im Bereich Retrieval-Augmented Generation. OpenRAG-Eval ist ein darauf aufbauendes Evaluations-Framework, das unterschiedliche RAG-Systeme anhand einheitlicher Metriken wie Accuracy, Contain Accuracy und Faithfulness vergleichbar macht. Im Projekt IMARA wird OpenRAG-Eval eingesetzt, um naives RAG, LinearRAG und weitere GraphRAG-Varianten konsistent und reproduzierbar zu bewerten.</p>
+<h2 id="3-hintergrund--background">3. Hintergrund / Background</h2>
+<p>In diesem Kapitel wird der fachliche Hintergrund vertieft, insbesondere die Grenzen vektorbasierter RAG-Systeme und das GraphRAG-Paradigma.</p>
+<h3 id="31-grenzen-vektorbasierten-naiven-rags">3.1 Grenzen vektorbasierten (naiven) RAGs</h3>
+<p>Klassische RAG-Systeme basieren auf einer Vektorsuche über in Chunks zerlegte Texte. Dokumente werden dabei in Segmente fester Länge aufgeteilt, eingebettet und in einer Vektordatenbank gespeichert. Benutzeranfragen werden ebenfalls eingebettet, woraufhin die semantisch ähnlichsten Chunks als Kontext für die Antwortgenerierung abgerufen werden.</p>
+<p>Dieser Ansatz weist mehrere grundlegende Limitierungen auf:</p>
+<h4 id="311-kontextuelle-fragmentierung">3.1.1 Kontextuelle Fragmentierung**</h4>
+<p>Durch das Chunking wird der natürliche Informationsfluss eines Dokuments künstlich unterbrochen. Relevanter Kontext kann über mehrere Chunks, Abschnitte oder Dokumente verteilt sein und wird von der Vektorsuche, die jeden Chunk isoliert betrachtet, häufig nur unvollständig erfasst. Zwar wird semantische Ähnlichkeit erkannt, explizite Beziehungen wie Kausalität, Abhängigkeiten oder hierarchische Strukturen bleiben jedoch unberücksichtigt.</p>
+<h4 id="312-abh%C3%A4ngigkeit-von-der-chunking-strategie">3.1.2 Abhängigkeit von der Chunking-Strategie</h4>
+<p>Die Leistungsfähigkeit naiver RAG-Systeme ist stark von der gewählten Chunking-Strategie abhängig. Zu grosse Chunks führen zu inhaltlichem Rauschen, während zu kleine Chunks wichtigen Kontext verlieren lassen. Eine optimale Konfiguration erfordert oft aufwändige, heuristische Feinabstimmungen und bleibt fragil gegenüber Änderungen im Dokumententyp oder Anwendungsfall.</p>
+<h4 id="313-eingeschr%C3%A4nktes-multi-hop-reasoning">3.1.3 Eingeschränktes Multi-Hop-Reasoning</h4>
+<p>Naive RAG-Ansätze sind nur begrenzt in der Lage, Fragen zu beantworten, die mehrere logisch verknüpfte Informationsschritte erfordern. Solche Multi-Hop-Fragestellungen setzen voraus, dass Zusammenhänge über mehrere Textstellen hinweg erkannt und kombiniert werden. Eine rein vektorbasierte Suche ist hierfür in der Regel nicht ausreichend, da sie keine explizite Verknüpfung zwischen den relevanten Informationseinheiten herstellt.</p>
+<h3 id="32-das-ai-native-graphrag-paradigma">3.2 Das AI-Native GraphRAG-Paradigma</h3>
+<p>AI-Native GraphRAG adressiert die Limitierungen vektorbasierten RAGs, indem Wissen explizit strukturiert wird. Unstrukturierte Daten werden entlang einer automatisierten Pipeline in natürlichsprachliche Antworten überführt, wobei die technische Komplexität von Graphen und Datenbanksystemen für Anwender abstrahiert bleibt. Im Unterschied zu klassischen Vektor-RAG-Ansätzen basiert das Retrieval nicht primär auf der semantischen Ähnlichkeit einzelner Text-Chunks, sondern auf einem expliziten Wissensmodell des Anwendungsbereichs.</p>
+<p>Hierzu werden Entitäten (z. B. Methoden, Datensätze oder Metriken) sowie ihre Relationen als Knoten und Kanten in einem Wissensgraphen modelliert. Anfragen können anschliessend als Operationen auf diesem Graphen formuliert werden, etwa in Form von Pfadsuchen, Nachbarschaftsanalysen oder semantischer Aggregation. Dadurch wird Wissen nicht nur auffindbar, sondern explizit verknüpfbar und kontextuell interpretierbar.</p>
+<p>Ein Wissensgraph transformiert eine passive Dokumentensammlung in ein aktives, abfragefähiges Wissensmodell und ermöglicht unter anderem:</p>
+<ul>
+<li>die explizite Modellierung von Entitätsbeziehungen,</li>
+<li>Multi-Hop-Reasoning über graphbasierte Pfade,</li>
+<li>die gemeinsame Nutzung strukturierter und unstrukturierter Informationsquellen.</li>
+</ul>
+<p>Anschaulich formuliert stellt vektorbasiertes RAG isolierte Informationseinheiten bereit, vergleichbar mit einem Stapel einzelner Karteikarten. GraphRAG hingegen entspricht einer dynamischen Mindmap, in der Zusammenhänge sichtbar, nachvollziehbar und gezielt traversierbar sind.</p>
+<h2 id="4-methodik--umsetzung">4. Methodik / Umsetzung</h2>
+<p>Dieses Kapitel beschreibt das konkrete Vorgehen im Projekt IMARA – von den Datenquellen über die PDF-Extraktion bis zur Implementierung des LinearRAG-Graphs und der Evaluationspipeline.</p>
+<h3 id="41-hardware">4.1 Hardware</h3>
+<p>Die Experimente wurden auf einem heterogenen Hardware-Setup durchgeführt, um unterschiedliche Verarbeitungsschritte unter realistischen Bedingungen evaluieren zu können. Zum Einsatz kamen unter anderem:</p>
+<ul>
+<li>Lenovo Tower i9-14900 mit 64 GB RAM und einer RTX 4090 (16 GB VRAM),</li>
+<li>ein Tower-System mit i9-14900, 256 GB RAM und drei RTX 6000 GPUs (je 48 GB VRAM),</li>
+<li>verschiedene Laptops (HP EliteBook X G11, Lenovo Legion 9) sowie ein MacBook M3 Pro.</li>
+</ul>
+<p>Die Graphkonstruktion für LinearRAG konnte vollständig CPU-basiert durchgeführt werden, was die geringe Abhängigkeit dieses Ansatzes von spezialisierter Hardware unterstreicht. GPU-Ressourcen wurden primär für LLM-Inferenz sowie für die PDF-Extraktion mit Docling eingesetzt, sofern GPU-unterstützte Funktionen aktiviert waren. Dieses Setup erlaubte es, den Ressourcenbedarf der einzelnen Pipeline-Schritte differenziert zu analysieren und die Skalierbarkeit der Ansätze unter variierenden Hardwarebedingungen zu bewerten.</p>
+<h3 id="42-datenbasis">4.2 Datenbasis</h3>
+<p>Für die Experimente wurde eine Kombination aus generischen und domänenspezifischen Datensätzen verwendet. Als zentraler Korpus dient OpenRAGBench, ein arXiv-basierter Datensatz mit rund 1 000 wissenschaftlichen Publikationen und zugehörigen Frage-Antwort-Paaren. Ergänzend wurden 2WikiMultihop als Benchmark für Multi-Hop Question Answering sowie HotpotQA und Musique als weitere Multi-Hop-QA-Datensätze eingesetzt. Für die domänenspezifische Evaluierung kamen zusätzlich medizinische Datensätze, insbesondere Medical- und PubMedQA, zum Einsatz. Sämtliche Rohdaten werden mittels DVC versioniert, in einem S3-kompatiblen Supabase Storage abgelegt und können reproduzierbar über <code>dvc pull</code> bezogen werden.</p>
+<h3 id="43-systemarchitektur">4.3 Systemarchitektur</h3>
+<p>Die IMARA-Architektur ist als modulare End-to-End-Pipeline umgesetzt. Die zentralen Komponenten sind im Repository klar getrennt strukturiert: die Implementierung in <code>src/</code>, Konfigurationen in <code>configs/</code> sowie Datenartefakte in <code>data/</code>. Die Architektur folgt einer domänenspezifischen, graphbasierten RAG-Vision, die im Projektverlauf iterativ entwickelt und im internen Projektdokument <a href="../../1.%20Projektantrag/specs_v6.md">specs_v6.md</a> konzeptuell festgehalten wurde.</p>
+<img src="file:///Users/emanuel.sovrano/git/ost/arbeit/imara/docs/9. Projektabschluss/Dokumentation/assets/Systemarchitektur.png" alt="IMARA Systemarchitektur" width="100%" height="100%">
+<p><em>Abbildung 8: IMARA Systemarchitektur</em></p>
+<p>Ausgangspunkt der Pipeline ist die Data Ingestion. Wissenschaftliche PDFs aus OpenRAGBench werden mithilfe von Docling in maschinenlesbare Artefakte überführt, typischerweise in Form von Markdown-, JSON- und Doctags-Ausgaben. Für jedes Quelldokument wird ein eigener Verzeichnisbaum mit sämtlichen Zwischenständen erzeugt, wodurch der Verarbeitungsworkflow – etwa alternative Chunking- oder Embedding-Strategien – flexibel angepasst und reproduzierbar variiert werden kann.</p>
+<p>Im Anschluss erfolgt das Chunking und Embedding der extrahierten Texte. Die Dokumente werden mit konfigurierbaren Strategien in Textsegmente zerlegt und unter Verwendung unterschiedlicher Embedding-Modelle vektorisiert. Die resultierenden Embeddings werden gemeinsam mit Metadaten in einer PostgreSQL-Datenbank mit pgvector-Erweiterung persistiert und bilden die Grundlage für nachgelagerte Retrieval- und Graphschritte.</p>
+<p>Darauf aufbauend stellt ein naiver RAG-Baustein eine Baseline bereit, die mittels Ähnlichkeitssuche über die eingebetteten Chunks relevante Kontexte identifiziert und diese an ein LLM zur Antwortgenerierung übergibt. Parallel dazu werden graphbasierte RAG-Varianten wie LinearRAG, LeanRAG und GraphMERT eingesetzt. In diesen Ansätzen werden aus den extrahierten Texten explizite Wissensgraphen konstruiert, um Retrieval und Antwortgenerierung durch strukturierte Repräsentationen und Multi-Hop-Reasoning zu unterstütze</p>
+<p>Die Ausführung der einzelnen Verarbeitungsschritte wird durch eine Orchestrierungsschicht koordiniert, welche Jobs, Workflows und Statusinformationen verwaltet. Sowohl einzelne Pipeline-Komponenten als auch vollständige End-to-End-Läufe können über Kommandozeilenwerkzeuge und Skripte gesteuert werden. Für Benchmarking und Evaluation werden OpenRAGBench-Experimente mit OpenRAG-Eval orchestriert; dabei werden Metriken wie Genauigkeit, Evidenzabdeckung und Laufzeit erhoben und in MLflow protokolliert, um Experimente nachvollziehbar und vergleichbar zu machen.</p>
+<h3 id="44-pdf-extraktion-docling">4.4 PDF-Extraktion (Docling)</h3>
+<p>Für die Konvertierung der PDFs in maschinenlesbare Formate (Markdown, JSON, Doctags) wird das Docling Toolkit eingesetzt. Die Extraktion ist der erste kritische Schritt der Pipeline, da hier die spätere Qualitätsobergrenze des gesamten Systems definiert wird.</p>
+<img src="file:///Users/emanuel.sovrano/git/ost/arbeit/imara/docs/9. Projektabschluss/Dokumentation/assets/Docling-architecture.png" alt="Architektur&#xFC;bersicht von Docling, &#xFC;bernommen aus der offiziellen Docling-Dokumentation (Docling-Projekt, Zugriff am 18.01.2026)." width="100%" height="100%">
+<p><em>Abbildung 7: Architekturübersicht von Docling, übernommen aus der offiziellen Docling-Dokumentation (Docling-Projekt, Zugriff am 18.01.2026).</em></p>
+<h4 id="441-konfiguration-und-parameter">4.4.1 Konfiguration und Parameter</h4>
+<p>Die Docling-Integration folgt dem in der Projektbeschreibung definierten Parameter-Set. Wichtige Aspekte:</p>
+<ul>
+<li>Unterstützung mehrerer Inputformate (<code>pdf</code>, <code>docx</code>, <code>pptx</code>, <code>html</code>, <code>image</code>, <code>xlsx</code>, <code>md</code>, <code>asciidoc</code>).</li>
+<li>Generierung verschiedener Output-Artefakte: <code>md</code>, <code>json</code>, <code>html</code>, <code>text</code>, <code>doctags</code>.</li>
+<li>Aktivierte Zusatzfunktionen:
+<ul>
+<li>OCR (<code>do_ocr=True</code>) inkl. <code>easyocr</code>-Backend.</li>
+<li>Extraktion von Tabellenstrukturen (<code>do_table_structure=True</code>).</li>
+<li>Code- und Formel-Anreicherung (<code>do_code_enrichment=True</code>, <code>do_formula_enrichment=True</code>).</li>
+<li>Bildklassifikation und Bildbeschreibung via lokalem Vision-Language-Modell.</li>
+</ul>
+</li>
+</ul>
+<p>Alle relevanten Parameter sind in der Projektkonfiguration (<code>configs/</code>) zentralisiert und können für zukünftige Experimente angepasst werden.</p>
+<p>!TODO: @Marco: wo genau liegen diese? im configs ist nichts.</p>
+<h4 id="442-technische-umsetzung-und-designentscheidungen">4.4.2 Technische Umsetzung und Designentscheidungen</h4>
+<p>Während der Implementierung der PDF-Extraktion wurden mehrere technische Anpassungen vorgenommen, um Stabilität und Reproduzierbarkeit der Pipeline sicherzustellen. Aufgrund von Speicher- und Stabilitätsproblemen wurde auf den containerisierten Betrieb von Docling (<code>docling-serve</code>) verzichtet und stattdessen die direkte Integration über die Python-API gewählt. Die Extraktion wurde überwiegend CPU-basiert durchgeführt, da GPU-Ressourcen in dieser Phase keinen stabilen Betrieb aller benötigten Funktionen ermöglichten.</p>
+<p>Zusätzlich wurde für rechenintensive Extraktionsläufe ein dedizierter Rechner eingesetzt, um lange Laufzeiten einzelner Dokumente von der übrigen Entwicklungsumgebung zu entkoppeln. Diese Massnahmen erlaubten einen kontrollierten und reproduzierbaren Ablauf der Extraktion und bildeten die Grundlage für die nachfolgenden Pipeline-Schritte.</p>
+<h3 id="45-naives-rag-baseline">4.5 Naives RAG (Baseline)</h3>
+<p>Das naive RAG dient im Projekt IMARA als Referenzbaseline, anhand derer die graphbasierten Ansätze (LinearRAG, LeanRAG, GraphMERT) eingeordnet werden. Die Implementierung folgt bewusst einem klassischen, vektorbasierten RAG-Paradigma: Dokumente werden in Text-Chunks zerlegt, gespeichert, eingebettet und ausschliesslich über Vektorsuche wieder abgerufen.</p>
+<h4 id="451-chunking-und-datenpersistierung">4.5.1 Chunking und Datenpersistierung</h4>
+<p>In der ersten Phase (<code>naiverag/chunk.py</code>) werden die von Docling erzeugten JSON-Dokumente (<code>DoclingDocument</code>) mit dem <code>HierarchicalChunker</code> aus <code>docling_core</code> in semantisch sinnvolle Textsegmente zerlegt. Die Chunking-Parameter – insbesondere Chunk-Grösse, Überlappung und Split-Kriterium – werden zur Laufzeit aus der zentralen Konfiguration (<code>params.yaml</code>, Sektion <code>chunk</code>) geladen und als MLflow-Parameter protokolliert. Falls zu einem Dokument ein Artefaktverzeichnis mit exportierten Bildern (<code>&lt;titel&gt;_artifacts/image_*.png</code>) existiert, werden die relativen Bildpfade ermittelt und zusammen mit dem Chunktest abgelegt: Chunks, die Bildinhalte referenzieren, enthalten am Ende einen <code>[IMAGES]</code>‑Block mit den zugehörigen Bildpfaden. Die resultierenden Chunks werden als einfache <code>.txt</code>‑Dateien im angegebenen Ausgabeverzeichnis gespeichert und bilden die Grundlage für die weitere Verarbeitung.</p>
+<h4 id="452-embedding-retrieval-und-baseline-charakter">4.5.2 Embedding, Retrieval und Baseline-Charakter</h4>
+<p>In der zweiten Phase (<code>naiverag/embed.py</code>) werden diese Text-Chunks zusammen mit ihren Metadaten in die relationale Datenbank überführt. Das Skript liest alle <code>.txt</code>‑Dateien aus dem Chunk-Verzeichnis, leitet aus dem Dateinamen den Dokumenttitel und eine Seitenreferenz (<code>page_ref</code>) ab und rekonstruiert die Verweise auf Bildartefakte, indem es nach einem passenden <code>&lt;titel&gt;_artifacts</code>‑Verzeichnis sucht. Die gefundenen Bildpfade werden als JSON‑kodierte Liste im Feld <code>pic_ref</code> abgelegt. Für jeden Chunk werden MLflow-Metriken wie <code>content_size_bytes</code>, ein Flag für vorhandene Seitenreferenzen und ein Flag für Bildreferenzen geloggt. Anschliessend werden Titel, Seitenreferenz, Bildreferenzen und der eigentliche Chunktest in die Tabelle <code>document_chunk</code> einer PostgreSQL-Datenbank geschrieben. Diese Tabelle dient als zentrale, normalisierte Textbasis für das naive RAG ebenso wie für die graphbasierten Pipelines.</p>
+<p>Aufbauend auf dieser Speicherung wird das eigentliche RAG-Verhalten durch einen separaten Embedding‑ und Retrieval‑Schritt realisiert: Die Inhalte aus <code>document_chunk</code> werden mit einem ausgewählten Embedding‑Modell in Vektoren überführt und in pgvector‑Feldern persistiert. Anfragen werden eingebettet, per Vektorsuche (k‑nächste Nachbarn) gegen diese Chunks gematcht und die Top‑k‑Kontexte an ein LLM zur Antwortgenerierung übergeben. Der naive RAG‑Pfad verzichtet dabei vollständig auf Graphkonstruktion und setzt ausschliesslich auf Vektorsimilaritätssuche über Text-Chunks, womit er als klare, interpretierbare Baseline für die Bewertung der Mehrwerte der GraphRAG‑Ansätze dient.</p>
+<h3 id="46-linearrag">4.6 LinearRAG</h3>
+<p>Die Implementierung von Linear RAG im IMARA-Projekt zielt darauf ab, die theoretischen Vorteile – lineare Komplexität und Kontextbewusstsein – in eine performante Pipeline zu überführen. Im Gegensatz zu komplexen GraphRAG-Ansätzen verzichtet diese Implementierung auf LLM-basierte Extraktion von Relationen und setzt stattdessen auf deterministische NLP-Prozesse und algorithmische Graphentraversierung.</p>
+<h4 id="461-datenaufbereitung--loading">4.6.1 Datenaufbereitung &amp; Loading</h4>
+<p>Der Loading-Prozess dient als Schnittstelle zwischen den extrahierten Rohdaten und der LinearRAG-Pipeline. Die Text-Chunks werden aus der PostgreSQL-Tabelle <code>document_chunk</code> geladen, welche als konsolidierte Datenbasis für alle nachfolgenden Verarbeitungsschritte fungiert.</p>
+<p>Ein zentrales Element dieses Schrittes ist die Sicherstellung von Idempotenz. Für jeden Chunk wird ein deterministischer MD5-Hash auf Basis seines Inhalts erzeugt. Dieser Hash verhindert die Entstehung von Duplikaten bei wiederholten Pipeline-Läufen und ermöglicht eine inkrementelle Aktualisierung des Datenbestands, ohne eine vollständige Neuindizierung durchführen zu müssen. Die persistierten Chunks bilden damit eine stabile „Ground Truth“ für die Graphkonstruktion.</p>
+<h4 id="462-graph-konstruktion">4.6.2 Graph-Konstruktion</h4>
+<p>Die Graphkonstruktion erfolgt on-the-fly aus den flachen Textdaten, ohne den Einsatz von LLMs. Als NLP-Engine wird scispaCy mit dem Modell <code>en_core_sci_md</code> verwendet, das sich für die Extraktion technischer Entitäten aus wissenschaftlichen Publikationen als geeignet erwiesen hat.</p>
+<p>Der resultierende Wissensgraph besteht aus drei Knotentypen:</p>
+<ul>
+<li><strong>Passage Nodes</strong>, die vollständige Text-Chunks repräsentieren,</li>
+<li><strong>Sentence Nodes</strong>, welche die Chunks in feinere Untereinheiten zerlegen,</li>
+<li><strong>Entity Nodes</strong>, die benannte Entitäten wie Methoden, Metriken oder wissenschaftliche Konzepte abbilden.</li>
+</ul>
+<p>Die Kanten zwischen diesen Knoten werden nicht semantisch inferiert, sondern deterministisch berechnet. Hierzu kommen mehrere Kantentypen zum Einsatz: strukturelle Containment-Beziehungen zwischen Passages, Sentences und Entities, sequentielle Nachbarschaftsbeziehungen zwischen Passages sowie gewichtete Passage–Entity-Kanten. Die Gewichtung dieser Kanten erfolgt mittels TF-IDF, um die Relevanz einer Entität innerhalb eines Textabschnitts quantitativ abzubilden.</p>
+<h4 id="463-hybrid-retrieval-algorithmus">4.6.3 Hybrid Retrieval-Algorithmus</h4>
+<p>Die Retrieval-Logik kombiniert klassische Vektorsuche mit graphbasierter Relevanzpropagation. Zunächst werden aus der Benutzeranfrage mittels spaCy potenzielle Seed-Entitäten extrahiert, die als Einstiegspunkte in den Graphen dienen. Parallel dazu werden über Vektorsuche semantisch ähnliche Textpassagen identifiziert.</p>
+<p>Auf Basis dieser Kandidaten wird ein graphbasierter Scoring-Schritt durchgeführt, der auf einem Personalized-PageRank-Verfahren basiert. Dabei wird Relevanz entlang der Graphstruktur propagiert, sodass auch Knoten berücksichtigt werden, die nicht direkt über Vektorähnlichkeit, aber über strukturelle Beziehungen mit relevanten Entitäten verbunden sind. Dieser mehrstufige Ansatz ermöglicht die Berücksichtigung verteilter Kontexte und unterstützt Multi-Hop-Reasoning über mehrere Graphpfade hinweg.</p>
+<h4 id="464-physisches-datenmodell">4.6.4 Physisches Datenmodell</h4>
+<p>Die Persistenzschicht von LinearRAG basiert auf PostgreSQL unter Verwendung der <code>pgvector</code>-Extension. Die Graphstruktur wird relational in den Tabellen <code>lr_graph_node</code> und <code>lr_graph_edge</code> abgelegt, wodurch SQL-basierte Traversierungen, etwa mittels rekursiver CTEs, möglich sind.</p>
+<p>Zusätzlich werden Vektorrepräsentationen von Entitäten in der Tabelle <code>lr_entity_embedding</code> gespeichert. Hierbei kommen unterschiedliche Embedding-Modelle mit variierenden Vektordimensionen zum Einsatz, um sowohl semantische Tiefe als auch Latenzanforderungen abzudecken. Diese Kombination ermöglicht hybride Abfragen, bei denen graphbasierte Strukturen und Vektorsuche effizient zusammenwirken.</p>
+<h3 id="47-graphmert">4.7 GraphMERT</h3>
+<p>!TODO: @Marco</p>
+<h3 id="48-evaluierungs-design">4.8 Evaluierungs-Design</h3>
+<p>Für die Evaluierung der Systeme wurde folgendes Vorgehen gewählt:</p>
+<p>OpenRAGBench dient als Hauptkorpus sowohl für die Graphkonstruktion als auch für das Query-Set, während OpenRAG-Eval die Ausführung der QA-Läufe sowie deren Auswertung orchestriert. In den Konfigurationsdateien <code>configs/open_rag_eval_*.yaml</code> sind verschiedene Szenarien definiert, unter anderem für naives RAG, LinearRAG und weitere Varianten wie beispielsweise GraphMERT. Als zentrale Metriken werden LLM Accuracy (bewertet durch einen LLM-Judge), Contain Accuracy (Überprüfung, ob die Antwort im kontextuellen Evidenz-Set enthalten ist) sowie Laufzeit- und Ressourcenaspekte herangezogen. In einem nächsten Schritt ist geplant, die Evaluierungen direkt mit DVC-Pipelines und MLflow-Runs zu verknüpfen, um Vollständigkeit und Nachvollziehbarkeit weiter zu erhöhen.</p>
+<h2 id="5-resultate">5. Resultate</h2>
+<p>Vergleich der Performance: Standard RAG vs. IMARA GraphRAG vs. Fine-tuned Model.</p>
+<h3 id="51-pdf-extraktion-mit-docling">5.1 PDF-Extraktion mit Docling</h3>
+<p>Die initiale Konfiguration der Docling-Extraktion führte zu unvollständigen Tabellen und fehlerhaften strukturellen Ausgaben, insbesondere bei komplex formatierten wissenschaftlichen PDFs. Durch den Vergleich und die iterative Anpassung unterschiedlicher Parameter-Sets konnte die Extraktionsqualität deutlich verbessert werden. Die optimierte Konfiguration resultierte in vollständigeren Tabellenstrukturen und konsistenteren Textrepräsentationen.</p>
+<img src="file:///Users/emanuel.sovrano/git/ost/arbeit/imara/docs/9. Projektabschluss/Dokumentation/assets/Qualit&#xE4;tsunterschied-1.png" alt="Beispielhafter Qualit&#xE4;tsunterschied zwischen urspr&#xFC;nglicher und optimierter Docling-Konfiguration (1)." width="100%" height="100%">
+<p><em>Abbildung 8: Beispielhafter Qualitätsunterschied zwischen ursprünglicher und optimierter Docling-Konfiguration (1).</em></p>
+<p>Die Abweichungen umfassten teilweise ganze Tabellen, die in der ursprünglichen Konfiguration fehlten oder unvollständig waren.</p>
+<img src="file:///Users/emanuel.sovrano/git/ost/arbeit/imara/docs/9. Projektabschluss/Dokumentation/assets/Qualit&#xE4;tsunterschied-2.png" alt="Beispielhafter Qualit&#xE4;tsunterschied zwischen urspr&#xFC;nglicher und optimierter Docling-Konfiguration (2)." width="100%" height="100%">
+<p><em>Abbildung 9: Beispielhafter Qualitätsunterschied zwischen ursprünglicher und optimierter Docling-Konfiguration (2).</em></p>
+<p>Die Analyse der Pipeline zeigte dabei klar unterscheidbare Sätze „problematischer“ versus „erfolgreicher“ Parameter.</p>
+<img src="file:///Users/emanuel.sovrano/git/ost/arbeit/imara/docs/9. Projektabschluss/Dokumentation/assets/Problematische-parameter.png" alt="problematische Parameter" width="100%" height="100%">
+<p><em>Abbildung 10: Auszug der als problematisch identifizierten Docling-Parameterkonfiguration.</em></p>
+<img src="file:///Users/emanuel.sovrano/git/ost/arbeit/imara/docs/9. Projektabschluss/Dokumentation/assets/Erfolgreiche-parameter.png" alt="erfolgreiche Parameter" width="100%" height="100%">
+<p><em>Abbildung 11: Auszug der optimierten Docling-Parameterkonfiguration mit deutlich besseren Ergebnissen.</em></p>
+<p>Gleichzeitig zeigte sich ein erheblicher Ressourcenbedarf: Einzelne Dokumente benötigten mehrere Stunden für die vollständige Extraktion, insbesondere beim Parsing von Formeln. Zudem reichten 16 GB GPU-VRAM nicht aus, um alle Extraktionsfeatures stabil zu betreiben. In der Entwicklungsumgebung verursachten zusätzliche Hintergrundprozesse zeitweise hohen RAM-Verbrauch, was zu blockierten oder abgebrochenen Extraktionsläufen führte.</p>
+<p>Darüber hinaus zeigte sich, dass das Parsen mathematischer Formeln sowohl auf CPU- als auch auf GPU-basierten Ausführungen mit sehr hohen Laufzeiten verbunden war. Einzelne Dokumente benötigten mehrere Stunden für die vollständige Extraktion, was den Durchsatz der Massenverarbeitung erheblich reduzierte.</p>
+<h3 id="52-naives-rag">5.2 Naives RAG</h3>
+<p>Für die Baseline wurden die mit Docling extrahierten Dokumente in kurze Text-Chunks zerlegt und in der Tabelle <code>document_chunk</code> persistiert. Typische Chunks umfassen ein bis wenige Sätze, z. B. eine einzelne Empfehlung aus einem Paper („Recommendation 2.4: Ethics is a topic that, given the nature of data science, students should learn and practice throughout their education.“), Schlagwortzeilen wie „Index Terms – self-supervised learning, self-labeling, knowledge distillation, noisy label modeling, speaker recognition“ oder isolierte Formeln („$$R + \frac{\mu}{\theta \sigma^2} &lt; A - \frac{1}{\cosh \kappa T - 1} \cdot (x_0 - A).$$“). In Fällen, in denen Docling Bilder extrahiert hat, enthalten die Chunks zusätzlich einen <code>[IMAGES]</code>‑Block mit relativen Bildpfaden.</p>
+<p>Diese feingranulare Segmentierung erlaubt eine präzise Vektorsuche, führt aber auch zu Kontextfragmentierung: Viele Fragen erfordern Informationen, die über mehrere solcher Kurz-Chunks verteilt sind. In den OpenRAG-Eval-Läufen zeigte sich deshalb, dass das naive RAG bei lokal verankerten Faktenfragen brauchbare Antworten liefert, bei Multi-Hop-Fragen jedoch häufiger entweder unvollständigen Kontext zurückliefert oder relevante Teile über mehrere Chunks verstreut bleiben. Damit bestätigt die Baseline die theoretisch erwarteten Grenzen rein vektorbasierter RAG-Systeme und dient als Referenzpunkt für die graphbasierten Ansätze.</p>
+<h3 id="53-linearrag">5.3 LinearRAG</h3>
+<h4 id="531-ausgangslage">5.3.1 Ausgangslage</h4>
+<p>Die Ausgangslage bilden die 1001 wissenschaftlichen Publikationen aus dem in Abschnitt 4.2 beschriebenen Datensatz. Alle nachfolgenden Vergleiche beziehen sich auf das ursprüngliche LinearRAG-Paper [4].</p>
+<p>Im Folgenden wird der konstruierte Graph charakterisiert und gegen die im Referenzpaper definierten Qualitätsmetriken verglichen.</p>
+<h4 id="532-graphstruktur-und-umfang">5.3.2 Graphstruktur und Umfang</h4>
+<p>Der für LinearRAG konstruierte Wissensgraph basiert auf dem OpenRAGBench-Korpus und umfasst insgesamt rund 1.75 Millionen Knoten und etwa 7.0 Millionen Kanten. Die Knoten verteilen sich auf Passage-, Sentence- und Entity-Nodes. Die resultierende Graphstruktur weist eine sehr geringe Dichte auf, was auf eine hohe Sparsität des Wissens bei gleichzeitig begrenzter Evidenzabdeckung im Retrieval hinweist.</p>
+<table>
+<thead>
+<tr>
+<th>Metrik</th>
+<th style="text-align:right">Wert</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Total Passages</td>
+<td style="text-align:right">278,692</td>
+</tr>
+<tr>
+<td>Total Sentences</td>
+<td style="text-align:right">908,997</td>
+</tr>
+<tr>
+<td>Total Unique Entities</td>
+<td style="text-align:right">596,824</td>
+</tr>
+<tr>
+<td>Total Graph Nodes</td>
+<td style="text-align:right">1,751,262</td>
+</tr>
+<tr>
+<td>Total Graph Edges</td>
+<td style="text-align:right">7,015,416</td>
+</tr>
+</tbody>
+</table>
+<h4 id="533-tf-idf-gewichtung">5.3.3 TF-IDF-Gewichtung</h4>
+<p>Die Auswertung bescheinigt der Verteilung eine exzellente Qualität mit starker Trennschärfe und symmetrischer Struktur, wodurch Entitäten effektiv nach ihrer Wichtigkeit unterschieden werden. Der breite Dynamikbereich ohne Nullwerte deckt dabei sowohl allgemeine als auch hochspezialisierte Konzepte zuverlässig ab und gilt als optimal für den Einsatz in LinearRAG. der TF-IDF-Gewichte der Passage–Entity-Kanten zeigt eine symmetrische Verteilung mit ähnlichen Werten für Mittelwert und Median. Die Gewichte decken einen breiten Wertebereich ab und erlauben eine differenzierte Quantifizierung der semantischen Relevanz von Entitäten innerhalb einzelner Passagen.</p>
+<table>
+<thead>
+<tr>
+<th>Kennzahl</th>
+<th style="text-align:right">Wert</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Mittelwert (Mean)</td>
+<td style="text-align:right">6.65</td>
+</tr>
+<tr>
+<td>Median</td>
+<td style="text-align:right">6.43</td>
+</tr>
+<tr>
+<td>Minimum</td>
+<td style="text-align:right">2.31</td>
+</tr>
+<tr>
+<td>Maximum</td>
+<td style="text-align:right">92.16</td>
+</tr>
+<tr>
+<td>Standardabweichung</td>
+<td style="text-align:right">3.14</td>
+</tr>
+</tbody>
+</table>
+<img src="file:///Users/emanuel.sovrano/git/ost/arbeit/imara/docs/9. Projektabschluss/Dokumentation/assets/lr_td_idf_diagram.png" width="100%" height="100%">
+*Abbildung 12: TF-IDF Gewichtung Verteilung. Erstellt mit Seaborn.*
+<h4 id="534-graph-sparsit%C3%A4t">5.3.4 Graph-Sparsität</h4>
+<p>Die Untersuchung der Graphstruktur zeigt eine extrem hohe Sparsität. Von mehreren Billionen theoretisch möglichen Kanten sind nur wenige Millionen tatsächlich realisiert. Dies resultiert in einer sehr geringen Graphdichte und bestätigt die inhärente Sparsität des relation-freien Ansatzes. Die gemessene Gesamtsparsität von 99.9995% übertrifft die Anforderungen des Referenzpapers deutlich und belegt eine Hyper-Effizienz, die weit über dem geforderten Minimum liegt. Diese Werte validieren den relation-freien Ansatz, da trotz TF-IDF-Gewichtung nur semantisch relevante Verbindungen bestehen bleiben und somit die lineare Skalierbarkeit des Systems bewiesen wird.</p>
+<table>
+<thead>
+<tr>
+<th>Kennzahl</th>
+<th style="text-align:right">Wert</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Theoretisch mögliche Kanten</td>
+<td style="text-align:right">1,533,458,420,691</td>
+</tr>
+<tr>
+<td>Tatsächliche Kanten</td>
+<td style="text-align:right">7,015,416</td>
+</tr>
+<tr>
+<td>Graphdichte</td>
+<td style="text-align:right">0.000457 %</td>
+</tr>
+<tr>
+<td>Graph-Sparsität</td>
+<td style="text-align:right">99.9995 %</td>
+</tr>
+</tbody>
+</table>
+<h4 id="535-zusammenfassung-zentraler-graphmetriken">5.3.5 Zusammenfassung zentraler Graphmetriken</h4>
+<p>Die aggregierten Graphmetriken verdeutlichen den Umfang und die strukturellen Eigenschaften des LinearRAG-Graphen. Neben der hohen Sparsität zeigen sich stabile Durchschnittswerte hinsichtlich der Anzahl von Entitäten pro Passage sowie der Wiederverwendung von Entitäten über mehrere Textabschnitte hinweg</p>
+<table>
+<thead>
+<tr>
+<th>Metrik</th>
+<th style="text-align:right">Wert</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Entities pro Passage (unique)</td>
+<td style="text-align:right">2.14</td>
+</tr>
+<tr>
+<td>Sentences pro Passage</td>
+<td style="text-align:right">3.26</td>
+</tr>
+<tr>
+<td>Passages pro Entity (avg)</td>
+<td style="text-align:right">4.34</td>
+</tr>
+<tr>
+<td>Passages ohne Entities</td>
+<td style="text-align:right">37,117 (13.32 %)</td>
+</tr>
+</tbody>
+</table>
+<h3 id="54-graphmert">5.4 GraphMERT</h3>
+<p>!TODO: @Marco</p>
+<h3 id="55-leanrag">5.5 LeanRAG</h3>
+<p>Für LeanRAG wurde insbesondere der Ressourcenbedarf nach einem Refactoring des Schritts der Triple-Extraktion analysiert. Die entsprechende Auswertung zeigt den Verbrauch an CPU-, Speicher- und GPU-Ressourcen während dieses kritischen Verarbeitungsschritts.</p>
+<img src="file:///Users/emanuel.sovrano/git/ost/arbeit/imara/docs/9. Projektabschluss/Dokumentation/assets/Ressourcenbedarf-leanRAG.png" alt="Ressourcenbedarf LeanRAG Triple Extraction" width="49%" height="49%">
+<p><em>Abbildung 12: Ressourcenbedarf im LeanRAG-Pipeline-Schritt der Triple-Extraktion nach dem Refactoring.</em></p>
+<h3 id="55-benchmark">5.5 Benchmark</h3>
+<h2 id="6-diskussion">6. Diskussion</h2>
+<h3 id="61-docling">6.1 Docling</h3>
+<p>Ein Verzicht auf die Extraktion mathematischer Formeln kam im Projekt nicht in Betracht, da diese einen wesentlichen Bestandteil wissenschaftlicher Publikationen darstellen. Die Ergebnisse zeigen jedoch, dass Formel-Parsing einen dominanten Kostenfaktor in der Extraktionspipeline darstellt und bei der Skalierung graphbasierter RAG-Systeme explizit berücksichtigt werden muss.</p>
+<h3 id="62-naives-rag">6.2 naives RAG</h3>
+<p>Die Ergebnisse des naiven RAG bestätigen die in Kapitel 3.1 beschriebenen Limitierungen vektorbasierter Ansätze. Die sehr kurz gehaltenen Chunks – von einzelnen Empfehlungen über Schlagwortlisten bis hin zu isolierten Formeln – funktionieren gut für einfache, lokal verankerte Faktenfragen, liefern aber bei komplexeren Multi-Hop-Fragen häufig nur Teilkontext. In den OpenRAG-Eval-Läufen zeigte sich, dass das LLM in solchen Fällen zwar gelegentlich korrekte Antworten generiert, diese jedoch nicht immer sauber auf im Kontext vorhandene Evidenz zurückgeführt werden können, was sich in einer im Vergleich zu LinearRAG niedrigeren Contain Accuracy widerspiegelt. Gleichzeitig ist die naive Pipeline klar einfacher und ressourcenschonender: Es entfallen Graphkonstruktion und graphbasierte Traversierungen, Online-Kosten beschränken sich auf Vektorsuche und Generierung. Insgesamt eignet sich das naive RAG damit gut als schnelle, interpretierbare Baseline, ist aber für die im Projekt betrachteten, wissensintensiven Multi-Hop-Szenarien nur bedingt ausreichend und macht den Mehrwert expliziter Graphstrukturen deutlich sichtbar.</p>
+<h3 id="63-linearrag">6.3 LinearRAG</h3>
+<h4 id="631-validierung-des-linearrag-ansatzes">6.3.1 Validierung des LinearRAG-Ansatzes</h4>
+<p>Die gemessenen Graphmetriken bestätigen die grundlegenden Annahmen des LinearRAG-Ansatzes. Insbesondere die hohe Sparsität des Graphen entspricht den theoretischen Erwartungen eines deterministischen, relation-freien Modells und steht im Einklang mit den im ursprünglichen LinearRAG-Paper formulierten Zielen.</p>
+<table>
+<thead>
+<tr>
+<th>Claim</th>
+<th>IMARA LinearRAG</th>
+<th>Referenz (Paper)</th>
+<th>Bewertung</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Entities pro Passage</td>
+<td>~9.3 (inkl. Duplikate)</td>
+<td>~10</td>
+<td>Bestätigt</td>
+</tr>
+<tr>
+<td>Entities pro Sentence</td>
+<td>~3.5</td>
+<td>~4</td>
+<td>Bestätigt</td>
+</tr>
+<tr>
+<td>Graph-Sparsität</td>
+<td>99.9995 %</td>
+<td>&gt;99 %</td>
+<td>Übertrifft</td>
+</tr>
+<tr>
+<td>LLM-freie Konstruktion</td>
+<td>Ja (scispaCy)</td>
+<td>Ja</td>
+<td>Bestätigt</td>
+</tr>
+<tr>
+<td>Tri-Graph-Struktur</td>
+<td>Passage / Sentence / Entity</td>
+<td>Gleich</td>
+<td>Implementiert</td>
+</tr>
+</tbody>
+</table>
+<h4 id="632-skalierbarkeitsimplikationen">6.3.2 Skalierbarkeitsimplikationen</h4>
+<p>Die beobachtete Sparsität impliziert eine nahezu lineare Skalierung von Speicherbedarf und Rechenaufwand in Abhängigkeit von der Korpusgröße. Im Vergleich zu dichteren, LLM-basierten GraphRAG-Ansätzen bleibt der Ressourcenbedarf von LinearRAG auch bei wachsenden Datenmengen beherrschbar, was den Ansatz für produktive Szenarien mit großen Dokumentkorpora besonders relevant macht.</p>
+<h4 id="633-einordnung-im-kontext-graphbasierter-rag-systeme">6.3.3 Einordnung im Kontext graphbasierter RAG-Systeme</h4>
+<p>Durch den Verzicht auf LLM-basierte Relationsextraktion erreicht LinearRAG eine hohe Reproduzierbarkeit und vollständige Unabhängigkeit von Tokenkosten. Diese Eigenschaften positionieren den Ansatz als skalierbare Alternative innerhalb des Spektrums graphbasierter RAG-Systeme, insbesondere in Szenarien, in denen deterministisches Verhalten und Kostenkontrolle im Vordergrund stehen.</p>
+<h3 id="634-openrag-eval-benchmark-vs-naive-rag">6.3.4 OpenRAG Eval Benchmark vs. Naive RAG</h3>
+<p>Dieser Abschnitt vergleicht die Ergebnisse der IMARA-Implementierung von LinearRAG mit dem Naive RAG im Rahmen der OpenRAG Eval.</p>
+<p>Hinweis: Aus Ressourcengründen wurde der Graph mit vollständigen Embeddings exemplarisch für 5 Publikationen und 10 Queries berechnet. Die Ergebnisse lassen dennoch bereits deutliche Tendenzen erkennen.</p>
+<img src="file:///Users/emanuel.sovrano/git/ost/arbeit/imara/docs/9. Projektabschluss/Dokumentation/assets/linearrag_naiverag_eval.png" width="49%" height="49%">
+<p><em>Abbildung 13: TRECE Benchmark OpenRAG - Linear RAG vs. Naive RAG.</em></p>
+<h3 id="64-graphmert">6.4 GraphMERT</h3>
+<p>!TODO: @Marco</p>
+<h3 id="65-leanrag">6.5 LeanRAG</h3>
+<p>!TODO: @Marco</p>
+<h2 id="7-conclusion--fazit">7. Conclusion / Fazit</h2>
+<p>Das Projekt IMARA hatte das Ziel, eine domänenspezifische GraphRAG-Pipeline mit Modell-Fine-tuning vorzubereiten und die Effektivität graphbasierter RAG-Ansätze im Vergleich zu naivem RAG zu evaluieren.</p>
+<p><strong>Zentrale Ergebnisse:</strong></p>
+<ul>
+<li>Es wurde eine skalierbare LinearRAG-Implementierung realisiert, die auf einem grossen wissenschaftlichen Korpus (OpenRAGBench) einen dichten Wissensgraphen mit über 1.7 Mio. Knoten und 7.3 Mio. Kanten aufbaut.</li>
+<li>Die Evaluierung zeigt, dass LinearRAG auf Multi-Hop-Benchmarks konkurrenzfähige bis sehr gute Genauigkeiten erzielt und klassische Limitierungen vektorbasierter RAG-Systeme adressiert.</li>
+<li>Die Arbeit bestätigt, dass Datenqualität (insbesondere PDF-Extraktion) und Graphdesign entscheidende Hebel für die Gesamtleistung sind.</li>
+<li>Durch DVC, MLflow und eine modulare Architektur ist die Grundlage für reproduzierbare Experimente und zukünftiges Fine-tuning gelegt.</li>
+</ul>
+<p>Insgesamt konnte das Kernziel erreicht werden: Der Nutzen graphbasierter RAG-Ansätze gegenüber naiven Vektor-RAGs wurde qualitativ und quantitativ demonstriert. Gleichzeitig wurden offene Fragen und Herausforderungen klar sichtbar gemacht.</p>
+<h3 id="71-pers%C3%B6nliches-fazit">7.1 Persönliches Fazit</h3>
+<h4 id="711-marco-allenspach">7.1.1 Marco Allenspach</h4>
+<p>!TODO: @Marco Allenspach</p>
+<h4 id="712-lukas-koller">7.1.2 Lukas Koller</h4>
+<p>Für mich war eines der stärksten Learnings in diesem Projekt, wie schnell die Komplexität explodiert, sobald mehrere Komponenten – insbesondere LLMs – im Spiel sind. Schon kleine Designentscheidungen (z. B. welche Tools, welcher Datenpfad, welche Konfigurationsquelle) multiplizieren sich sehr schnell mit der Anzahl Daten, Pipelines und Modelle. In Kombination mit grossen Datenmengen führt das leicht dazu, dass man mehr Zeit mit Debugging, Infrastruktur und „Glue Code“ verbringt als mit der eigentlichen inhaltlichen Fragestellung.</p>
+<p>Mein Fazit ist deshalb: lieber mit wenig Daten und klar begrenztem Scope einen stabilen End-to-End-Prozess etablieren, diesen messen und verstehen – und erst danach schrittweise mehr Daten, mehr Komplexität und weitere Modelle hinzufügen. In einer LLM-getriebenen Umgebung ist dieser iterative Ansatz aus meiner Sicht die einzige realistische Chance, die technische und kognitive Komplexität im Griff zu behalten.</p>
+<h4 id="713-emanuel-sovrano">7.1.3 Emanuel Sovrano</h4>
+<p>Die strategische Entscheidung, für Training und Evaluation auf existierende Datensätze zurückzugreifen, erwies sich als essentiell. Ohne die Grundlage von OpenRAG Bench und OpenRAG Eval wäre eine valide Auswertung kaum möglich gewesen.</p>
+<p>Technisch zeigte sich ein deutlicher Gegensatz: Während die einmalige Generierung des Graphen verhältnismässig geradlinig verlief, stellt die Entwicklung hin zu einem voll produktiven und wartbaren System eine erhebliche Hürde dar. Insbesondere die Anforderung, einzelne Dokumente dynamisch hinzuzufügen oder zu entfernen, würde schätzungsweise ein weiteres Personenjahr an Entwicklungszeit beanspruchen.</p>
+<p>Auch infrastrukturell wurden Grenzen sichtbar. Trotz des grossen Aufwands, der in die lokale AI-Infrastruktur floss, blieb die Skalierbarkeit eine Herausforderung. Der Verzicht auf externe „AI Studios“ und Cloud-Anbieter machte die Generierung der Embeddings für den gesamten Korpus (1001 Dokumente) zu einem zeitkritischen Faktor, für dessen vollständige Optimierung letztlich die Ressourcen fehlten.</p>
+<h2 id="8-risikomanagement-und-lessons-learned">8. Risikomanagement und Lessons Learned</h2>
+<h3 id="81-identifizierte-risiken">8.1 Identifizierte Risiken</h3>
+<p>Im Projektverlauf wurden mehrere zentrale Risiken sichtbar. Die Datenqualität und die resultierende Graphdichte sind kritisch: Fehler in der PDF-Extraktion oder Entitätserkennung schlagen direkt auf die Qualität des Wissensgraphen und damit auf die Antwortqualität durch. Zudem ist die gesamte Pipeline – von der Docling-Extraktion über die Graphkonstruktion bis hin zu den LLM-Evaluierungen – deutlich rechenintensiv und stellt hohe Anforderungen an Hardware und Laufzeiten. Hinzu kommen Tooling- und Plattformabhängigkeiten: Unterschiedliche Betriebssysteme (Windows, Linux, macOS) sowie Werkzeuge wie VSCode, Supabase, Docling und die zugrunde liegenden Datenbanken und LLM-Backends bringen jeweils ihre eigenen Stolpersteine mit. Schliesslich erhöht die Vielzahl von Komponenten (DVC, MLflow, Supabase, PostgreSQL mit pgvector, LLM-Backends usw.) die Komplexität der Gesamtinfrastruktur und damit den Integrationsaufwand.</p>
+<h3 id="82-konkrete-erfahrungen">8.2 Konkrete Erfahrungen</h3>
+<p>Die Entscheidung, plattformunabhängig zu bleiben, erwies sich im Alltag als zusätzliche Herausforderung. Insbesondere unter Windows traten Inkompatibilitäten (beispielsweise mit MLflow) und erzwungene Reboots auf, die lang laufende Prozesse – etwa Docling-Batches – wiederholt unterbrachen. Unerwartete Hintergrundprozesse wie <code>cloudcode_cli.exe</code> konnten unbemerkt erhebliche Ressourcen blockieren und ML-Workloads so weit beeinträchtigen, dass Konvertierungen nicht mehr starteten oder einfrohren. Diese Erfahrungen haben gezeigt, dass eine klare Trennung von produktionsnahen Experimenten und „normalen“ Entwicklungsumgebungen sinnvoll ist; dedizierte Maschinen für rechenintensive Aufgaben wie die Docling-Extraktion vereinfachen Stabilität und Fehlersuche deutlich.</p>
+<h3 id="83-lessons-learned">8.3 Lessons Learned</h3>
+<p>Aus diesen Erfahrungen lassen sich mehrere Lehren ableiten. Es ist hilfreich, möglichst früh im Projekt einen Ende-zu-Ende-Slice zu realisieren – etwa vom PDF bis zur einfachen Antwort –, um Risiken in Tooling, Infrastruktur und Datenflüssen sichtbar zu machen, bevor die Architektur zu komplex wird. Daten- und Modellversionierung sollten von Anfang an konsequent mit Werkzeugen wie DVC und MLflow umgesetzt werden, um Experimente nachvollziehbar, reproduzierbar und vergleichbar zu machen. Schliesslich hat sich gezeigt, dass eine schrittweise Komplexitätssteigerung sinnvoll ist: Zuerst eine stabile, naive RAG-Baseline etablieren, diese messen und verstehen, und darauf aufbauend GraphRAG-Komponenten sowie Fine-tuning iterativ ergänzen, statt alles gleichzeitig zu implementieren.</p>
+<h2 id="9-ausblick">9. Ausblick</h2>
+<p>Aus den bisherigen Ergebnissen und Erfahrungen ergeben sich mehrere konkrete Ansatzpunkte für zukünftige Arbeiten. Zunächst bleibt die zentrale Frage, ob ein kompaktes, domänenspezifisches Modell mit rund 80 M Parametern tatsächlich grössere, generische Modelle übertreffen kann. Die bisherigen Experimente deuten darauf hin, dass dies in klar abgegrenzten Domänen und bei gut kuratierten Trainingsdaten möglich ist, allerdings ist dafür eine sehr hohe Qualität der zugrunde liegenden Wissensrepräsentation erforderlich. Ein zentrales Lernfeld ist deshalb die Gestaltung und Pflege des Wissensgraphen selbst.</p>
+<p>Die Qualität eines Wissensgraphen wird wesentlich durch die Qualität der Entitäten bestimmt. Sprachliche Mehrdeutigkeiten – etwa Berufsbezeichnungen versus Eigennamen – sollten systematisch durch kontextbasierte Attribute aufgelöst werden. Das Beispiel „Der Müller hat den Beruf eines Maurers“ illustriert dies: Die Entity „Müller“ ist hier kein Beruf, sondern eine Person mit dem Familiennamen Müller und dem Beruf Maurer. Entsprechende Kontexteigenschaften (Rollen, Typen, semantische Klassen) müssen explizit modelliert werden, um Fehlinterpretationen im Graphen zu vermeiden.</p>
+<p>Ein weiterer Ansatzpunkt betrifft die Organisation der Verarbeitungsschritte. Möglichst viele Schritte – bis hin zu Entity-Relation-Triples – sollten im Scope eines einzelnen Dokuments vorverarbeitet werden. Dadurch entsteht ein kontinuierlich erweiterbarer Graph, der sich sukzessive aus vorverarbeiteten Datensätzen speist. Gleichzeitig werden Parallelisierung und Lastverteilung erleichtert, und das Entfernen oder Ersetzen einzelner Dokumente wird deutlich einfacher, etwa wenn Daten fehlerhaft sind oder veralten und durch aktuellere Versionen ersetzt werden müssen. Darüber hinaus ermöglicht dieses Vorgehen, mehrere Graphvarianten mit minimalem Offset für unterschiedliche Berechtigungsstufen zu erzeugen.</p>
+<p>Viele Fakten sind zudem orts- und zeitabhängig. Medizinische Interpretationen (z. B. Atemschwierigkeiten auf Meereshöhe versus in grosser Höhe), Aktienkurse oder auch Geschwindigkeitsbegriffe („rasend schnell“ um 1900 vs. Durchschnitt heute) verändern ihre Bedeutung in Abhängigkeit von Raum und Zeit. Diese Dimensionen sollten systematisch im Graphmodell berücksichtigt werden, etwa durch explizite Zeit- und Ortsattribute oder entsprechende Kontext-Knoten, um Aussagen korrekt einordnen und zeitliche Entwicklungen abbilden zu können.</p>
+<p>Für mehrsprachige Knowledge Bases ist eine semantisch korrekte Zusammenführung von Entitäten über Sprachgrenzen hinweg erforderlich. Statt Entitäten lediglich über Übersetzungen zu verknüpfen, bietet sich die Einführung einer höheren Hierarchieschicht in Form eines Konzeptgraphen an: Einzelne Fakten werden in sprachspezifischen Wissensgraphen modelliert und darüber auf sprachunabhängige Konzepte abgebildet. So lassen sich Mehrsprachigkeit und Domänenspezifik besser trennen, ohne permanente Übersetzungen zwischen Sprachen erzwingen zu müssen.</p>
+<p>Ein weiterer, vielversprechender Ansatz liegt im Einsatz von Hypergraphen und Relation-Clustering. Das Clustering identischer oder stark ähnlicher Relationen in einem Hypergraphen erlaubt es, Teilgraphen zusammenzuführen, ohne die Möglichkeit zu verlieren, einzelne Teile bei Bedarf wieder zu entfernen. Gleichzeitig können aus den Hyperkanten wahrscheinliche Relationen abgeleitet und zurück in den klassischen Wissensgraph projiziert werden. Dies eröffnet Spielräume für effizienteres Speichern, besseres Generalisieren und für die Ableitung neuer, plausibler Verbindungen.</p>
+<p>Schliesslich ist die tiefere Integration der Evaluierungsinfrastruktur ein wichtiger nächster Schritt. Die Ausführung von OpenRAG-Eval-Szenarien soll vollständig über DVC-Pipelines orchestriert werden, sodass Datendownload, Graphaufbau, Retrieval-Läufe und Auswertung automatisch miteinander verknüpft sind und als reproduzierbare Pipelines ausgeführt werden können. Die geplante Arbeit zu DVC und dem Vergleich verschiedener OpenRAG-Eval-Konfigurationen kann hier andocken, indem unterschiedliche Modelle, Konfigurationen und Datenschnitte als DVC-Stages abgebildet und systematisch miteinander verglichen werden. Dies würde die Nachvollziehbarkeit der Experimente weiter erhöhen und eine belastbare Grundlage für die Frage schaffen, unter welchen Bedingungen ein kompaktes, domänenspezifisches Modell grössere, generische LLMs tatsächlich übertreffen kann.</p>
+<div style="page-break-after: always;"></div>
+<h2 id="glossar">Glossar</h2>
+<h3 id="a-%E2%80%93-c">A – C</h3>
+<ul>
+<li><strong>AI-Native GraphRAG:</strong> Ein weiterentwickeltes Paradigma von GraphRAG, das den gesamten Workflow von unstrukturierten Daten bis zur Antwortgenerierung automatisiert und dabei die Komplexität von Graphentheorie und Datenbankmanagement abstrahiert.</li>
+<li><strong>Chunking:</strong> Der Prozess des Zerlegens von Texten in kleinere Abschnitte (Chunks). Im Bericht wird dies als kritischer Faktor für naives RAG identifiziert, da suboptimale Chunk-Grössen (zu gross oder zu klein) zu Kontextverlust oder Rauschen führen können.</li>
+<li><strong>CommonKG:</strong> Eine im Kontext von LeanRAG erwähnte Methode zur Erstellung von Wissensgraphen, bei der Entitäten und Relationen (Triples) aus Text-Chunks extrahiert und dedupliziert werden.</li>
+</ul>
+<h3 id="d-%E2%80%93-g">D – G</h3>
+<ul>
+<li><strong>Docling:</strong> Ein Open-Source-Toolkit zur Dokumentenkonvertierung, das im Projekt eingesetzt wurde, um komplexe PDFs in maschinenlesbare Formate (z. B. Markdown, JSON, Doctags) zu wandeln. Im Projekt traten Herausforderungen bezüglich VRAM-Verbrauch, Laufzeit und Stabilität (z. B. in der Container-Variante <code>docling-serve</code>) auf.</li>
+<li><strong>Embeddings:</strong> Vektorrepräsentationen von Texten (z. B. Sätze, Entitäten, Passagen), die als Grundlage für Vektorsuche, Clustering und Ähnlichkeitsberechnungen in RAG- und GraphRAG-Systemen dienen.</li>
+<li><strong>FActScore / ValidityScore:</strong> Metriken zur Bewertung der faktischen Korrektheit (FActScore) und der ontologischen Gültigkeit von Relationen (ValidityScore) in Wissensgraphen oder generierten Antworten. Im Bericht erzielt GraphMERT deutlich höhere Werte als reine LLMs.</li>
+<li><strong>Fine-tuning:</strong> Das Nachtrainieren eines LLMs (z. B. Qwen) auf spezifischen, oft graphbasierten oder domänenspezifischen Daten, um Antwortqualität und Domänenexpertise zu erhöhen.</li>
+<li><strong>GraphMERT:</strong> Ein kompaktes, rein grafisches Encoder-Modell (neurosymbolische KI), das effizient zuverlässige und ontologiekonsistente Wissensgraphen aus unstrukturierten Texten generiert und dabei hohe FActScore- und ValidityScore-Werte erreicht.</li>
+<li><strong>GraphRAG (Graph Retrieval-Augmented Generation):</strong> Eine Erweiterung von RAG, die statt flacher Textlisten strukturierte Wissensgraphen nutzt. Dies ermöglicht das Erkennen komplexer Beziehungen, Multi-Hop-Reasoning und eine explizite Repräsentation von Entitäten und Relationen.</li>
+<li><strong>Graph-Sparsität:</strong> Ein Mass für die Anzahl fehlender Kanten in einem Graphen relativ zur maximal möglichen Anzahl. Die Sparsität wird typischerweise berechnet als<br>
+<em>Sparsität = 1 − (Actual Edges / Possible Edges)</em>.<br>
+Bei 100 % Sparsität existieren keine Kanten, bei 0 % sind alle möglichen Kanten vorhanden. Im Kontext von Wissensgraphen beschreibt sie, wie dicht oder dünn ein Graph verknüpft ist.</li>
+</ul>
+<h3 id="h-%E2%80%93-l">H – L</h3>
+<ul>
+<li><strong>Hypergraph:</strong> Eine Graphstruktur, bei der eine Kante (Hyperedge) mehr als zwei Knoten verbinden kann. Im Ausblick wird dies als Ansatz vorgeschlagen, um identische Relationen zu clustern und Teilgraphen effizient zusammenzufassen.</li>
+<li><strong>IMARA:</strong> Der Name des Projekts. Es steht für die Entwicklung einer domänenspezifischen, graphbasierten RAG-Pipeline mit Modell-Fine-tuning und integrierter Evaluationspipeline.</li>
+<li><strong>Knowledge Graph (Wissensgraph):</strong> Eine strukturierte Darstellung von Wissen in Form von Knoten (Entitäten) und Kanten (Beziehungen), die ein aktives, abfragefähiges Modell eines Fachbereichs oder der Welt bildet.</li>
+<li><strong>LeanRAG:</strong> Ein GraphRAG-Ansatz, der auf semantische Aggregation und hierarchisches Retrieval setzt, um Redundanzen zu minimieren (im Bericht ca. 46 % weniger Redundanz im Vergleich zu flachen Baselines) und gleichzeitig hoch relevante Evidenz bereitzustellen.</li>
+<li><strong>LinearRAG:</strong> Eine effiziente, relation-freie GraphRAG-Methode mit linearer Komplexität. Sie nutzt leichtgewichtige Entity Recognition und semantische Verlinkung zur Graphkonstruktion, ohne LLM-basierte Relationsextraktion, und kombiniert Vektorsuche mit graphbasiertem Scoring (z. B. Personalized PageRank).</li>
+<li><strong>LLM (Large Language Model):</strong> Grosse Sprachmodelle (z. B. GPT‑4o, Qwen, Gemma), die als generative Komponente in RAG- und GraphRAG-Pipelines eingesetzt werden, um natürlichsprachliche Antworten aus bereitgestelltem Kontext zu erzeugen.</li>
+</ul>
+<h3 id="m-%E2%80%93-o">M – O</h3>
+<ul>
+<li><strong>Multi-Hop-Reasoning:</strong> Die Fähigkeit, Informationen über mehrere Verbindungsschritte hinweg zu verknüpfen (z. B. A ist verbunden mit B, B ist verbunden mit C → Schlussfolgerung von A auf C). Dies ist eine Schwäche von naivem RAG, aber eine Stärke von GraphRAG-Ansätzen wie LeanRAG oder LinearRAG.</li>
+<li><strong>Naives RAG:</strong> Bezeichnet im Bericht konventionelle, rein vektorbasierte RAG-Architekturen, die Wissen als unzusammenhängende Fakten (Chunks) behandeln, stark von der Chunking-Strategie abhängen und häufig an kontextueller Fragmentierung leiden.</li>
+<li><strong>Neurosymbolische KI:</strong> Kombination aus neuronalen Netzwerken (für Generalisierung und Lernen) und symbolischer KI (für Abstraktion, Logik und Graphstrukturen), wie sie im GraphMERT-Ansatz umgesetzt ist.</li>
+<li><strong>OpenRAGBench:</strong> Ein Referenzdatensatz (Benchmark) mit rund 1000 wissenschaftlichen PDFs (Arxiv) und zugehörigen Frage-Antwort-Paaren, der im Projekt genutzt wird, um die Messbarkeit und Vergleichbarkeit der Ergebnisse sicherzustellen.</li>
+<li><strong>OpenRAG-Eval:</strong> Ein Evaluations-Framework, das unterschiedliche RAG- und GraphRAG-Systeme anhand einheitlicher Metriken (z. B. LLM Accuracy, Contain Accuracy, Faithfulness, Laufzeit) miteinander vergleicht und im Projekt zur Orchestrierung der Benchmarks eingesetzt wird.</li>
+</ul>
+<h3 id="s-%E2%80%93-v">S – V</h3>
+<ul>
+<li><strong>Semantic Aggregation:</strong> Ein Feature von LeanRAG, bei dem Entitäten in semantisch kohärente Zusammenfassungen (Cluster) gruppiert und als aggregierte Knoten mit expliziten Relationen dargestellt werden, um die Navigation im Graphen und das hierarchische Retrieval zu verbessern.</li>
+<li><strong>Synthetic Data Generation (SDG):</strong> Ein Ansatz zur Generierung künstlicher Testdaten zur Systembewertung, häufig unter Nutzung von LLMs als „Judge“, um z. B. Antwortqualität oder Robustheit zu messen.</li>
+<li><strong>TF-IDF (Term Frequency–Inverse Document Frequency):</strong> Ein statistisches Mass zur Bewertung der Wichtigkeit eines Terms in einem Dokument relativ zu einer Dokumentensammlung. Eine gebräuchliche Formel ist<br>
+<em>TF-IDF = log(1 + tf) × log(N / df)</em>,<br>
+wobei <em>tf</em> die Termfrequenz, <em>N</em> die Gesamtzahl der Dokumente und <em>df</em> die Anzahl der Dokumente ist, die den Term enthalten. Im LinearRAG-Ansatz wird TF-IDF unter anderem zur Gewichtung von Passage-Entitäts-Kanten verwendet, um die semantische Relevanz von Entitäten für spezifische Textabschnitte zu quantifizieren.</li>
+<li><strong>Triple:</strong> Die grundlegende Dateneinheit eines Wissensgraphen, bestehend aus Subjekt, Prädikat (Relation) und Objekt (z. B. „Müller“ → „hat Beruf“ → „Maurer“).</li>
+<li><strong>Unsloth:</strong> Ein Framework für ressourceneffizientes Fine-tuning von LLMs, das im Projekt genutzt wurde, um Modellanpassungen mit geringeren Hardwareanforderungen durchzuführen.</li>
+<li><strong>Vektorsimilaritätssuche:</strong> Das Standard-Suchverfahren klassischer RAG-Systeme, bei dem Textabschnitte als Vektoren im Embedding-Raum repräsentiert und basierend auf ihrer Distanz (z. B. Kosinus- oder euklidische Distanz) verglichen werden. Es ermöglicht semantische Suche, berücksichtigt jedoch explizite Relationen zwischen Entitäten oft nicht.</li>
+</ul>
+<div style="page-break-after: always;"></div>
+<h2 id="abbildungsverzeichnis">Abbildungsverzeichnis</h2>
+<p>Abbildung 3: LeanRAG-Framework, übernommen aus Zhang et al. (2025), arXiv:2508.10391.
+Abbildung 4: LinearRAG-Workflow, übernommen aus Li et al. (2025), arXiv:2510.10114.
+Abbildung 5: GraphMERT Node Embeddings (t-SNE View) und GraphMERT Semantic Graph Visualization, jeweils übernommen aus Belova et al. (2025), arXiv:2510.09580.<br>
+Abbildung 6: Query-Suche auf den Graph-Ergebnissen: links ein perfektes, rechts ein fast perfektes Resultat, übernommen aus Belova et al. (2025), arXiv:2510.09580.<br>
+Abbildung 7: Architekturübersicht von Docling, übernommen aus der offiziellen Docling-Dokumentation (Docling-Projekt, Zugriff am 18.01.2026).
+Abbildung 8: Beispielhafter Qualitätsunterschied zwischen ursprünglicher und optimierter Docling-Konfiguration (1).<br>
+Abbildung 9: Beispielhafter Qualitätsunterschied zwischen ursprünglicher und optimierter Docling-Konfiguration (2).<br>
+Abbildung 10: Auszug der als problematisch identifizierten Docling-Parameterkonfiguration.<br>
+Abbildung 11: Auszug der optimierten Docling-Parameterkonfiguration mit deutlich besseren Ergebnissen.<br>
+Abbildung 12: Ressourcenbedarf im LeanRAG-Pipeline-Schritt der Triple-Extraktion nach dem Refactoring.</p>
+<div style="page-break-after: always;"></div>
+<h2 id="literaturverzeichnis">Literaturverzeichnis</h2>
+<p>[1] Docling-Projekt. <em>Docling: An Efficient Open-Source Toolkit for AI-driven Document Conversion.</em><br>
+arXiv:2501.17887.<br>
+Verfügbar unter: <a href="https://www.docling.ai/">https://www.docling.ai/</a> (Zugriff am 18.01.2026).</p>
+<p>[2] Docling-Projekt (o.J.). <em>Docling Architecture.</em><br>
+Verfügbar unter: <a href="https://docling-project.github.io/docling/concepts/architecture/">https://docling-project.github.io/docling/concepts/architecture/</a><br>
+(Zugriff am 18.01.2026).</p>
+<p>[3] Zhang, X. et al. (2025). <em>Knowledge-Graph-Based Generation with Semantic Aggregation and Hierarchical Retrieval.</em><br>
+arXiv:2508.10391.<br>
+Zusätzliche Ressourcen: <a href="https://github.com/KnowledgeXLab/LeanRAG">https://github.com/KnowledgeXLab/LeanRAG</a></p>
+<p>[4] Li, Y. et al. (2025). <em>LinearRAG: Linear Graph Retrieval-Augmented Generation on Large-scale Corpora.</em><br>
+arXiv:2510.10114.<br>
+Zusätzliche Ressourcen: <a href="https://github.com/DEEP-PolyU/LinearRAG">https://github.com/DEEP-PolyU/LinearRAG</a></p>
+<p>[5] Belova, M., Xiao, J., Tuli, S., &amp; Jha, N. K. (2025). <em>GraphMERT: Efficient and Scalable Distillation of Reliable Knowledge Graphs from Unstructured Data.</em><br>
+arXiv:2510.09580.<br>
+Zusätzliche Ressourcen: <a href="https://github.com/creativeautomaton/graphMERT-python">https://github.com/creativeautomaton/graphMERT-python</a></p>
+<p>[6] Vectara. <em>Open RAG Benchmark (1000 PDFs, 3000 Queries): A Multimodal PDF Dataset for Comprehensive RAG Evaluation.</em><br>
+Verfügbar unter: <a href="https://github.com/vectara/open-rag-bench">https://github.com/vectara/open-rag-bench</a></p>
+
+</body>
+</html>
