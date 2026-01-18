@@ -1,8 +1,6 @@
 ---
-title: "Projektbericht CAS «Machine Learning for Software Engineers (ML4SE)»"
-subtitle: |
-  Evaluation graph-basierter RAG-Ansätze
-  IMARA
+title: "IMARA - Evaluation graph-basierter RAG-Ansätze"
+subtitle: "Machine Learning for Software Engineers (ML4SE)"
 author:
   - "Marco Allenspach"
   - "Lukas Koller"
