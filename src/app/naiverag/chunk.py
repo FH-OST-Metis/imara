@@ -32,7 +32,12 @@ def write_chunks_for_file(
 ) -> None:
     global files_count, overall_chunks_count
 
-    chunker = HierarchicalChunker()
+    # Configure chunker with max_tokens to enforce hard limit on chunk size
+    # max_tokens limits token count (1 token ≈ 4 chars), preventing massive chunks
+    chunker = HierarchicalChunker(
+        max_tokens=chunk_size,
+        overlap=overlap,
+    )
 
     doc = DoclingDocument.load_from_json(input_file)
 

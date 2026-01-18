@@ -147,8 +147,8 @@ stages:
       nfiles: 12955
     - path: src/app/naiverag/chunk.py
       hash: md5
-      md5: f879183e47c88d6e7b788e3ba723828d
-      size: 3696
+      md5: 3568b3e7a5d274780e0fa528d28d27c7
+      size: 3918
     params:
       params.yaml:
         chunk.chunk_size: 500
@@ -157,9 +157,9 @@ stages:
     outs:
     - path: data/processed/chunks
       hash: md5
-      md5: 97d328068fbd9307ce5e3db94b1beeb2.dir
-      size: 159631484
-      nfiles: 278692
+      md5: b2facf2022e7cb700f8b1173a82e863b.dir
+      size: 159617272
+      nfiles: 278574
   naiverag_embed:
     cmd: uv run python src/app/naiverag/embed.py --input data/processed/chunks 
       --artifacts data/processed/extracted --database_url 
@@ -380,8 +380,8 @@ stages:
     deps:
     - path: src/app/linear_rag/index.py
       hash: md5
-      md5: 61521e36b7df712ae2d2a28b25b79c62
-      size: 17601
+      md5: 0e4713762bf3f7325a1e294c3d7b21c4
+      size: 19584
     params:
       params.yaml:
         index.batch_size: 32
@@ -403,8 +403,8 @@ stages:
       nfiles: 12955
     - path: src/app/linear_rag/load.py
       hash: md5
-      md5: 376a2f2799fcaff349420e3f22549a9d
-      size: 7041
+      md5: 0cc577fc2360c232d6cb8f895559c1dc
+      size: 7033
     params:
       params.yaml:
         load.batch_size: 100

@@ -30,6 +30,14 @@ logging.basicConfig(
 )
 logger = logging.getLogger(__name__)
 
+# Maximum text length for spaCy processing (stay under 1M limit)
+# Parser and NER require ~1GB RAM per 100K chars, so 900K = ~9GB RAM per chunk
+MAX_SPACY_LENGTH = 900000
+
+# Maximum sentence length in bytes for PostgreSQL btree index (limit is 2704 bytes)
+# Using 2500 as safe margin to account for UTF-8 encoding overhead
+MAX_SENTENCE_BYTES = 2500
+
 
 def compute_hash_id(text: str, prefix: str) -> str:
     """Compute MD5-based hash ID with namespace prefix (matches LinearRAG convention)."""
@@ -55,8 +63,10 @@ class LinearRAGIndexer:
         # Statistics for MLflow logging
         self.stats = {
             "passages_processed": 0,
+            "passages_skipped": 0,
             "entities_extracted": 0,
             "sentences_extracted": 0,
+            "sentences_filtered_oversized": 0,
             "unique_entities": 0,
             "unique_sentences": 0,
             "graph_nodes_created": 0,
@@ -113,6 +123,16 @@ class LinearRAGIndexer:
             if "[IMAGES]" in content:
                 passage_text = content.split("[IMAGES]")[0].strip()
 
+            # Skip passages that are too large (likely data quality issues)
+            # Large passages cause memory issues and produce oversized sentences that exceed DB index limits
+            if len(passage_text) > MAX_SPACY_LENGTH:
+                logger.warning(
+                    f"Skipping large passage ({len(passage_text)} chars) in {title} page {page_ref}. "
+                    f"Exceeds MAX_SPACY_LENGTH ({MAX_SPACY_LENGTH}). Consider investigating upstream chunking."
+                )
+                self.stats["passages_skipped"] += 1
+                continue
+
             passages_data.append(
                 {
                     "db_id": db_id,
@@ -125,16 +145,27 @@ class LinearRAGIndexer:
 
             # Extract entities and sentences using spaCy
             doc = self.nlp(passage_text)
-
             # Extract entities (NER)
             entities = [ent.text.strip() for ent in doc.ents if ent.text.strip()]
+            # Extract sentences and filter out oversized ones (exceed PostgreSQL btree index limit)
+            raw_sentences = [sent.text.strip() for sent in doc.sents if sent.text.strip()]
+            sentences = []
+            for sent in raw_sentences:
+                sent_bytes = len(sent.encode('utf-8'))
+                if sent_bytes > MAX_SENTENCE_BYTES:
+                    logger.warning(
+                        f"Filtering oversized sentence ({sent_bytes} bytes) from {title} page {page_ref}. "
+                        f"Exceeds MAX_SENTENCE_BYTES ({MAX_SENTENCE_BYTES}). First 100 chars: {sent[:100]}..."
+                    )
+                    self.stats["sentences_filtered_oversized"] += 1
+                else:
+                    sentences.append(sent)
+
             entity_hashes = [compute_hash_id(ent, "entity-") for ent in entities]
 
             all_entities.update(entities)
             passage_entities_map[passage_hash] = entity_hashes
 
-            # Extract sentences
-            sentences = [sent.text.strip() for sent in doc.sents if sent.text.strip()]
             sentence_hashes = [compute_hash_id(sent, "sentence-") for sent in sentences]
 
             all_sentences.update(sentences)
@@ -433,7 +464,11 @@ def main(database_url: str, spacy_model: str, batch_size: int) -> None:
     Reads passages from document_chunk table to build knowledge graph in Supabase lr_* tables.
     """
     logger.info(f"Loading spaCy model: {spacy_model}")
-    nlp = spacy.load(spacy_model)
+    # Disable parser to reduce memory usage, use rule-based sentence segmentation
+    nlp = spacy.load(spacy_model, disable=["parser"])
+    # Add simple rule-based sentencizer (lightweight alternative to parser)
+    nlp.add_pipe("sentencizer")
+    logger.info("SpaCy pipeline optimized: parser disabled, using sentencizer for sentence segmentation")
 
     logger.info(f"Connecting to database: {database_url}")
     conn = _connect(database_url)

@@ -54,6 +54,7 @@ stages:
     params:
       - index.batch_size
       - index.spacy_model
+    frozen: false
 
   generate_queries:
     cmd: uv run open-rag-eval generate-queries --config query_gen_config.yaml
