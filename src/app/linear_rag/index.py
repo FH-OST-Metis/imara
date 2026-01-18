@@ -148,10 +148,12 @@ class LinearRAGIndexer:
             # Extract entities (NER)
             entities = [ent.text.strip() for ent in doc.ents if ent.text.strip()]
             # Extract sentences and filter out oversized ones (exceed PostgreSQL btree index limit)
-            raw_sentences = [sent.text.strip() for sent in doc.sents if sent.text.strip()]
+            raw_sentences = [
+                sent.text.strip() for sent in doc.sents if sent.text.strip()
+            ]
             sentences = []
             for sent in raw_sentences:
-                sent_bytes = len(sent.encode('utf-8'))
+                sent_bytes = len(sent.encode("utf-8"))
                 if sent_bytes > MAX_SENTENCE_BYTES:
                     logger.warning(
                         f"Filtering oversized sentence ({sent_bytes} bytes) from {title} page {page_ref}. "
@@ -468,7 +470,9 @@ def main(database_url: str, spacy_model: str, batch_size: int) -> None:
     nlp = spacy.load(spacy_model, disable=["parser"])
     # Add simple rule-based sentencizer (lightweight alternative to parser)
     nlp.add_pipe("sentencizer")
-    logger.info("SpaCy pipeline optimized: parser disabled, using sentencizer for sentence segmentation")
+    logger.info(
+        "SpaCy pipeline optimized: parser disabled, using sentencizer for sentence segmentation"
+    )
 
     logger.info(f"Connecting to database: {database_url}")
     conn = _connect(database_url)
