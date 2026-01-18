@@ -247,20 +247,20 @@ Zusätzlich werden Vektorrepräsentationen von Entitäten in der Tabelle `lr_ent
 **GraphMERT: Graph-Augmented Masked Entity Recovery Transformer**
 GraphMERT ist eine neuartige Architektur, die entwickelt wurde, um strukturiertes Wissen (Wissensgraphen) direkt in den Einbettungsraum eines Sprachmodells zu injizieren. Im Gegensatz zu Standard-Transformern, die Text als flache Sequenz behandeln, betrachtet GraphMERT Text als einen „Leafy Chain Graph“ (einen Graphen mit einer Kette als Rückgrat und angehängten Blättern). Dies ermöglicht es, Beziehungen zwischen Entitäten explizit zu modellieren und diese strukturellen Informationen in seine Repräsentationen einfliessen zu lassen.
 
-#### Das Konzept
+#### 4.7.1 Das Konzept
 
 Standard-Sprachmodelle (wie BERT) lernen Muster in Texten. Sie sind hervorragend im Erfassen von Syntax und allgemeiner Semantik, haben aber oft Schwierigkeiten mit explizitem, mehrstufigem strukturiertem Wissen (z. B. definitiv zu wissen, dass „Metformin Diabetes BEHANDELT“, anstatt nur zu wissen, dass diese Wörter oft zusammen auftreten).
 
 GraphMERT überbrückt diese Lücke, indem es Sätze in Graphen umwandelt:
 
-#### Die „Leafy Chain Graph“-Struktur
+#### 4.7.2 Die „Leafy Chain Graph“-Struktur
 
 Die Schlüsselinnovation liegt in der Darstellung der Daten. Jede Eingabesequenz ist als Graph fester Grösse formatiert (z. B. 512 Token):
 
 1. **Die Wurzeln (Satz-Rückgrat):** Die ersten  Token (z. B. 64) sind die Standard-Token des Eingabesatzes und bilden eine lineare „Kette“.
 2. **Die Blätter (Strukturiertes Wissen):** An diese Wurzeln sind „Blätter“ angehängt. Wenn wir ein Tripel wie `(Subjekt, Relation, Objekt)` kennen, lokalisieren wir das `Subjekt`-Token in den Wurzeln und hängen die `Objekt`-Token als dessen Blätter an. Die Kante, die sie verbindet, trägt den `Relations`-Typ.
 
-#### H-GAT (Hierarchical Graph Attention)
+#### 4.7.3 H-GAT (Hierarchical Graph Attention)
 
 Standard-Transformer verwenden Self-Attention, bei der jedes Token jedes andere Token betrachtet. GraphMERT fügt eine H-GAT-Schicht *vor* dem Standard-Transformer-Encoder ein.
 
@@ -272,12 +272,12 @@ Diese Schicht führt **Message Passing** (Nachrichtenübermittlung) durch. Für 
 
 Dies „injiziert“ die Bedeutung der Beziehung explizit in die Repräsentation der Tail-Entität.
 
-#### Implementation Version 1
+#### 4.7.4 Implementation Version 1
 
 Der Core von GraphMERT wurde von einer kleinen Referenzimplementierung (PoC in einem Jupyter-Notebook) abgeleitet.
 Die ersten Ergebnisse waren Vielversprechend, aber nur auf einem Minimaldatensatz. Zudem weist diese  Implementierung einen katastrophalen Logikfehler auf, der garantiert, dass das Retrieval fehlschlägt (d. h. zufällige Ergebnisse liefert).
 
-#### Impementation Version 2
+#### 4.7.5 Impementation Version 2
 
 Es musste eine komplett neue Version von GraphMERT geschrieben werden, in der die gemachten Erfahrungen verarbeitet wurden.
 
