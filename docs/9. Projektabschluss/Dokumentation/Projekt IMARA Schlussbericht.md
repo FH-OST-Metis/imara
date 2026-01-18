@@ -392,24 +392,41 @@ Die aggregierten Graphmetriken verdeutlichen den Umfang und die strukturellen Ei
 
 ### 5.4 GraphMERT
 
-**Kritische Analyse: Warum die erste Version scheiterte**
+**GraphMERT_General.py**
+[3] Training on 1192 graph samples...
+Epoch 1: Loss = 9.1747
+...
+Epoch 20: Loss = 0.0551
 
-**A. Der „Äpfel-mit-Birnen“-Vergleich bei den Vektorräumen (Mismatch)**
-Dies ist der kritischste Fehler. Es werden zwei völlig unterschiedliche mathematische Räume verglichen.
+**GraphMERT_RAG.py**
+[RAG] Loading Tokenizer...
+[RAG] Connecting to Vector DB...
+[DB] Dropping old collection 'graph_knowledge'...
+[DB] Initialized clean storage.
+[RAG] Loading GraphMERT Model...
+[RAG] Model weights loaded.
+[DB] Ingesting 1192 graphs...
+[DB] Inserted batch 0 to 49...
+...
+[DB] Inserted batch 1100 to 1149...
+[DB] Inserted final batch of 42 items.
+[DB] Ingestion complete.
 
-- **Die Datenbank (Graph-Knoten):** Die Knoten-Embeddings werden erstellt durch: `SBERT -> PCA (Text) -> GraphMERT -> PCA (GraphMERT)`.
-- **Die Abfrage (Query):** Das Query-Embedding wird erstellt durch: `SBERT -> PCA (Text)`.
-- **Das Problem:** Die Abfrage durchläuft niemals das `GraphMERT`-Modell oder die zweite `PCA`. Die Berechnung der Kosinus-Ähnlichkeit zwischen dem „rohen SBERT-Raum“ und dem „GraphMERT-transformierten Raum“ funktioniert nicht. Diese Vektoren befinden sich in unterschiedlichen Koordinatensystemen. Das Skalarprodukt wird lediglich zufälliges Rauschen ergeben.
+**Processing Query:** 'What type of features does the ScanSSD architecture exclusively use?'
+**[RAG] Retrieved Context (Score: 0.7849):** "scanssd uses only visual features for detection : no formatting or typesetting information such as layout, font, or character labels are employed."
+**Result:** ['labels -> layout (Retrieved)']
 
-**B. Verwirrung bei der Dimensionalität**
-PCA wird zweimal angewendet, was redundant und verlustbehaftet ist.
+**Processing Query:** 'What specific computational issue of the 'two-stage iterative framework' does the proposed 'Self-supervised Reflective Learning' (SSRL) aim to eliminate?'
+**[RAG] Retrieved Context (Score: 0.8202):** "methods < / section _header_ level _1 > < text > < loc_ 255 > < loc _315 > < loc_ 460 > < loc _ 374 > this section introduces the self - supervised reflective learning ( ssrl ) approach, which improves the two - stage iterative framework ["
+**Result:** ['methods -> > (Retrieved)', 'which -> 8 (Retrieved)']
 
-- **Input:** SBERT (384 Dim.) PCA 10 Dim.
-- **Modell:** GraphMERT erweitert dies auf 128 Dim. (Hidden State).
-- **Output:** PCA 10 Dim.
-Embeddings auf **10 Dimensionen** zu komprimieren, ist extrem aggressiv. Standard-RAG-Systeme nutzen 768 oder 1024 Dimensionen. Bei 10 Dimensionen werden unterschiedliche Konzepte (z. B. „Romeo“ vs. „Mercutio“) wahrscheinlich ineinander kollabieren, was das Retrieval (die Informationsabfrage) ungenau macht.
+**Processing Query:** 'According to the text, what are the six elements of Knowledge, Skills, and Abilities (KSAs) required for 'Ethical Reasoning'?'
+**[RAG] Retrieved Context (Score: 0.9469):** "there are six elements of knowledge, skills, and abilities ( ksas ) that are required for ethical reasoning."
+**Result:** ['that -> reasoning (Retrieved)']
 
-Als Folge wurde eine Neu-Implementation Version 2 gemacht.
+**Processing Query:** 'The proposed pipeline uses XGBoost to predict the future distribution of cells expressing which specific gene?'
+**[RAG] Retrieved Context (Score: 0.6834):** "fig - 1 : detailed information about our pipeline, ( a ) ripley ' s k function are used as a feature, ( b ) xgboost is the machine learning method we used ( c ) the output of the pipeline that shows the distribution of active cells. < / caption > < chart > < lo"
+**Result:** ['that -> cells. < / capt (Retrieved)']
 
 **GraphMERT_General.py:**
 
@@ -480,15 +497,33 @@ Hinweis: Aus Ressourcengründen wurde der Graph mit vollständigen Embeddings ex
 
 ### 6.4 GraphMERT
 
+**Kritische Analyse: Warum die erste Version scheiterte**
+
+**A. Der „Äpfel-mit-Birnen“-Vergleich bei den Vektorräumen (Mismatch)**
+Dies ist der kritischste Fehler. Es werden zwei völlig unterschiedliche mathematische Räume verglichen.
+
+- **Die Datenbank (Graph-Knoten):** Die Knoten-Embeddings werden erstellt durch: `SBERT -> PCA (Text) -> GraphMERT -> PCA (GraphMERT)`.
+- **Die Abfrage (Query):** Das Query-Embedding wird erstellt durch: `SBERT -> PCA (Text)`.
+- **Das Problem:** Die Abfrage durchläuft niemals das `GraphMERT`-Modell oder die zweite `PCA`. Die Berechnung der Kosinus-Ähnlichkeit zwischen dem „rohen SBERT-Raum“ und dem „GraphMERT-transformierten Raum“ funktioniert nicht. Diese Vektoren befinden sich in unterschiedlichen Koordinatensystemen. Das Skalarprodukt wird lediglich zufälliges Rauschen ergeben.
+
+**B. Verwirrung bei der Dimensionalität**
+PCA wird zweimal angewendet, was redundant und verlustbehaftet ist.
+
+- **Input:** SBERT (384 Dim.) PCA 10 Dim.
+- **Modell:** GraphMERT erweitert dies auf 128 Dim. (Hidden State).
+- **Output:** PCA 10 Dim.
+Embeddings auf **10 Dimensionen** zu komprimieren, ist extrem aggressiv. Standard-RAG-Systeme nutzen 768 oder 1024 Dimensionen. Bei 10 Dimensionen werden unterschiedliche Konzepte (z. B. „Romeo“ vs. „Mercutio“) wahrscheinlich ineinander kollabieren, was das Retrieval (die Informationsabfrage) ungenau macht.
+
+Als Folge wurde eine Neu-Implementation Version 2 gemacht.
+
 Zu diesem Zeitpunkt sind keine belastbaren Ergebnisse verfügbar.
 
 **Einzelne Abfragen** sehen wie folgt aus:
 Der Score spiegelt vor allem das Resultat des Vectorstores wieder. Jedoch har das Resultat des Graphen, die Verbindung "Head => Tail" oder hier "methods -> >" oder "which -> 8" keinen Einfluss auf das Ergebnis.
 
---- Processing Query: 'What specific computational issue of the 'two-stage iterative framework' does the proposed 'Self-supervised Reflective Learning' (SSRL) aim to eliminate?' ---´
-[RAG] Retrieved Context (Score: 0.8202): "methods < / section *header* level *1 > < text > < loc* 255 > < loc *315 > < loc* 460 > < loc _ 374 > this section introduces the self - supervised reflective learning ( ssrl ) approach, which improves the two - stage iterative framework ["
-
-Result: ['methods -> > (Retrieved)', 'which -> 8 (Retrieved)']
+**Processing Query:** 'What specific computational issue of the 'two-stage iterative framework' does the proposed 'Self-supervised Reflective Learning' (SSRL) aim to eliminate?'
+**[RAG] Retrieved Context (Score: 0.8202):** "methods < / section _header_ level _1 > < text > < loc_ 255 > < loc _315 > < loc_ 460 > < loc _ 374 > this section introduces the self - supervised reflective learning ( ssrl ) approach, which improves the two - stage iterative framework ["
+**Result:** ['methods -> > (Retrieved)', 'which -> 8 (Retrieved)']
 
 #### Einschränkungen
 
