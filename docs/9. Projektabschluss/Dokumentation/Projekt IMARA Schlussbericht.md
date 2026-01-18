@@ -53,7 +53,6 @@ Aus dieser Problemstellung leiten sich die Ziele von IMARA ab:
 
 1. Aufbau einer graphbasierten RAG Pipeline zur Erstellung dichter Wissensgraphen aus wissenschaftlichen PDFs.
 1. Systematischer Vergleich klassischer vektorbasierter RAG-Ansätze mit verschiedenen GraphRAG-Varianten (u. a. LeanRAG, LinearRAG, GraphMERT).
-1. Aufbau eines naiven RAG als Referenz sowie Vorbereitung von graphbasiertem Fine-tuning (z. B. via GraphRAFT) auf Basis domänenspezifischer Daten.
 1. Entwicklung einer flexiblen, wiederholbaren Pipeline vom PDF bis zur Evaluation, inklusive Datenversionierung (DVC), Orchestrierung und MLflow-gestützter Nachvollziehbarkeit.
 1. Nutzung von OpenRAGBench/OpenRAG-Eval zur objektiven, reproduzierbaren Bewertung unterschiedlicher Varianten.
 
@@ -79,13 +78,13 @@ LinearRAG („Linear Graph Retrieval-Augmented Generation on Large-scale Corpora
 
 GraphMERT adressiert die Skalierbarkeitsprobleme klassischer neurosymbolischer Frameworks und wurde von Belova et al. (2025) vorgeschlagen. Es handelt sich um ein kompaktes, graphbasiertes Encoder-Modell, das aus unstrukturierten Textkorpora hochwertige Wissensgraphen generiert. Dabei werden neuronale Netze zur Erlernung abstrakter Repräsentationen mit symbolischen Strukturen in Form eines Wissensgraphen kombiniert, um nachvollziehbares und verifizierbares Schliessen zu ermöglichen. Ziel ist eine effiziente und skalierbare neurosymbolische Architektur mit hoher faktischer Korrektheit, beispielsweise gemessen mittels FActScore, sowie konsistenten Relationen, bewertet über den ValidityScore.
 
-![GraphMERT Node Embeddings t-SNE View (übernommen aus Belova et al., 2025)](assets/GraphMERT-node-embeddings.png){width=49%}
-![GraphMERT Semantic Graph Visualization (übernommen aus Belova et al., 2025)](assets/GraphMERT-semantic-graph-visualization.png){width=49%}
+![GraphMERT Node Embeddings t-SNE View](assets/GraphMERT-node-embeddings.png){width=49%}
+![GraphMERT Semantic Graph Visualization](assets/GraphMERT-semantic-graph-visualization.png){width=49%}
 
 Die Abfrage erfolgt direkt auf dem Wissensgraphen und nutzt dessen explizite Struktur. Anstatt isolierte Textsegmente über Vektorähnlichkeit zu vergleichen, traversiert der Suchprozess semantisch angereicherte, verkettete Knoten und unterstützt so linear skalierbares Multi-Hop-Reasoning.
 
 ![Ein perfektes Resultat (übernommen aus Belova et al., 2025)](assets/GraphMERT-perfektes-resultat.png){width=49%}
-![Ein fast perfektes Resultat (übernommen aus Belova et al., 2025)](assets/GraphMERT-fast-perfektes-resultat.png){width=49%}
+![Ein fast perfektes Resultat](assets/GraphMERT-fast-perfektes-resultat.png){width=49%}
 
 In der vorgelagerten Extraktion wird unstrukturierter Text in Entitäten und Relationen überführt und anschliessend semantisch aggregiert. Dadurch werden redundante Strukturen reduziert, die Graphkomplexität verringert und die Effizienz des Retrievals erhöht. Im Projekt IMARA dient GraphMERT als Referenzkonzept, das anhand prototypischer Implementierungen und Visualisierungen qualitativ analysiert wurde.
 
@@ -153,9 +152,7 @@ Für die Experimente wurde eine Kombination aus generischen und domänenspezifis
 
 ### 4.3 Systemarchitektur
 
-Die IMARA-Architektur ist als modulare End-to-End-Pipeline umgesetzt. Die zentralen Komponenten sind im Repository klar getrennt strukturiert: die Implementierung in `src/`, Konfigurationen in `configs/` sowie Datenartefakte in `data/`. Die Architektur folgt einer domänenspezifischen, graphbasierten RAG-Vision, die im Projektverlauf iterativ entwickelt und im internen Projektdokument what6.md konzeptuell festgehalten wurde.
-
-!TODO @Marco: Kommt das what6.md von dir? falls ja kannast du noch kurz Beschreiben woher das kommt?
+Die IMARA-Architektur ist als modulare End-to-End-Pipeline umgesetzt. Die zentralen Komponenten sind im Repository klar getrennt strukturiert: die Implementierung in `src/`, Konfigurationen in `configs/` sowie Datenartefakte in `data/`. Die Architektur folgt einer domänenspezifischen, graphbasierten RAG-Vision, die im Projektverlauf iterativ entwickelt und im internen Projektdokument [specs_v6.md](../../1.%20Projektantrag/specs_v6.md) konzeptuell festgehalten wurde.
 
 ![IMARA Systemarchitektur](assets/Systemarchitektur.png){width=100%}
 
@@ -386,6 +383,14 @@ Die beobachtete Sparsität impliziert eine nahezu lineare Skalierung von Speiche
 #### 6.3.3 Einordnung im Kontext graphbasierter RAG-Systeme
 
 Durch den Verzicht auf LLM-basierte Relationsextraktion erreicht LinearRAG eine hohe Reproduzierbarkeit und vollständige Unabhängigkeit von Tokenkosten. Diese Eigenschaften positionieren den Ansatz als skalierbare Alternative innerhalb des Spektrums graphbasierter RAG-Systeme, insbesondere in Szenarien, in denen deterministisches Verhalten und Kostenkontrolle im Vordergrund stehen.
+
+### 6.3.4 OpenRAG Eval Benchmark vs. Naive RAG
+
+Dieser Abschnitt vergleicht die Ergebnisse der IMARA-Implementierung von LinearRAG mit dem Naive RAG im Rahmen der OpenRAG Eval.
+
+Hinweis: Aus Ressourcengründen wurde der Graph mit vollständigen Embeddings exemplarisch für 5 Publikationen und 10 Queries berechnet. Die Ergebnisse lassen dennoch bereits deutliche Tendenzen erkennen.
+
+![TRECE Benchmark OpenRAG - Linear RAG vs. Naive RAG.](assets/linearrag_naiverag_eval.png){width=49%}
 
 ### 6.4 GraphMERT
 
