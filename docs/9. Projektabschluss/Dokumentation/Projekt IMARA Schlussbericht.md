@@ -18,61 +18,77 @@ Diese Arbeit untersucht graphbasierte RAG-Architekturen anhand des Projekts IMAR
 
 ## Inhaltsverzeichnis
 
-- [1. Einleitung](#1-einleitung)  
-  - [1.1 Problemstellung](#11-problemstellung)  
-  - [1.2 Projektziele](#12-projektziele)
-
-- [2. Stand der Technik](#2-stand-der-technik)  
-  - [2.1 LeanRAG](#21-leanrag)  
-  - [2.2 LinearRAG](#22-linearrag)  
-  - [2.3 GraphMERT](#23-graphmert)  
-  - [2.4 OpenRAGBench und OpenRAG-Eval](#24-openragbench-und-openrag-eval)
-
-- [3. Hintergrund / Background](#3-hintergrund--background)  
-  - [3.1 Grenzen vektorbasierten (naiven) RAGs](#31-grenzen-vektorbasierten-naiven-rags)  
-  - [3.2 Das AI-Native GraphRAG-Paradigma](#32-das-ai-native-graphrag-paradigma)
-
-- [4. Methodik / Umsetzung](#4-methodik--umsetzung)  
-  - [4.1 Hardware](#41-hardware)  
-  - [4.2 Datenbasis](#42-datenbasis)  
-  - [4.3 Systemarchitektur](#43-systemarchitektur)  
-  - [4.4 PDF-Extraktion (Docling)](#44-pdf-extraktion-docling)  
-  - [4.5 Naives RAG (Baseline)](#45-naives-rag-baseline)  
-  - [4.6 LinearRAG](#46-linearrag)  
-  - [4.7 GraphMERT](#47-graphmert)  
-  - [4.8 Evaluierungs-Design](#48-evaluierungs-design)
-
-- [5. Resultate](#5-resultate)  
-  - [5.1 PDF-Extraktion mit Docling](#51-pdf-extraktion-mit-docling)  
-  - [5.2 Naives RAG](#52-naives-rag)  
-  - [5.3 LinearRAG](#53-linearrag)  
-  - [5.4 GraphMERT](#54-graphmert)  
-  - [5.5 LeanRAG](#55-leanrag)  
-  - [5.5 Benchmark](#55-benchmark)
-
-- [6. Diskussion](#6-diskussion)  
-  - [6.1 Docling](#61-docling)  
-  - [6.2 Naives RAG](#62-naives-rag)  
-  - [6.3 LinearRAG](#63-linearrag)  
-  - [6.4 GraphMERT](#64-graphmert)  
-  - [6.5 LeanRAG](#65-leanrag)  
-  - [6.6 Benchmark](#66-benchmark)
-
-- [7. Conclusion / Fazit](#7-conclusion--fazit)  
-  - [7.1 Persönliches Fazit](#71-persönliches-fazit)
-
-- [8. Risikomanagement und Lessons Learned](#8-risikomanagement-und-lessons-learned)  
-  - [8.1 Identifizierte Risiken](#81-identifizierte-risiken)  
-  - [8.2 Konkrete Erfahrungen](#82-konkrete-erfahrungen)  
-  - [8.3 Lessons Learned](#83-lessons-learned)
-
-- [9. Ausblick](#9-ausblick)
-
-- [Glossar](#glossar)
-
-- [Abbildungsverzeichnis](#abbildungsverzeichnis)
-
-- [Literaturverzeichnis](#literaturverzeichnis)
+- [Projektbericht: IMARA](#projektbericht-imara)
+  - [Abstract](#abstract)
+  - [Inhaltsverzeichnis](#inhaltsverzeichnis)
+  - [1. Einleitung](#1-einleitung)
+    - [1.1 Problemstellung](#11-problemstellung)
+    - [1.2 Projektziele](#12-projektziele)
+  - [2. Stand der Technik](#2-stand-der-technik)
+    - [2.1 LeanRAG](#21-leanrag)
+    - [2.2 LinearRAG](#22-linearrag)
+    - [2.3 GraphMERT](#23-graphmert)
+    - [2.4 OpenRAGBench und OpenRAG-Eval](#24-openragbench-und-openrag-eval)
+  - [3. Hintergrund / Background](#3-hintergrund--background)
+    - [3.1 Grenzen vektorbasierten (naiven) RAGs](#31-grenzen-vektorbasierten-naiven-rags)
+      - [3.1.1 Kontextuelle Fragmentierung\*\*](#311-kontextuelle-fragmentierung)
+      - [3.1.2 Abhängigkeit von der Chunking-Strategie](#312-abhängigkeit-von-der-chunking-strategie)
+      - [3.1.3 Eingeschränktes Multi-Hop-Reasoning](#313-eingeschränktes-multi-hop-reasoning)
+    - [3.2 Das AI-Native GraphRAG-Paradigma](#32-das-ai-native-graphrag-paradigma)
+  - [4. Methodik / Umsetzung](#4-methodik--umsetzung)
+    - [4.1 Hardware](#41-hardware)
+    - [4.2 Datenbasis](#42-datenbasis)
+    - [4.3 Systemarchitektur](#43-systemarchitektur)
+    - [4.4 PDF-Extraktion (Docling)](#44-pdf-extraktion-docling)
+      - [4.4.1 Konfiguration und Parameter](#441-konfiguration-und-parameter)
+      - [4.4.2 Technische Umsetzung und Designentscheidungen](#442-technische-umsetzung-und-designentscheidungen)
+    - [4.5 Naives RAG (Baseline)](#45-naives-rag-baseline)
+    - [4.6 LinearRAG](#46-linearrag)
+      - [4.6.1 Datenaufbereitung \& Loading](#461-datenaufbereitung--loading)
+      - [4.6.2 Graph-Konstruktion](#462-graph-konstruktion)
+      - [4.6.3 Hybrid Retrieval-Algorithmus](#463-hybrid-retrieval-algorithmus)
+      - [4.6.4 Physisches Datenmodell](#464-physisches-datenmodell)
+    - [4.7 GraphMERT](#47-graphmert)
+    - [4.8 Evaluierungs-Design](#48-evaluierungs-design)
+  - [5. Resultate](#5-resultate)
+    - [5.1 PDF-Extraktion mit Docling](#51-pdf-extraktion-mit-docling)
+    - [5.2 Naives RAG](#52-naives-rag)
+    - [5.3 LinearRAG](#53-linearrag)
+      - [5.3.1 Graphstruktur und Umfang](#531-graphstruktur-und-umfang)
+      - [5.3.2 TF-IDF-Gewichtung](#532-tf-idf-gewichtung)
+      - [5.3.3 Graph-Sparsität](#533-graph-sparsität)
+      - [5.3.4 Zusammenfassung zentraler Graphmetriken](#534-zusammenfassung-zentraler-graphmetriken)
+    - [5.4 GraphMERT](#54-graphmert)
+    - [5.5 LeanRAG](#55-leanrag)
+    - [5.5 Benchmark](#55-benchmark)
+  - [6. Diskussion](#6-diskussion)
+    - [6.1 Docling](#61-docling)
+    - [6.2 naives RAG](#62-naives-rag)
+    - [6.3 LinearRAG](#63-linearrag)
+      - [6.3.1 Validierung des LinearRAG-Ansatzes](#631-validierung-des-linearrag-ansatzes)
+      - [6.3.2 Skalierbarkeitsimplikationen](#632-skalierbarkeitsimplikationen)
+      - [6.3.3 Einordnung im Kontext graphbasierter RAG-Systeme](#633-einordnung-im-kontext-graphbasierter-rag-systeme)
+    - [6.4 GraphMERT](#64-graphmert)
+    - [6.5 LeanRAG](#65-leanrag)
+    - [6.6 Benchmark](#66-benchmark)
+  - [7. Conclusion / Fazit](#7-conclusion--fazit)
+    - [7.1 Persönliches Fazit](#71-persönliches-fazit)
+      - [7.1.1 Marco Allenspach](#711-marco-allenspach)
+      - [7.1.2 Lukas Koller](#712-lukas-koller)
+      - [7.1.3 Emanuel Sovrano](#713-emanuel-sovrano)
+  - [8. Risikomanagement und Lessons Learned](#8-risikomanagement-und-lessons-learned)
+    - [8.1 Identifizierte Risiken](#81-identifizierte-risiken)
+    - [8.2 Konkrete Erfahrungen](#82-konkrete-erfahrungen)
+    - [8.3 Lessons Learned](#83-lessons-learned)
+  - [9. Ausblick](#9-ausblick)
+  - [Glossar](#glossar)
+    - [A – C](#a--c)
+    - [D – G](#d--g)
+    - [H – L](#h--l)
+    - [M – O](#m--o)
+    - [S – V](#s--v)
+  - [Abbildungsverzeichnis](#abbildungsverzeichnis)
+  - [Literaturverzeichnis](#literaturverzeichnis)
 
 <div style="page-break-after: always;"></div>
 
@@ -99,7 +115,6 @@ Aus dieser Problemstellung leiten sich die Ziele von IMARA ab:
 
 1. Aufbau einer graphbasierten RAG Pipeline zur Erstellung dichter Wissensgraphen aus wissenschaftlichen PDFs.
 1. Systematischer Vergleich klassischer vektorbasierter RAG-Ansätze mit verschiedenen GraphRAG-Varianten (u. a. LeanRAG, LinearRAG, GraphMERT).
-1. Aufbau eines naiven RAG als Referenz sowie Vorbereitung von graphbasiertem Fine-tuning (z. B. via GraphRAFT) auf Basis domänenspezifischer Daten.
 1. Entwicklung einer flexiblen, wiederholbaren Pipeline vom PDF bis zur Evaluation, inklusive Datenversionierung (DVC), Orchestrierung und MLflow-gestützter Nachvollziehbarkeit.
 1. Nutzung von OpenRAGBench/OpenRAG-Eval zur objektiven, reproduzierbaren Bewertung unterschiedlicher Varianten.
 
@@ -136,7 +151,7 @@ GraphMERT adressiert die Skalierbarkeitsprobleme klassischer neurosymbolischer F
        width="49%" />
 </p>
 
-*Abbildung 5: Links GraphMERT Node Embeddings (t-SNE View), rechts GraphMERT Semantic Graph Visualization, jeweils übernommen aus Belova et al. (2025).*
+*Abbildung 5: Links GraphMERT Node Embeddings (t-SNE View), rechts GraphMERT Semantic Graph Visualization, jeweils übernommen aus eigenen Versuchen.*
 
 Die Abfrage erfolgt direkt auf dem Wissensgraphen und nutzt dessen explizite Struktur. Anstatt isolierte Textsegmente über Vektorähnlichkeit zu vergleichen, traversiert der Suchprozess semantisch angereicherte, verkettete Knoten und unterstützt so linear skalierbares Multi-Hop-Reasoning.
 
@@ -149,7 +164,7 @@ Die Abfrage erfolgt direkt auf dem Wissensgraphen und nutzt dessen explizite Str
        width="49%" />
 </p>
 
-*Abbildung 6: Query-Suche auf den Graph-Ergebnissen: links ein perfektes, rechts ein fast perfektes Resultat, jeweils übernommen aus Belova et al. (2025).*
+*Abbildung 6: Query-Suche auf den Graph-Ergebnissen: links ein perfektes, rechts ein fast perfektes Resultat, links übernommen aus Belova et al. (2025) und rechts aus eignen Versuchen.*
 
 In der vorgelagerten Extraktion wird unstrukturierter Text in Entitäten und Relationen überführt und anschliessend semantisch aggregiert. Dadurch werden redundante Strukturen reduziert, die Graphkomplexität verringert und die Effizienz des Retrievals erhöht. Im Projekt IMARA dient GraphMERT als Referenzkonzept, das anhand prototypischer Implementierungen und Visualisierungen qualitativ analysiert wurde.
 
@@ -213,9 +228,8 @@ Für die Experimente wurde eine Kombination aus generischen und domänenspezifis
 
 ### 4.3 Systemarchitektur
 
-Die IMARA-Architektur ist als modulare End-to-End-Pipeline umgesetzt. Die zentralen Komponenten sind im Repository klar getrennt strukturiert: die Implementierung in `src/`, Konfigurationen in `configs/` sowie Datenartefakte in `data/`. Die Architektur folgt einer domänenspezifischen, graphbasierten RAG-Vision, die im Projektverlauf iterativ entwickelt und im internen Projektdokument what6.md konzeptuell festgehalten wurde.
+Die IMARA-Architektur ist als modulare End-to-End-Pipeline umgesetzt. Die zentralen Komponenten sind im Repository klar getrennt strukturiert: die Implementierung in `src/`, Konfigurationen in `configs/` sowie Datenartefakte in `data/`. Die Architektur folgt einer domänenspezifischen, graphbasierten RAG-Vision, die im Projektverlauf iterativ entwickelt und im internen Projektdokument [specs_v6.md](../../1.%20Projektantrag/specs_v6.md) konzeptuell festgehalten wurde.
 
-!TODO @Marco: Kommt das what6.md von dir? falls ja kannast du noch kurz Beschreiben woher das kommt?
 
 <img src="assets/Systemarchitektur.png" alt="IMARA Systemarchitektur" width="100%" height="100%">
 
