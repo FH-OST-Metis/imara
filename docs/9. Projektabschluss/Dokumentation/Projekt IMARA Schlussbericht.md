@@ -74,7 +74,7 @@ Diese Arbeit untersucht graphbasierte RAG-Architekturen anhand des Projekts IMAR
 
 - [Literaturverzeichnis](#literaturverzeichnis)
 
----
+<div style="page-break-after: always;"></div>
 
 ## 1. Einleitung
 
@@ -102,8 +102,6 @@ Aus dieser Problemstellung leiten sich die Ziele von IMARA ab:
 1. Aufbau eines naiven RAG als Referenz sowie Vorbereitung von graphbasiertem Fine-tuning (z. B. via GraphRAFT) auf Basis domänenspezifischer Daten.
 1. Entwicklung einer flexiblen, wiederholbaren Pipeline vom PDF bis zur Evaluation, inklusive Datenversionierung (DVC), Orchestrierung und MLflow-gestützter Nachvollziehbarkeit.
 1. Nutzung von OpenRAGBench/OpenRAG-Eval zur objektiven, reproduzierbaren Bewertung unterschiedlicher Varianten.
-
----
 
 ## 2. Stand der Technik
 
@@ -159,8 +157,6 @@ In der vorgelagerten Extraktion wird unstrukturierter Text in Entitäten und Rel
 
 OpenRAGBench stellt einen umfangreichen Datensatz aus wissenschaftlichen PDFs (arXiv) mit zugehörigen Frage-Antwort-Paaren bereit und bildet die Grundlage für reproduzierbare Benchmarks im Bereich Retrieval-Augmented Generation. OpenRAG-Eval ist ein darauf aufbauendes Evaluations-Framework, das unterschiedliche RAG-Systeme anhand einheitlicher Metriken wie Accuracy, Contain Accuracy und Faithfulness vergleichbar macht. Im Projekt IMARA wird OpenRAG-Eval eingesetzt, um naives RAG, LinearRAG und weitere GraphRAG-Varianten konsistent und reproduzierbar zu bewerten.
 
----
-
 ## 3. Hintergrund / Background
 
 In diesem Kapitel wird der fachliche Hintergrund vertieft, insbesondere die Grenzen vektorbasierter RAG-Systeme und das GraphRAG-Paradigma.
@@ -196,8 +192,6 @@ Ein Wissensgraph transformiert eine passive Dokumentensammlung in ein aktives, a
 - die gemeinsame Nutzung strukturierter und unstrukturierter Informationsquellen.
 
 Anschaulich formuliert stellt vektorbasiertes RAG isolierte Informationseinheiten bereit, vergleichbar mit einem Stapel einzelner Karteikarten. GraphRAG hingegen entspricht einer dynamischen Mindmap, in der Zusammenhänge sichtbar, nachvollziehbar und gezielt traversierbar sind.
-
----
 
 ## 4. Methodik / Umsetzung
 
@@ -312,8 +306,6 @@ Zusätzlich werden Vektorrepräsentationen von Entitäten in der Tabelle `lr_ent
 Für die Evaluierung der Systeme wurde folgendes Vorgehen gewählt:
 
 OpenRAGBench dient als Hauptkorpus sowohl für die Graphkonstruktion als auch für das Query-Set, während OpenRAG-Eval die Ausführung der QA-Läufe sowie deren Auswertung orchestriert. In den Konfigurationsdateien `configs/open_rag_eval_*.yaml` sind verschiedene Szenarien definiert, unter anderem für naives RAG, LinearRAG und weitere Varianten wie beispielsweise GraphMERT. Als zentrale Metriken werden LLM Accuracy (bewertet durch einen LLM-Judge), Contain Accuracy (Überprüfung, ob die Antwort im kontextuellen Evidenz-Set enthalten ist) sowie Laufzeit- und Ressourcenaspekte herangezogen. In einem nächsten Schritt ist geplant, die Evaluierungen direkt mit DVC-Pipelines und MLflow-Runs zu verknüpfen, um Vollständigkeit und Nachvollziehbarkeit weiter zu erhöhen.
-
----
 
 ## 5. Resultate
 
@@ -480,10 +472,6 @@ Insgesamt konnte das Kernziel erreicht werden: Der Nutzen graphbasierter RAG-Ans
 
 !TODO: @Emanuel Sovrano
 
----
-
-- Der Vorsatz Plattformunabhängig zu sein hatte sich im Laufe des Projekts als unnötige Herausforderung herausgestellt. Konkret Microsoft Windows hatte bei der Installation spezielle Anforderungen, Inkompatibilität mit MLFlow und letzlich erzwungene Reboots, die mehrfach lang laufende Prozesse abgeschossen haben.
-
 ## 8. Risikomanagement und Lessons Learned
 
 ### 8.1 Identifizierte Risiken
@@ -497,8 +485,6 @@ Die Entscheidung, plattformunabhängig zu bleiben, erwies sich im Alltag als zus
 ### 8.3 Lessons Learned
 
 Aus diesen Erfahrungen lassen sich mehrere Lehren ableiten. Es ist hilfreich, möglichst früh im Projekt einen Ende-zu-Ende-Slice zu realisieren – etwa vom PDF bis zur einfachen Antwort –, um Risiken in Tooling, Infrastruktur und Datenflüssen sichtbar zu machen, bevor die Architektur zu komplex wird. Daten- und Modellversionierung sollten von Anfang an konsequent mit Werkzeugen wie DVC und MLflow umgesetzt werden, um Experimente nachvollziehbar, reproduzierbar und vergleichbar zu machen. Schliesslich hat sich gezeigt, dass eine schrittweise Komplexitätssteigerung sinnvoll ist: Zuerst eine stabile, naive RAG-Baseline etablieren, diese messen und verstehen, und darauf aufbauend GraphRAG-Komponenten sowie Fine-tuning iterativ ergänzen, statt alles gleichzeitig zu implementieren.
-
----
 
 ## 9. Ausblick
 
@@ -515,6 +501,8 @@ Für mehrsprachige Knowledge Bases ist eine semantisch korrekte Zusammenführung
 Ein weiterer, vielversprechender Ansatz liegt im Einsatz von Hypergraphen und Relation-Clustering. Das Clustering identischer oder stark ähnlicher Relationen in einem Hypergraphen erlaubt es, Teilgraphen zusammenzuführen, ohne die Möglichkeit zu verlieren, einzelne Teile bei Bedarf wieder zu entfernen. Gleichzeitig können aus den Hyperkanten wahrscheinliche Relationen abgeleitet und zurück in den klassischen Wissensgraph projiziert werden. Dies eröffnet Spielräume für effizienteres Speichern, besseres Generalisieren und für die Ableitung neuer, plausibler Verbindungen.
 
 Schliesslich ist die tiefere Integration der Evaluierungsinfrastruktur ein wichtiger nächster Schritt. Die Ausführung von OpenRAG-Eval-Szenarien soll vollständig über DVC-Pipelines orchestriert werden, sodass Datendownload, Graphaufbau, Retrieval-Läufe und Auswertung automatisch miteinander verknüpft sind und als reproduzierbare Pipelines ausgeführt werden können. Die geplante Arbeit zu DVC und dem Vergleich verschiedener OpenRAG-Eval-Konfigurationen kann hier andocken, indem unterschiedliche Modelle, Konfigurationen und Datenschnitte als DVC-Stages abgebildet und systematisch miteinander verglichen werden. Dies würde die Nachvollziehbarkeit der Experimente weiter erhöhen und eine belastbare Grundlage für die Frage schaffen, unter welchen Bedingungen ein kompaktes, domänenspezifisches Modell grössere, generische LLMs tatsächlich übertreffen kann.
+
+<div style="page-break-after: always;"></div>
 
 ## Glossar
 
@@ -564,6 +552,8 @@ Schliesslich ist die tiefere Integration der Evaluierungsinfrastruktur ein wicht
 - **Unsloth:** Ein Framework für ressourceneffizientes Fine-tuning von LLMs, das im Projekt genutzt wurde, um Modellanpassungen mit geringeren Hardwareanforderungen durchzuführen.  
 - **Vektorsimilaritätssuche:** Das Standard-Suchverfahren klassischer RAG-Systeme, bei dem Textabschnitte als Vektoren im Embedding-Raum repräsentiert und basierend auf ihrer Distanz (z. B. Kosinus- oder euklidische Distanz) verglichen werden. Es ermöglicht semantische Suche, berücksichtigt jedoch explizite Relationen zwischen Entitäten oft nicht.
 
+<div style="page-break-after: always;"></div>
+
 ## Abbildungsverzeichnis
 
 Abbildung 3: LeanRAG-Framework, übernommen aus Zhang et al. (2025), arXiv:2508.10391.
@@ -576,6 +566,8 @@ Abbildung 9: Beispielhafter Qualitätsunterschied zwischen ursprünglicher und o
 Abbildung 10: Auszug der als problematisch identifizierten Docling-Parameterkonfiguration.  
 Abbildung 11: Auszug der optimierten Docling-Parameterkonfiguration mit deutlich besseren Ergebnissen.  
 Abbildung 12: Ressourcenbedarf im LeanRAG-Pipeline-Schritt der Triple-Extraktion nach dem Refactoring.
+
+<div style="page-break-after: always;"></div>
 
 ## Literaturverzeichnis
 
