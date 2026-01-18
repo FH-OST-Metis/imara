@@ -86,7 +86,7 @@ Die Abfrage erfolgt direkt auf dem Wissensgraphen und nutzt dessen explizite Str
 ![Ein perfektes Resultat (übernommen aus Belova et al., 2025)](assets/GraphMERT-perfektes-resultat.png){width=49%}
 ![Ein fast perfektes Resultat](assets/GraphMERT-fast-perfektes-resultat.png){width=49%}
 
-In der vorgelagerten Extraktion wird unstrukturierter Text in Entitäten und Relationen überführt und anschliessend semantisch aggregiert. Dadurch werden redundante Strukturen reduziert, die Graphkomplexität verringert und die Effizienz des Retrievals erhöht. Im Projekt IMARA dient GraphMERT als Referenzkonzept, das anhand prototypischer Implementierungen und Visualisierungen qualitativ analysiert wurde.
+In der vorgelagerten Extraktion wird unstrukturierter Text in Entitäten und Relationen überführt und anschliessend semantisch aggregiert. Dadurch werden redundante Strukturen reduziert, die Graphkomplexität verringert und die Effizienz des Retrievals erhöht. Im Projekt IMARA dient GraphMERT als Referenzkonzept, das anhand prototypischer Implementierungen und Visualisierungen qualitativ analysiert wurde. Dabei ist GraphMERT nicht als RAG-System zu verstehen, es repräsentiert lediglich den Core mit dem Graphen.
 
 ### 2.4 OpenRAGBench und OpenRAG-Eval
 
@@ -160,7 +160,7 @@ Ausgangspunkt der Pipeline ist die Data Ingestion. Wissenschaftliche PDFs aus Op
 
 Im Anschluss erfolgt das Chunking und Embedding der extrahierten Texte. Die Dokumente werden mit konfigurierbaren Strategien in Textsegmente zerlegt und unter Verwendung unterschiedlicher Embedding-Modelle vektorisiert. Die resultierenden Embeddings werden gemeinsam mit Metadaten in einer PostgreSQL-Datenbank mit pgvector-Erweiterung persistiert und bilden die Grundlage für nachgelagerte Retrieval- und Graphschritte.
 
-Darauf aufbauend stellt ein naiver RAG-Baustein eine Baseline bereit, die mittels Ähnlichkeitssuche über die eingebetteten Chunks relevante Kontexte identifiziert und diese an ein LLM zur Antwortgenerierung übergibt. Parallel dazu werden graphbasierte RAG-Varianten wie LinearRAG, LeanRAG und GraphMERT eingesetzt. In diesen Ansätzen werden aus den extrahierten Texten explizite Wissensgraphen konstruiert, um Retrieval und Antwortgenerierung durch strukturierte Repräsentationen und Multi-Hop-Reasoning zu unterstütze
+Darauf aufbauend stellt ein naiver RAG-Baustein eine Baseline bereit, die mittels Ähnlichkeitssuche über die eingebetteten Chunks relevante Kontexte identifiziert und diese an ein LLM zur Antwortgenerierung übergibt. Parallel dazu werden graphbasierte RAG-Varianten wie LinearRAG, LeanRAG und GraphMERT eingesetzt. In diesen Ansätzen werden aus den extrahierten Texten explizite Wissensgraphen konstruiert, um Retrieval und Antwortgenerierung durch strukturierte Repräsentationen und Multi-Hop-Reasoning zu unterstützen.
 
 Die Ausführung der einzelnen Verarbeitungsschritte wird durch eine Orchestrierungsschicht koordiniert, welche Jobs, Workflows und Statusinformationen verwaltet. Sowohl einzelne Pipeline-Komponenten als auch vollständige End-to-End-Läufe können über Kommandozeilenwerkzeuge und Skripte gesteuert werden. Für Benchmarking und Evaluation werden OpenRAGBench-Experimente mit OpenRAG-Eval orchestriert; dabei werden Metriken wie Genauigkeit, Evidenzabdeckung und Laufzeit erhoben und in MLflow protokolliert, um Experimente nachvollziehbar und vergleichbar zu machen.
 
@@ -181,10 +181,6 @@ Die Docling-Integration folgt dem in der Projektbeschreibung definierten Paramet
   - Extraktion von Tabellenstrukturen (`do_table_structure=True`).
   - Code- und Formel-Anreicherung (`do_code_enrichment=True`, `do_formula_enrichment=True`).
   - Bildklassifikation und Bildbeschreibung via lokalem Vision-Language-Modell.
-
-Alle relevanten Parameter sind in der Projektkonfiguration (`configs/`) zentralisiert und können für zukünftige Experimente angepasst werden.
-
-!TODO: @Marco: wo genau liegen diese? im configs ist nichts.
 
 #### 4.4.2 Technische Umsetzung und Designentscheidungen
 
@@ -242,7 +238,59 @@ Zusätzlich werden Vektorrepräsentationen von Entitäten in der Tabelle `lr_ent
 
 ### 4.7 GraphMERT
 
-!TODO: @Marco
+**GraphMERT: Graph-Augmented Masked Entity Recovery Transformer**
+GraphMERT ist eine neuartige Architektur, die entwickelt wurde, um strukturiertes Wissen (Wissensgraphen) direkt in den Einbettungsraum eines Sprachmodells zu injizieren. Im Gegensatz zu Standard-Transformern, die Text als flache Sequenz behandeln, betrachtet GraphMERT Text als einen „Leafy Chain Graph“ (einen Graphen mit einer Kette als Rückgrat und angehängten Blättern). Dies ermöglicht es, Beziehungen zwischen Entitäten explizit zu modellieren und diese strukturellen Informationen in seine Repräsentationen einfliessen zu lassen.
+
+#### Das Konzept
+
+Standard-Sprachmodelle (wie BERT) lernen Muster in Texten. Sie sind hervorragend im Erfassen von Syntax und allgemeiner Semantik, haben aber oft Schwierigkeiten mit explizitem, mehrstufigem strukturiertem Wissen (z. B. definitiv zu wissen, dass „Metformin Diabetes BEHANDELT“, anstatt nur zu wissen, dass diese Wörter oft zusammen auftreten).
+
+GraphMERT überbrückt diese Lücke, indem es Sätze in Graphen umwandelt:
+
+#### Die „Leafy Chain Graph“-Struktur
+
+Die Schlüsselinnovation liegt in der Darstellung der Daten. Jede Eingabesequenz ist als Graph fester Grösse formatiert (z. B. 512 Token):
+
+1. **Die Wurzeln (Satz-Rückgrat):** Die ersten  Token (z. B. 64) sind die Standard-Token des Eingabesatzes und bilden eine lineare „Kette“.
+2. **Die Blätter (Strukturiertes Wissen):** An diese Wurzeln sind „Blätter“ angehängt. Wenn wir ein Tripel wie `(Subjekt, Relation, Objekt)` kennen, lokalisieren wir das `Subjekt`-Token in den Wurzeln und hängen die `Objekt`-Token als dessen Blätter an. Die Kante, die sie verbindet, trägt den `Relations`-Typ.
+
+#### H-GAT (Hierarchical Graph Attention)
+
+Standard-Transformer verwenden Self-Attention, bei der jedes Token jedes andere Token betrachtet. GraphMERT fügt eine H-GAT-Schicht *vor* dem Standard-Transformer-Encoder ein.
+
+Diese Schicht führt **Message Passing** (Nachrichtenübermittlung) durch. Für ein Tripel `(Head, Relation, Tail)` aktualisiert die H-GAT-Schicht das Embedding des **Tail**-Knotens (Blatt), indem sie Informationen aus folgenden Quellen fusioniert:
+
+1. Dessen aktuellem Embedding.
+2. Dem Embedding seines **Head**-Knotens (Wurzel).
+3. Einem lernbaren Embedding, das den **Relations**-Typ repräsentiert.
+
+Dies „injiziert“ die Bedeutung der Beziehung explizit in die Repräsentation der Tail-Entität.
+
+#### Implementation Version 1
+
+Der Core von GraphMERT wurde von einer kleinen Referenzimplementierung (PoC in einem Jupyter-Notebook) abgeleitet.
+Die ersten Ergebnisse waren Vielversprechend, aber nur auf einem Minimaldatensatz. Zudem weist diese  Implementierung einen katastrophalen Logikfehler auf, der garantiert, dass das Retrieval fehlschlägt (d. h. zufällige Ergebnisse liefert).
+
+#### Impementation Version 2
+
+Es musste eine komplett neue Version von GraphMERT geschrieben werden, in der die gemachten Erfahrungen verarbeitet wurden.
+
+Der Ansatz ist nun ein Graph-Enhanced RAG mit GraphMERT im Core.
+Die Kernidee besteht darin, über die einfache semantische Suche (SBERT) hinauszugehen, indem Ihr „GraphMERT“-Modell verwendet wird, um *kontextbezogene* Informationen aus benachbarten Sätzen in die Embeddings zu injizieren, bevor das Retrieval stattfindet.
+
+**Wie es funktionieren *sollte* (Die Logik)**
+
+1. **Ingestion (Datenaufnahme) & Basis-Embedding:** Sie zerlegt Dokumente in Sätze (Korpus).
+Sie konvertiert diese Sätze mithilfe von SBERT (Sentence-BERT) in standardmässige statische Embeddings.
+
+1. **Kontext-Injektion (GraphMERT):** Sie speist diese SBERT-Embeddings in Ihr trainiertes **GraphMERT**-Modell ein.
+**Ziel:** Im Gegensatz zu SBERT, wo das Embedding für „Er sagte ja“ immer gleich ist, aktualisiert GraphMERT das Embedding basierend auf den *umgebenden* Sätzen (der Graphstruktur).
+
+1. **Indizierung:** Sie baut einen Graphen auf, in dem die Knoten diese *neuen, kontextbewussten* Embeddings enthalten.
+
+1. **Retrieval (Abruf):** Sie nimmt eine Benutzeranfrage entgegen, wandelt sie in einen Vektor um und durchsucht den Graphen nach den ähnlichsten Knoten.
+
+1. **Generierung:** Sie übergibt den abgerufenen Text an ein LLM, um die Frage zu beantworten.
 
 ### 4.8 Evaluierungs-Design
 
@@ -254,7 +302,7 @@ OpenRAGBench dient als Hauptkorpus sowohl für die Graphkonstruktion als auch f�
 
 ## 5. Resultate
 
-Vergleich der Performance: Standard RAG vs. IMARA GraphRAG vs. Fine-tuned Model.
+Vergleich der Performance: Standard RAG vs. LinearRAG vs. LeanRAG.
 
 ### 5.1 PDF-Extraktion mit Docling
 
@@ -286,7 +334,7 @@ Diese feingranulare Segmentierung erlaubt eine präzise Vektorsuche, führt aber
 
 #### 5.3.1 Ausgangslage
 
-Die Ausgangslage bilden die 1001 wissenschaftlichen Publikationen aus dem in Abschnitt 4.2 beschriebenen Datensatz. Alle nachfolgenden Vergleiche beziehen sich auf das ursprüngliche LinearRAG-Paper [4].
+Die Ausgangslage bilden die 1001 wissenschaftlichen Publikationen aus dem in Abschnitt 4.2 beschriebenen OpenRAGBench-Datensatz. Alle nachfolgenden Vergleiche beziehen sich auf das ursprüngliche LinearRAG-Paper [4].
 
 Im Folgenden wird der konstruierte Graph charakterisiert und gegen die im Referenzpaper definierten Qualitätsmetriken verglichen.
 
@@ -340,7 +388,43 @@ Die aggregierten Graphmetriken verdeutlichen den Umfang und die strukturellen Ei
 
 ### 5.4 GraphMERT
 
-!TODO: @Marco
+**Kritische Analyse: Warum die erste Version scheiterte**
+
+**A. Der „Äpfel-mit-Birnen“-Vergleich bei den Vektorräumen (Mismatch)**
+Dies ist der kritischste Fehler. Es werden zwei völlig unterschiedliche mathematische Räume verglichen.
+
+- **Die Datenbank (Graph-Knoten):** Die Knoten-Embeddings werden erstellt durch: `SBERT -> PCA (Text) -> GraphMERT -> PCA (GraphMERT)`.
+- **Die Abfrage (Query):** Das Query-Embedding wird erstellt durch: `SBERT -> PCA (Text)`.
+- **Das Problem:** Die Abfrage durchläuft niemals das `GraphMERT`-Modell oder die zweite `PCA`. Die Berechnung der Kosinus-Ähnlichkeit zwischen dem „rohen SBERT-Raum“ und dem „GraphMERT-transformierten Raum“ funktioniert nicht. Diese Vektoren befinden sich in unterschiedlichen Koordinatensystemen. Das Skalarprodukt wird lediglich zufälliges Rauschen ergeben.
+
+**B. Verwirrung bei der Dimensionalität**
+PCA wird zweimal angewendet, was redundant und verlustbehaftet ist.
+
+- **Input:** SBERT (384 Dim.) PCA 10 Dim.
+- **Modell:** GraphMERT erweitert dies auf 128 Dim. (Hidden State).
+- **Output:** PCA 10 Dim.
+Embeddings auf **10 Dimensionen** zu komprimieren, ist extrem aggressiv. Standard-RAG-Systeme nutzen 768 oder 1024 Dimensionen. Bei 10 Dimensionen werden unterschiedliche Konzepte (z. B. „Romeo“ vs. „Mercutio“) wahrscheinlich ineinander kollabieren, was das Retrieval (die Informationsabfrage) ungenau macht.
+
+Als Folge wurde eine Neu-Implementation Version 2 gemacht.
+
+**GraphMERT_General.py:**
+
+1. **Initialisierung:** Lädt den `bert-base-uncased` Tokenizer und das spaCy-Modell.
+2. **Daten laden & Extraktion:** Liest Ihre Textdateien. Es versucht, Subjekt-Verb-Objekt-Tripel aus jedem Satz zu extrahieren.
+3. **Graph-Konstruktion:** Konvertiert Sätze und ihre Tripel in das „Leafy Chain Graph“-Tensorformat (Input-IDs, Relations-IDs, Distanzmatrix, Blattmaske).
+4. **Training:** Initialisiert das GraphMERT-Modell und trainiert es für eine feste Anzahl von Epochen (Standard 20 in der Demo) auf Ihren Daten. Es konzentriert sich darauf, maskierte Blattknoten vorherzusagen.
+5. **Speichern:** Nach dem Training speichert es zwei Dateien:
+
+- `graphmert_general.pth`: Die trainierten Modellgewichte.
+- `processed_graphs_general.pkl`: Die vorverarbeiteten Graph-Daten (zum einfacheren erneuten Laden später).
+
+**GraphMERT_RAG.py:**
+
+1. **Initialisierung:** Lädt die notwendigen Komponenten: den Tokenizer, das `Sentence-Transformer`-Modell (SBERT) für die semantische Vektorsuche und das zuvor trainierte `GraphMERT`-Modell. Zudem wird die lokale Vektordatenbank (Milvus) zurückgesetzt und initialisiert.
+2. **Indizierung & Ingestion:** Lädt die Datei `processed_graphs_general.pkl`. Es generiert für jeden Graphen ein semantisches Embedding des Textinhalts (für die Suche), speichert das komplexe Graph-Objekt physisch auf der Festplatte (um Speicherlimits zu umgehen) und legt den Suchvektor zusammen mit dem Dateipfad in der Datenbank ab.
+3. **Retrieval (Suche):** Nimmt eine natürlichsprachliche Benutzerfrage entgegen (z. B. „Wer führte die Armee?“), wandelt sie in einen Vektor um und findet in der Datenbank den semantisch passendsten Graphen (z. B. den zu „Napoleon befehligte...“), selbst wenn der Wortlaut nicht exakt übereinstimmt.
+4. **Verifikation & Extraktion:** Der gefundene Graph wird geladen und an das GraphMERT-Modell übergeben. Das System maskiert die „Blatt“-Knoten (die Ziel-Informationen) und lässt das Modell versuchen, diese basierend auf dem gelernten Wissen vorherzusagen bzw. zu rekonstruieren.
+5. **Ausgabe:** Kombiniert das abgerufene Wissen mit der Vorhersage des Modells. Es gibt die extrahierten Fakten in der Form `Kopf -> Schwanz` (z. B. `Napoleon -> Armee`) aus und zeigt an, ob die Information durch das Modell verifiziert („Verified“) oder nur aus dem Graphen abgelesen („Retrieved“) wurde.
 
 ### 5.5 LeanRAG
 
@@ -378,7 +462,7 @@ Die gemessenen Graphmetriken bestätigen die grundlegenden Annahmen des LinearRA
 
 #### 6.3.2 Skalierbarkeitsimplikationen
 
-Die beobachtete Sparsität impliziert eine nahezu lineare Skalierung von Speicherbedarf und Rechenaufwand in Abhängigkeit von der Korpusgröße. Im Vergleich zu dichteren, LLM-basierten GraphRAG-Ansätzen bleibt der Ressourcenbedarf von LinearRAG auch bei wachsenden Datenmengen beherrschbar, was den Ansatz für produktive Szenarien mit großen Dokumentkorpora besonders relevant macht.
+Die beobachtete Sparsität impliziert eine nahezu lineare Skalierung von Speicherbedarf und Rechenaufwand in Abhängigkeit von der Korpusgrösse. Im Vergleich zu dichteren, LLM-basierten GraphRAG-Ansätzen bleibt der Ressourcenbedarf von LinearRAG auch bei wachsenden Datenmengen beherrschbar, was den Ansatz für produktive Szenarien mit grossen Dokumentkorpora besonders relevant macht.
 
 #### 6.3.3 Einordnung im Kontext graphbasierter RAG-Systeme
 
@@ -408,7 +492,7 @@ Hinweis: Aus Ressourcengründen wurde der Graph mit vollständigen Embeddings ex
 
 ## 7. Conclusion / Fazit
 
-Das Projekt IMARA hatte das Ziel, eine domänenspezifische GraphRAG-Pipeline mit Modell-Fine-tuning vorzubereiten und die Effektivität graphbasierter RAG-Ansätze im Vergleich zu naivem RAG zu evaluieren.
+Das Projekt IMARA hatte das Ziel, eine domänenspezifische GraphRAG-Pipeline vorzubereiten und im Vergleich zu naivem RAG zu evaluieren.
 
 **Zentrale Ergebnisse:**
 
@@ -423,7 +507,9 @@ Insgesamt konnte das Kernziel erreicht werden: Der Nutzen graphbasierter RAG-Ans
 
 #### 7.1.1 Marco Allenspach
 
-!TODO: @Marco Allenspach
+Der enorme Verbrauch an Rechnenleistung und Zeit hat mich überrascht. Nach viel Recherche in den Sommerferien dacht ich, der grösste Aufwand ist vorbei. 2 Monate für Docling mit zwei Rechnern und über 2000-3000 kWh Stromverbrauch später weiss ich es besser.
+
+Mein Fazit ist die Erkenntnis, dass ein solches Projekt mindestens 2 Monate für ein gutes Requirements Engineering und eine gute Architektur braucht. Die sehr intensive Realisierung wird so planbarer und effizienter. Die Pipeline war auch ein Invest, der sich auf die Dauer ausbezahlt hat, vor allem gemeinamer Nenner in einem Dreier-Team.
 
 #### 7.1.2 Lukas Koller
 
