@@ -417,7 +417,7 @@ Epoch 20: Loss = 0.0551
 **Result:** ['labels -> layout (Retrieved)']
 
 **Processing Query:** 'What specific computational issue of the 'two-stage iterative framework' does the proposed 'Self-supervised Reflective Learning' (SSRL) aim to eliminate?'
-**[RAG] Retrieved Context (Score: 0.8202):** "methods < / section _header_ level _1 > < text > < loc_ 255 > < loc _315 > < loc_ 460 > < loc _ 374 > this section introduces the self - supervised reflective learning ( ssrl ) approach, which improves the two - stage iterative framework ["
+**[RAG] Retrieved Context (Score: 0.8202):** "methods < / section *header* level *1 > < text > < loc* 255 > < loc *315 > < loc* 460 > < loc _ 374 > this section introduces the self - supervised reflective learning ( ssrl ) approach, which improves the two - stage iterative framework ["
 **Result:** ['methods -> > (Retrieved)', 'which -> 8 (Retrieved)']
 
 **Processing Query:** 'According to the text, what are the six elements of Knowledge, Skills, and Abilities (KSAs) required for 'Ethical Reasoning'?'
@@ -461,7 +461,7 @@ Für LeanRAG wurde insbesondere der Ressourcenbedarf nach einem Refactoring des 
 
 Ein Verzicht auf die Extraktion mathematischer Formeln kam im Projekt nicht in Betracht, da diese einen wesentlichen Bestandteil wissenschaftlicher Publikationen darstellen. Die Ergebnisse zeigen jedoch, dass Formel-Parsing einen dominanten Kostenfaktor in der Extraktionspipeline darstellt und bei der Skalierung graphbasierter RAG-Systeme explizit berücksichtigt werden muss.
 
-### 6.2 naives RAG
+### 6.2 Naives RAG
 
 Die Ergebnisse des naiven RAG bestätigen die in Kapitel 3.1 beschriebenen Limitierungen vektorbasierter Ansätze. Die sehr kurz gehaltenen Chunks – von einzelnen Empfehlungen über Schlagwortlisten bis hin zu isolierten Formeln – funktionieren gut für einfache, lokal verankerte Faktenfragen, liefern aber bei komplexeren Multi-Hop-Fragen häufig nur Teilkontext. In den OpenRAG-Eval-Läufen zeigte sich, dass das LLM in solchen Fällen zwar gelegentlich korrekte Antworten generiert, diese jedoch nicht immer sauber auf im Kontext vorhandene Evidenz zurückgeführt werden können, was sich in einer im Vergleich zu LinearRAG niedrigeren Contain Accuracy widerspiegelt. Gleichzeitig ist die naive Pipeline klar einfacher und ressourcenschonender: Es entfallen Graphkonstruktion und graphbasierte Traversierungen, Online-Kosten beschränken sich auf Vektorsuche und Generierung. Insgesamt eignet sich das naive RAG damit gut als schnelle, interpretierbare Baseline, ist aber für die im Projekt betrachteten, wissensintensiven Multi-Hop-Szenarien nur bedingt ausreichend und macht den Mehrwert expliziter Graphstrukturen deutlich sichtbar.
 
@@ -522,7 +522,7 @@ Zu diesem Zeitpunkt sind keine belastbaren Ergebnisse verfügbar.
 Der Score spiegelt vor allem das Resultat des Vectorstores wieder. Jedoch har das Resultat des Graphen, die Verbindung "Head => Tail" oder hier "methods -> >" oder "which -> 8" keinen Einfluss auf das Ergebnis.
 
 **Processing Query:** 'What specific computational issue of the 'two-stage iterative framework' does the proposed 'Self-supervised Reflective Learning' (SSRL) aim to eliminate?'
-**[RAG] Retrieved Context (Score: 0.8202):** "methods < / section _header_ level _1 > < text > < loc_ 255 > < loc _315 > < loc_ 460 > < loc _ 374 > this section introduces the self - supervised reflective learning ( ssrl ) approach, which improves the two - stage iterative framework ["
+**[RAG] Retrieved Context (Score: 0.8202):** "methods < / section *header* level *1 > < text > < loc* 255 > < loc *315 > < loc* 460 > < loc _ 374 > this section introduces the self - supervised reflective learning ( ssrl ) approach, which improves the two - stage iterative framework ["
 **Result:** ['methods -> > (Retrieved)', 'which -> 8 (Retrieved)']
 
 #### Einschränkungen
