@@ -46,6 +46,7 @@ stages:
       - data/processed/extracted
     params:
       - load.batch_size
+    frozen: true
 
   linearrag_index:
     cmd: uv run python src/app/linear_rag/index.py --database_url postgresql://postgres:postgres@127.0.0.1:54322/postgres
@@ -54,6 +55,7 @@ stages:
     params:
       - index.batch_size
       - index.spacy_model
+    frozen: true
 
   generate_queries:
     cmd: uv run open-rag-eval generate-queries --config query_gen_config.yaml
