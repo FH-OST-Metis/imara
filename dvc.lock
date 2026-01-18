@@ -167,14 +167,14 @@ stages:
     deps:
     - path: data/processed/chunks
       hash: md5
-      md5: 97d328068fbd9307ce5e3db94b1beeb2.dir
-      size: 159631484
-      nfiles: 278692
+      md5: b3fd5b1369d991ccf8c917283af28719.dir
+      size: 458580
+      nfiles: 848
     - path: data/processed/extracted
       hash: md5
-      md5: 2b597a1b3021010b926d35600555ddc4.dir
-      size: 27059869438
-      nfiles: 12955
+      md5: 2fd66098f33b1fa4f54622de2ee7e74d.dir
+      size: 131543751
+      nfiles: 60
     - path: src/app/naiverag/embed.py
       hash: md5
       md5: d21b6d55f73e3d4d473473f060a76604
@@ -393,14 +393,14 @@ stages:
     deps:
     - path: data/processed/chunks
       hash: md5
-      md5: 97d328068fbd9307ce5e3db94b1beeb2.dir
-      size: 159631484
-      nfiles: 278692
+      md5: b3fd5b1369d991ccf8c917283af28719.dir
+      size: 458580
+      nfiles: 848
     - path: data/processed/extracted
       hash: md5
-      md5: 2b597a1b3021010b926d35600555ddc4.dir
-      size: 27059869438
-      nfiles: 12955
+      md5: 2fd66098f33b1fa4f54622de2ee7e74d.dir
+      size: 131543751
+      nfiles: 60
     - path: src/app/linear_rag/load.py
       hash: md5
       md5: 59d888a4a2df9a1f335496f4d9c54d68
