@@ -1,5 +1,8 @@
 ---
-title: "Projektbericht: IMARA"
+title: "Projektbericht CAS «Machine Learning for Software Engineers (ML4SE)»"
+subtitle: |
+  Evaluation graph-basierter RAG-Ansätze
+  IMARA
 author:
   - "Marco Allenspach"
   - "Lukas Koller"
@@ -15,9 +18,14 @@ indent: false
 lang: de
 header-includes:
   - \renewcommand{\figurename}{Abbildung}
-  - |
-    \usepackage{etoolbox}
-    \pretocmd{\tableofcontents}{\clearpage}{}{}
+  - \usepackage{etoolbox}
+  - \pretocmd{\tableofcontents}{\clearpage}{}{}
+  - \usepackage{titlesec}
+  - \titlespacing*{\section}{0pt}{2.5ex plus 1ex minus .2ex}{1.5ex plus .2ex}
+  - \titlespacing*{\subsection}{0pt}{2.25ex plus 1ex minus .2ex}{1.2ex plus .2ex}
+  - \titlespacing*{\subsubsection}{0pt}{2ex plus 0.8ex minus .2ex}{1ex plus .2ex}
+  - \titleformat{\paragraph}[block]{\normalfont\normalsize\bfseries}{\theparagraph}{1em}{}
+  - \titlespacing*{\paragraph}{0pt}{2ex plus 0.8ex minus .2ex}{1ex plus .2ex}
 ---
 
 \newpage
@@ -78,13 +86,11 @@ LinearRAG („Linear Graph Retrieval-Augmented Generation on Large-scale Corpora
 
 GraphMERT adressiert die Skalierbarkeitsprobleme klassischer neurosymbolischer Frameworks und wurde von Belova et al. (2025) vorgeschlagen. Es handelt sich um ein kompaktes, graphbasiertes Encoder-Modell, das aus unstrukturierten Textkorpora hochwertige Wissensgraphen generiert. Dabei werden neuronale Netze zur Erlernung abstrakter Repräsentationen mit symbolischen Strukturen in Form eines Wissensgraphen kombiniert, um nachvollziehbares und verifizierbares Schliessen zu ermöglichen. Ziel ist eine effiziente und skalierbare neurosymbolische Architektur mit hoher faktischer Korrektheit, beispielsweise gemessen mittels FActScore, sowie konsistenten Relationen, bewertet über den ValidityScore.
 
-![GraphMERT Node Embeddings t-SNE View](assets/GraphMERT-node-embeddings.png){width=49%}
-![GraphMERT Semantic Graph Visualization](assets/GraphMERT-semantic-graph-visualization.png){width=49%}
+![GraphMERT-Embeddings: Node Embeddings (t-SNE View) und Semantic Graph Visualization](assets/GraphMERT-embeddings-combined.png){width=100%}
 
 Die Abfrage erfolgt direkt auf dem Wissensgraphen und nutzt dessen explizite Struktur. Anstatt isolierte Textsegmente über Vektorähnlichkeit zu vergleichen, traversiert der Suchprozess semantisch angereicherte, verkettete Knoten und unterstützt so linear skalierbares Multi-Hop-Reasoning.
 
-![Ein perfektes Resultat (übernommen aus Belova et al., 2025)](assets/GraphMERT-perfektes-resultat.png){width=49%}
-![Ein fast perfektes Resultat](assets/GraphMERT-fast-perfektes-resultat.png){width=49%}
+![Query-Suche auf den Graph-Ergebnissen: links ein perfektes, rechts ein fast perfektes Resultat, links übernommen aus Belova et al. (2025).](assets/GraphMERT-results-combined.png){width=100%}
 
 In der vorgelagerten Extraktion wird unstrukturierter Text in Entitäten und Relationen überführt und anschliessend semantisch aggregiert. Dadurch werden redundante Strukturen reduziert, die Graphkomplexität verringert und die Effizienz des Retrievals erhöht. Im Projekt IMARA dient GraphMERT als Referenzkonzept, das anhand prototypischer Implementierungen und Visualisierungen qualitativ analysiert wurde. Dabei ist GraphMERT nicht als RAG-System zu verstehen, es repräsentiert lediglich den Core mit dem Graphen.
 
@@ -104,7 +110,7 @@ Klassische RAG-Systeme basieren auf einer Vektorsuche über in Chunks zerlegte T
 
 Dieser Ansatz weist mehrere grundlegende Limitierungen auf:
 
-#### 3.1.1 Kontextuelle Fragmentierung**
+#### 3.1.1 Kontextuelle Fragmentierung
 
 Durch das Chunking wird der natürliche Informationsfluss eines Dokuments künstlich unterbrochen. Relevanter Kontext kann über mehrere Chunks, Abschnitte oder Dokumente verteilt sein und wird von der Vektorsuche, die jeden Chunk isoliert betrachtet, häufig nur unvollständig erfasst. Zwar wird semantische Ähnlichkeit erkannt, explizite Beziehungen wie Kausalität, Abhängigkeiten oder hierarchische Strukturen bleiben jedoch unberücksichtigt.
 
@@ -326,7 +332,7 @@ Darüber hinaus zeigte sich, dass das Parsen mathematischer Formeln sowohl auf C
 
 ### 5.2 Naives RAG
 
-Für die Baseline wurden die mit Docling extrahierten Dokumente in kurze Text-Chunks zerlegt und in der Tabelle `document_chunk` persistiert. Typische Chunks umfassen ein bis wenige Sätze, z. B. eine einzelne Empfehlung aus einem Paper („Recommendation 2.4: Ethics is a topic that, given the nature of data science, students should learn and practice throughout their education.“), Schlagwortzeilen wie „Index Terms – self-supervised learning, self-labeling, knowledge distillation, noisy label modeling, speaker recognition“ oder isolierte Formeln („$$R + \\frac{\\mu}{\\theta \\sigma^2} < A - \\frac{1}{\\cosh \\kappa T - 1} \\cdot (x_0 - A).$$“). In Fällen, in denen Docling Bilder extrahiert hat, enthalten die Chunks zusätzlich einen `[IMAGES]`‑Block mit relativen Bildpfaden.
+Für die Baseline wurden die mit Docling extrahierten Dokumente in kurze Text-Chunks zerlegt und in der Tabelle `document_chunk` persistiert. Typische Chunks umfassen ein bis wenige Sätze, z. B. eine einzelne Empfehlung aus einem Paper („Recommendation 2.4: Ethics is a topic that, given the nature of data science, students should learn and practice throughout their education.“), Schlagwortzeilen wie „Index Terms – self-supervised learning, self-labeling, knowledge distillation, noisy label modeling, speaker recognition“. In Fällen, in denen Docling Bilder extrahiert hat, enthalten die Chunks zusätzlich einen `[IMAGES]`‑Block mit relativen Bildpfaden.
 
 Diese feingranulare Segmentierung erlaubt eine präzise Vektorsuche, führt aber auch zu Kontextfragmentierung: Viele Fragen erfordern Informationen, die über mehrere solcher Kurz-Chunks verteilt sind. In den OpenRAG-Eval-Läufen zeigte sich deshalb, dass das naive RAG bei lokal verankerten Faktenfragen brauchbare Antworten liefert, bei Multi-Hop-Fragen jedoch häufiger entweder unvollständigen Kontext zurückliefert oder relevante Teile über mehrere Chunks verstreut bleiben. Damit bestätigt die Baseline die theoretisch erwarteten Grenzen rein vektorbasierter RAG-Systeme und dient als Referenzpunkt für die graphbasierten Ansätze.
 
