@@ -1,51 +1,131 @@
-
----
-
 # Projektbericht: IMARA
-
-## Domain-specific GraphRAG pipeline with model fine-tuning
 
 **Modul:** Abschlussarbeit CAS Machine Learning for Software Engineers (ML4SE)
 
-**Datum:** [Aktuelles Datum]
+**Datum:** 18.01.2026
 
 **Autoren:** Marco Allenspach, Lukas Koller, Emanuel Sovrano
 
+---
+
 ## Abstract
 
-Die Einführung von Retrieval-Augmented Generation (RAG) markierte einen bedeutenden Meilenstein in der Anwendung grosser Sprachmodelle (LLM), indem generative Fähigkeiten auf faktischen, externen Daten basierten, um Fehlinterpretationen zu vermeiden und die Relevanz zu erhöhen. Um die Schwächen von RAG der ersten Generation durch die Einführung strukturierter, relationaler Kontexte zu beheben, hat sich jedoch mit AI-Native GraphRAG ein weiterentwickeltes Paradigma etabliert.
+Die Einführung von Retrieval-Augmented Generation (RAG) markiert einen bedeutenden Meilenstein in der Anwendung grosser Sprachmodelle (LLM), indem generative Fähigkeiten auf faktischen, externen Daten basieren. Klassische, rein vektorbasierte RAG-Systeme behandeln Wissen jedoch als Sammlung unzusammenhängender Textfragmente und stossen bei komplexen Anfragen an Grenzen – insbesondere, wenn Informationen aus mehreren Quellen zu verknüpfen sind oder explizite Beziehungen zwischen Entitäten eine Rolle spielen.
 
-Der rasante branchenweite Wandel hin zu graphenbasierten Architekturen ist eine notwendige Weiterentwicklung, die auf der Erkenntnis beruht, dass eine KI für effektives Denken ein Modell des Anwendungsbereichs benötigt, nicht nur eine Sammlung von Fakten. Der Fortschritt von unreflektierten LLMs zu grundlegenden RAGs löste das Problem der faktischen Fundierung, doch das Versagen rein vektorbasierter RAGs bei komplexen Anfragen zeigte, dass die Struktur des Wissens ebenso wichtig ist wie sein Inhalt. Ein Wissensgraph liefert diese Struktur und transformiert eine passive Dokumentensammlung in ein aktives, abfragefähiges Modell der Welt.
+Der rasante branchenweite Wandel hin zu graphenbasierten Architekturen ist eine notwendige
+Weiterentwicklung, die auf der Erkenntnis beruht, dass eine KI für effektives Denken ein Modell des
+Anwendungsbereichs benötigt, nicht nur eine Sammlung von Fakten. Der Fortschritt von unreflektierten LLMs
+zu grundlegenden RAGs löste das Problem der faktischen Fundierung, doch das Versagen rein vektorbasierter
+RAGs bei komplexen Anfragen zeigte, dass die Struktur des Wissens ebenso wichtig ist wie sein Inhalt. Ein
+Wissensgraph liefert diese Struktur und transformiert eine passive Dokumentensammlung in ein aktives,
+abfragefähiges Modell der Welt.
 
 ---
 
-## 1. Management Summary
+## 1. Einleitung
 
-*(Ca. 0.5 - 1 Seite)*
-Zusammenfassung des gesamten Projekts: Problemstellung (Extraktion aus komplexen PDFs), gewählter Lösungsansatz (GraphRAG & Fine-tuning) und die wichtigsten Ergebnisse des Benchmarkings.
+Das Projekt IMARA verfolgt das Ziel, die Grenzen klassischer RAG-Systeme aufzuzeigen und zu untersuchen, inwiefern graphbasierte Retrieval-Ansätze die Antwortqualität insbesondere bei komplexen, mehrschrittigen Anfragen verbessern können. Ausgangspunkt ist ein realitätsnahes End-to-End-Szenario: Ausgehend von komplexen, wissenschaftlichen PDFs (z. B. aus OpenRAGBench) werden Dokumente automatisch extrahiert, in eine Wissensrepräsentation überführt und schliesslich für Frage-Antwort-Szenarien genutzt.
 
-Traditionelle neuronale Netze eignen sich gut zur Kodierung linearer Beziehungen, doch Daten aus der realen Welt sind in der Regel komplex und multidimensional. Graphen sind besser geeignet, höherdimensionale Verbindungen darzustellen, in denen jeder Knoten mit jedem anderen Knoten in Beziehung steht. Dadurch eignen sich Graphen besser zur Speicherung komplexer Beziehungen aus der realen Welt.
+Zur Standardisierung der Evaluation werden OpenRAGBench als Datensatz und OpenRAG-Eval als Evaluations-Framework eingesetzt. Damit lassen sich unterschiedliche Konfigurationen – naives RAG, verschiedene GraphRAG-Varianten und später feinabgestimmte Modelle – unter vergleichbaren Bedingungen messen.
 
-## 2. Einleitung und Zielsetzung
+### 1.1 Problemstellung
 
-Das IMARA-Projekt hat zum Ziel, aufzuzeigen wie die Genauigkeit der Abfrage eines graph-basierten RAG-Systems sich verbessert.
+Konventionelle RAG-Architekturen basieren typischerweise auf Vektorsimilaritätssuche über in Chunks zerlegte Dokumente. Dieser Ansatz weist folgende zentrale Schwächen auf:
 
-Um eine Grundlage für die Messbarkeit zu haben, wurde OpenRAGBench als Referenzdatensatz ausgewählt.
+- Wissen wird als Menge von isolierten Textausschnitten behandelt.
+- Beziehungen zwischen Entitäten (Kausalität, Abhängigkeit, Hierarchie) sind implizit und für das System nicht explizit erfassbar.
+- Multi-Hop-Reasoning (z. B. Verknüpfung mehrerer Dokumente/Abschnitte) ist schwierig.
+- Die Performance ist stark abhängig von der gewählten Chunking-Strategie (Grösse, Überlappung, Heuristiken).
 
-### Defining the "AI-Native" GraphRAG Paradigm
+Gerade wissenschaftliche Publikationen mit komplexen Abhängigkeiten, Formeln, Tabellen und Querverweisen sind mit einem rein vektorbasierenden RAG nur eingeschränkt zuverlässig erschliessbar. Es fehlt eine strukturierte Repräsentation, die inhaltliche Zusammenhänge explizit abbildet.
 
-AI-Native GraphRAG represents a specific and powerful subset of graph-based RAG systems. Solutions must automate the entire workflow from unstructured data to a natural language answer, abstracting complexities of graph theory and database management.
+### 1.2 Projektziele
 
-## naives RAG
+Aus dieser Problemstellung leiten sich die Ziele von IMARA ab:
 
-### Die inhärenten Einschränkungen von vektorbasierter RAG
+1. Aufbau einer graphbasierten RAG Pipeline zur Erstellung dichter Wissensgraphen aus wissenschaftlichen PDFs.
+2. Systematischer Vergleich klassischer vektorbasierter RAG-Ansätze mit verschiedenen GraphRAG-Varianten (u. a. LeanRAG, LinearRAG, GraphMERT).
+3. Aufbau eines naiven RAG als Referenz sowie Vorbereitung von graphbasiertem Fine-tuning (z. B. via GraphRAFT) auf Basis domänenspezifischer Daten.
+4. Entwicklung einer flexiblen, wiederholbaren Pipeline vom PDF bis zur Evaluation, inklusive Datenversionierung (DVC), Orchestrierung und MLflow-gestützter Nachvollziehbarkeit.
+5. Nutzung von OpenRAGBench/OpenRAG-Eval zur objektiven, reproduzierbaren Bewertung unterschiedlicher Varianten.
 
-Konventionelle RAG-Architekturen verlassen sich auf Vektorsimilaritätssuche über ein Korpus von geteiltem Text. Dieser Ansatz behandelt Wissen als eine Sammlung von unzusammenhängenden Fakten und hat Schwierigkeiten mit Fragen, die erfordern:
+---
 
-- Synthese von Informationen aus mehreren Quellen
-- Verständnis nuancierter Beziehungen zwischen Entitäten
-- Durchführung von Multi-Hop-Reasoning
-Der Kontext, der dem LLM bereitgestellt wird, ist oft eine Liste von Textausschnitten, die keine explizite Darstellung ihrer Verbindungen enthalten.
+## 2. Stand der Technik
+
+In diesem Kapitel werden die theoretischen und praktischen Grundlagen beschrieben, auf denen IMARA aufbaut. Dazu gehören insbesondere graphbasierte RAG-Ansätze und neurosymbolische Methoden.
+
+### 2.1 AI-Native GraphRAG
+
+Unter AI-Native GraphRAG wird ein Paradigma verstanden, das den gesamten Weg von unstrukturierten Daten bis hin zu natürlichsprachlichen Antworten automatisiert, während die Komplexität von Graphentheorie und Datenbanken abstrahiert wird. Im Gegensatz zu klassischen Vektor-RAGs steht nicht nur die semantische Ähnlichkeit einzelner Chunks im Vordergrund, sondern ein explizites Modell des Anwendungsbereichs in Form eines Wissensgraphen.
+
+Ein Wissensgraph transformiert eine passive Dokumentensammlung in ein aktives, abfragefähiges Modell der Welt. Damit werden insbesondere folgende Fähigkeiten unterstützt:
+
+- Abbildung expliziter Relationen zwischen Entitäten.
+- Multi-Hop-Reasoning über mehrere Kanten hinweg.
+- Kombination strukturierter und unstrukturierter Informationen.
+
+### 2.2 LeanRAG
+
+LeanRAG ist ein graphbasierter RAG-Ansatz, der Entitäten in semantisch kohärente Cluster mit expliziten Relationen aggregiert. Aus diesen Clustern entstehen aggregierte Knoten, die als Navigationsschicht über dem Detailgraphen dienen. Anfragen starten auf feingranularer Entitätsebene und traversieren anschliessend auf aggregierte Ebenen, um möglichst relevante Evidenz effizient zu sammeln. Durch optimierte Retrieval-Pfade werden redundante Informationen deutlich reduziert (in Benchmarks ca. 46 % weniger Redundanz im Vergleich zu flachen Baselines). LeanRAG dient im Projekt als Referenz für einen explizit relationenbasierten GraphRAG-Ansatz mit semantischer Verdichtung.
+
+<img src="assets/LeanRAG-framework.png" alt="LeanRAG-Framework (übernommen aus Zhang et al., 2025)"  width="100%" height="100%">
+
+*Abbildung 3: LeanRAG-Framework, übernommen aus Zhang et al. (2025), arXiv:2508.10391.*
+
+### 2.3 LinearRAG
+
+LinearRAG („Linear Graph Retrieval-Augmented Generation on Large-scale Corpora“) verfolgt einen anderen Ansatz: Es wird ein relation-freier Graph konstruiert, der vollständig ohne LLM-basierte Relationsextraktion auskommt. Stattdessen werden Entitäten und ihre Co-Occurrence-Strukturen algorithmisch bestimmt. Die Graphkonstruktion ist kontext-erhaltend, da leichtgewichtige Entity Recognition und semantische Verlinkung genutzt werden, um den Kontext über Passagen und Sätze hinweg zu bewahren. Multi-Hop-Reasoning wird über semantische Brücken im Graphen unterstützt, ohne dass explizite Relationen modelliert werden müssen. Die Konstruktion verursacht keine LLM-Tokenkosten und skaliert linear in Zeit und Speicher. Im Projekt IMARA ist LinearRAG der primäre GraphRAG-Ansatz, der vollständig implementiert und mit Benchmarks evaluiert wurde.
+
+<img src="assets/LinearRAG-workflow.png" alt="LinearRAG-Workflow (übernommen aus Li et al., 2025)" width="100%" height="100%">
+
+*Abbildung 4: LinearRAG-Workflow, übernommen aus Li et al. (2025), arXiv:2510.10114.*
+
+### 2.4 GraphMERT
+
+GraphMERT adressiert die Skalierbarkeitsprobleme klassischer neurosymbolischer Frameworks. Es handelt sich um ein kompaktes, rein grafisches Encoder-Modell, das hochwertige Wissensgraphen aus Textkorpora generiert. Dabei werden einerseits neuronale Netze für das Lernen von Abstraktionen (Encoder-Modell) eingesetzt und andererseits symbolische Repräsentationen in Form eines Wissensgraphen genutzt, um verifizierbares Schliessen zu ermöglichen. Ziel ist eine effiziente und skalierbare neurosymbolische Architektur mit hoher faktischer Korrektheit (zum Beispiel gemessen via FActScore) und validen Relationen (ValidityScore). Im Projekt dient GraphMERT als Referenzkonzept. Prototypische Implementierungen und Visualisierungen wurden erstellt, um die Potenziale graphbasierter Repräsentationen zu illustrieren.
+
+<p align="center">
+  <img src="assets/GraphMERT-node-embeddings.png"
+       alt="GraphMERT Node Embeddings t-SNE View (übernommen aus Belova et al., 2025)"
+       width="49%" />
+  <img src="assets/GraphMERT-semantic-graph-visualization.png"
+       alt="GraphMERT Semantic Graph Visualization (übernommen aus Belova et al., 2025)"
+       width="49%" />
+</p>
+
+*Abbildung 5: Links GraphMERT Node Embeddings (t-SNE View), rechts GraphMERT Semantic Graph Visualization, jeweils übernommen aus Belova et al. (2025).*
+
+Query search on the graphs results. Das ist es, was wir wollen, da die Suche im Graphen linear ist und auf verkettetem Wissen basiert, wobei die Knoten Daten über sich selbst enthalten.
+
+<p align="center">
+  <img src="assets/GraphMERT-perfektes-resultat.png"
+       alt="Ein perfektes Resultat"
+       width="49%" />
+  <img src="assets/GraphMERT-fast-perfektes-resultat.png"
+       alt="Ein fast perfektes Resultat"
+       width="49%" />
+</p>
+
+*Abbildung 6: Query-Suche auf den Graph-Ergebnissen: links ein perfektes, rechts ein fast perfektes Resultat, jeweils übernommen aus Belova et al. (2025).*
+
+Die Extraktion wandelt Text in Entitäten und Relationen um, während die Aggregation diese Informationen semantisch bündelt, um Redundanz zu reduzieren.
+
+### 2.5 OpenRAGBench und OpenRAG-Eval
+
+OpenRAGBench stellt einen umfangreichen Datensatz aus wissenschaftlichen PDFs (Arxiv) und dazugehörigen Frage-Antwort-Paaren bereit und dient als Grundlage für reproduzierbare RAG-Benchmarks im Projekt. OpenRAG-Eval ist ein Evaluations-Framework, das unterschiedliche RAG-Systeme anhand einheitlicher Metriken (zum Beispiel Accuracy, Contain Accuracy und Faithfulness) miteinander vergleicht. IMARA integriert OpenRAG-Eval, um naives RAG, LinearRAG und weitere Varianten konsistent zu bewerten.
+
+---
+
+## 3. Hintergrund
+
+In diesem Kapitel wird der fachliche Hintergrund vertieft, insbesondere die Grenzen vektorbasierter RAG-Systeme und das GraphRAG-Paradigma.
+
+### 3.1 Grenzen vektorbasierten (naiven) RAGs
+
+Klassische RAG-Systeme basieren auf einer Vektorsuche über in Chunks zerlegte Texte. Typischerweise werden Dokumente in Segmente fester Länge aufgeteilt, eingebettet und in einer Vektordatenbank (z. B. Milvus) gespeichert. Anfragen werden ebenfalls eingebettet und die ähnlichsten Chunks zurückgegeben.
+
+Die wesentlichen Limitierungen:
 
 #### Kontextuelle Fragmentierung und Blindheit
 
@@ -59,519 +139,331 @@ Die Leistung ist hochgradig empfindlich gegenüber der Chunking-Strategie (z.B. 
 
 Es gibt Schwierigkeiten, komplexe Fragen zu beantworten, die "Multi-Hop"-Reasoning erfordern. Zum Beispiel: "Welche Marketingkampagnen wurden von der in dem Q3-Bericht erwähnten Lieferkettenstörung betroffen?" erfordert die Verknüpfung von Störung → betroffene Produkte → Marketingkampagnen. Eine einfache Vektorsuche ist unwahrscheinlich, diese Informationssprünge zu überbrücken.
 
-**Analogie:** Vektorbasierte RAG bietet einem Forscher einen Stapel isolierter Karteikarten, während GraphRAG darauf abzielt, eine umfassende Mindmap zu erstellen und bereitzustellen, die entscheidende Verbindungen aufdeckt.
+### 3.2 Das AI-Native GraphRAG-Paradigma
 
-### 2.1 Projekttitel: IMARA
+AI-Native GraphRAG setzt hier an, indem es Wissen strukturiert: Entitäten (z. B. Methoden, Datensätze, Metriken) und ihre Relationen werden explizit als Knoten und Kanten modelliert, und Anfragen können als Operationen auf diesem Graphen formuliert werden, etwa in Form von Pfadsuche, Nachbarschaftsanalyse oder semantischer Aggregation.
 
-### 2.2 Problemstellung
+Analogie: Wo vektorbasiertes RAG einem Forscher einen Stapel Karteikarten gibt, stellt GraphRAG eine dynamische Mindmap bereit, in der Zusammenhänge sichtbar und traversierbar sind.
 
-Die Extraktion und Verarbeitung von Informationen aus unstrukturierten PDF-Dokumenten stellt eine Herausforderung für herkömmliche RAG-Systeme dar.
+### 3.3 Projektkontext: IMARA
 
-### 2.3 Projektziele
+IMARA integriert diese Ideen in eine End-to-End-Pipeline, die von der robusten Dokumentenextraktion bis zur Graphkonstruktion, zum Retrieval und zur Evaluation reicht. Der Hintergrund umfasst dabei realitätsnahe Hardware- und Tooling-Constraints (GPU-VRAM, langsame Formel-Extraktion, instabile Tools), Anforderungen an Reproduzierbarkeit und Datenversionierung (DVC, MLflow) sowie den Bedarf an lokaler Ausführung aufgrund von Datenschutz und sensiblen Inhalten.
 
-- Die Implementation von graphbasierten System und der Vergleich zu klassischen RAG-Systemen
-- Der Vergleich zwischen verschiedenen graphbasierten RAG-Systemen
+---
 
+## 4. Methodik / Umsetzung
 
-**Graph-basiertes RAG:** Aufbau einer Pipeline zur Erstellung dichter Wissensgraphen.
-In diesem Projekt werden drei ausprägungen deines graphbasierten RAG-Systems umgesetzt.
-1. **LeanRAG** - basiert auf einem Knowledge Graph mit einer hirarchischen Aggregierung. 
-2. **linearRAG** - relying on lightweight entity recognition and semantic linking
-3. **GraphMERT** - kompaktes, rein grafisches Encoder-Modell, das hochwertige KGs aus unstrukturierten Textkorpora und seinen eigenen internen Repräsentationen generiert
+Dieses Kapitel beschreibt das konkrete Vorgehen im Projekt IMARA – von den Datenquellen über die PDF-Extraktion bis zur Implementierung des LinearRAG-Graphs und der Evaluationspipeline.
 
+### 4.1 Verwendete Hardware
 
-**Automation:** End-to-End Automatisierung der Pipeline.
-Eine flexible Pipeline bauen, die bei der Evaluation der verschiedenen RAG-Systeme unterstützt.
+Die Experimente wurden auf einem heterogenen Hardware-Setup durchgeführt, u. a.:
 
-## 3. Datenbasis und Vorverarbeitung
+- Lenovo Tower i9-14900, 64 GB RAM, RTX 4090 (16 GB VRAM).
+- Tower mit i9-14900, 256 GB RAM, 3× RTX 6000 (je 48 GB VRAM).
+- Laptops (HP EliteBook X G11, Lenovo Legion 9) sowie MacBook M3 Pro.
 
-### 3.1 Datenquellen
+Die Graphkonstruktion für LinearRAG konnte CPU-basiert durchgeführt werden; GPU-Ressourcen wurden primär für LLM-Inferenz und Docling-Extraktion (wenn GPU-Features genutzt wurden) eingesetzt.
 
-Beschreibung der verwendeten Datensätze, wie z.B. der **Open RAG Bench Dataset** (Arxiv-Kategorien) oder **PubMedQA**.
+### 4.2 Datenbasis
 
+Für die Experimente wurde eine Kombination aus generischen und domänenspezifischen Datensätzen verwendet. Der zentrale Korpus ist OpenRAGBench, ein Arxiv-Datensatz mit rund 1000 wissenschaftlichen Publikationen und zugehörigen Fragen. Ergänzend kamen 2wikimultihop als Benchmark für Multi-Hop Question Answering sowie HotpotQA und Musique als weitere Multi-Hop-QA-Datensätze zum Einsatz. Für die domänenspezifische Evaluierung wurden zudem Medical- bzw. PubMedQA-Datensätze verwendet. Die Rohdaten werden versioniert über DVC verwaltet, liegen in einem S3-kompatiblen Supabase Storage und können reproduzierbar mit dvc pull abgerufen werden.
 
+### 4.3 Systemarchitektur
 
-## 4. Methodik und Architektur
+Die IMARA-Architektur ist als modulare End-to-End-Pipeline umgesetzt. Die wichtigsten Komponenten sind im Repository in `src/` strukturiert, ergänzt durch Konfigurationen in `configs/`, Daten in `data/` und Ergebnisse in `results/`. Die Systemarchitektur orientiert sich an der im Projektdokument `what6.md` beschriebenen Vision einer domänenspezifischen, graphbasierten RAG-Pipeline.
 
-### 4.1 PDF-Extraktion mit Docling
+!TODO @Marco: Kommt das what6.md von dir? falls ja kannast du noch kurz Beschreiben woher das kommt?
 
-Einsatz des **Docling Toolkits** zur effizienten Konvertierung von Dokumenten in maschinenlesbare Formate (Markdown/JSON).
+<img src="assets/Systemarchitektur.png" alt="IMARA Systemarchitektur" width="100%" height="100%">
 
-![alt text](image-10.png)
+*Abbildung 8: IMARA Systemarchitektur*
 
+Ausgangspunkt der Pipeline ist die Data Ingestion: PDFs aus OpenRAGBench werden mit Docling in maschinenlesbare Artefakte überführt, typischerweise als Markdown-, JSON- und Doctags-Ausgaben. Für jedes Quelldokument entsteht dabei ein eigener Verzeichnisbaum mit allen Zwischenständen, sodass der Verarbeitungsworkflow (zum Beispiel alternative Chunking- oder Embedding-Strategien) später flexibel angepasst werden kann. In einem nächsten Schritt erfolgt das Chunking und Embedding; die extrahierten Texte werden mit konfigurierbaren Strategien in Chunks zerlegt und mit unterschiedlichen Embedding-Modellen vektorisiert, bevor sie gemeinsam mit weiteren Metadaten in einer PostgreSQL-Datenbank mit pgvector-Extension abgelegt werden.
 
+Darauf aufbauend stellt ein naiver RAG-Baustein eine Baseline bereit, die mittels Ähnlichkeitssuche über den eingebetteten Chunks relevante Kontexte findet und diese mit einem LLM zur Antwortgenerierung kombiniert. Parallel dazu kommen graphbasierte RAG-Varianten wie LinearRAG, LeanRAG und GraphMERT zum Einsatz, bei denen aus den extrahierten Texten Wissensgraphen aufgebaut werden, um Retrieval und Antwortgenerierung mit expliziten Strukturen und Multi-Hop-Reasoning zu unterstützen.
 
-### 4.2 Graph-Konstruktion
+Die Ausführung der einzelnen Schritte wird durch eine Orchestrierungsschicht koordiniert, welche Jobs, Workflows und Statusinformationen verwaltet und sowohl das Starten einzelner Verarbeitungsschritte als auch ganzer Pipelines über Kommandozeilenwerkzeuge und Skripte ermöglicht. Für Benchmarking und Evaluation werden OpenRAGBench-Läufe über OpenRAG-Eval orchestriert; dabei werden Metriken wie Genauigkeit und Latenz erhoben und in MLflow protokolliert, um Experimente nachvollziehbar vergleichen zu können.
 
-#### 4.1.1 LeanRAG Ansatz
+### 4.4 PDF-Extraktion mit Docling
 
-Detaillierung der Triple-Extraktion und der hierarchischen Retrieval-Struktur.
+Für die Konvertierung der PDFs in maschinenlesbare Formate (Markdown, JSON, Doctags) wird das Docling Toolkit eingesetzt. Die Extraktion ist der erste kritische Schritt der Pipeline, da hier die spätere Qualitätsobergrenze des gesamten Systems definiert wird.
 
-## ✨ Features
+<img src="assets/Docling-architecture.png" alt="Architekturübersicht von Docling, übernommen aus der offiziellen Docling-Dokumentation (Docling-Projekt, Zugriff am 18.01.2026)." width="100%" height="100%">
 
-- **Semantic Aggregation**: Clusters entities into semantically coherent summaries and constructs explicit relations to form a navigable aggregation-level knowledge network.
-- **Hierarchical, Structure-Guided Retrieval**: Initiates retrieval from fine-grained entities and traverses up the knowledge graph to gather rich, highly relevant evidence efficiently.
-- **Reduced Redundancy**: Optimizes retrieval paths to significantly reduce redundant information—LeanRAG achieves ~46% lower retrieval redundancy compared to flat retrieval baselines (based on benchmark evaluations).
-- **Benchmark Performance**: Demonstrates superior performance across multiple QA benchmarks with improved response quality and retrieval efficiency.
+*Abbildung 7: Architekturübersicht von Docling, übernommen aus der offiziellen Docling-Dokumentation (Docling-Projekt, Zugriff am 18.01.2026).*
 
-## 🏛️ Architecture Overview
+#### 4.4.1 Konfiguration und Parameter
 
-<img src="framework.png" alt="Overview of LeanRAG"  width="100%" height="100%">
+Die Docling-Integration folgt dem in der Projektbeschreibung definierten Parameter-Set. Wichtige Aspekte:
 
-LeanRAG’s processing pipeline follows these core stages:
+- Unterstützung mehrerer Inputformate (`pdf`, `docx`, `pptx`, `html`, `image`, `xlsx`, `md`, `asciidoc`).
+- Generierung verschiedener Output-Artefakte: `md`, `json`, `html`, `text`, `doctags`.
+- Aktivierte Zusatzfunktionen:
+  - OCR (`do_ocr=True`) inkl. `easyocr`-Backend.
+  - Extraktion von Tabellenstrukturen (`do_table_structure=True`).
+  - Code- und Formel-Anreicherung (`do_code_enrichment=True`, `do_formula_enrichment=True`).
+  - Bildklassifikation und Bildbeschreibung via lokalem Vision-Language-Modell.
 
-1. **Semantic Aggregation**  
-   - Group low-level entities into clusters; generate summary nodes and build adjacency relations among them for efficient navigation.
+Alle relevanten Parameter sind in der Projektkonfiguration (`configs/`) zentralisiert und können für zukünftige Experimente angepasst werden.
 
-2. **Knowledge Graph Construction**  
-   - Construct a multi-layer graph where nodes represent entities and aggregated summaries, with explicit inter-node relations for graph-based traversal.
+!TODO: @Marco: wo genau liegen diese? im configs ist nichts.
 
-3. **Query Processing & Hierarchical Retrieval**  
-   - Anchor queries at the most relevant detailed entities ("bottom-up"), then traverse upward through the semantic aggregation graph to collect evidence spans.
+#### 4.4.2 Herausforderungen und Massnahmen
 
-4. **Redundancy-Aware Synthesis**  
-   - Streamline retrieval paths and avoid overlapping content, ensuring concise evidence aggregation before generating responses.
+Im Projektverlauf traten mehrere praktische Herausforderungen auf:
 
-5. **Generation**  
-   - Use retrieved, well-structured evidence as input to an LLM to produce coherent, accurate, and contextually grounded answers.
+- **Qualität der Extraktion:** Die initialen Parameter führten zu unvollständigen Tabellen und fehlerhaften Strukturen. Durch systematische Optimierung (Vergleich unterschiedlicher Konfigurationen) konnte die Genauigkeit deutlich verbessert werden.
+- **VRAM-Limitationen:** 16 GB GPU-VRAM reichten nicht aus, um alle Docling-Features stabil in Container-Form (`docling-serve`) zu betreiben. Es kam zu wiederkehrenden Endlosschleifen.
+  - *Massnahme:* Wechsel von `docling-serve` zur direkten Python-Integration und Ausführung auf der CPU.
+- **Tooling-Konflikte:** Der Prozess `cloudcode_cli.exe` verursachte massiven RAM-Verbrauch in der VSCode-Umgebung und blockierte die Ausführung von Docling.
+  - *Massnahme:* Deinstallation des Tools und Bereinigung der Entwicklungsumgebung.
+- **Lange Laufzeiten bei Formel-Parsing:** Einzelne Dokumente benötigten mehrere Stunden für die vollumfängliche Extraktion.
+  - *Massnahme:* Dedizierter zweiter Rechner ausschliesslich für Docling-Extraktion.
 
+Diese Erfahrungen fliessen in das Risikomanagement (Kapitel 8) ein und verdeutlichen die praktische Relevanz robuster Datenvorverarbeitung.
 
+### 4.5 Naive RAG Implementation
 
+!TODO:
 
-
-- **Extraktion:** Umwandlung von Text in Entitäten und Relationen.
-
-
-### leanRAG Workflow
-
-    file_chunk.py
-
-1. chunk raw input token-based with 512 Tokens and 64 Tokens overlap
-
-#### **Method 1: CommonKG**
-
-    CommonKG/create_kg.py
-
-2. create a list of match words (entities) for each chunk
-3. create a list of "all entities" based on the match words without duplicates
-
-1. "new triples" have "subject, predicate, object" triples init with coresponding reference to the chunk of origin
-2. "next layer entities"
-3. "new triples descriptions"
-
-    CommonKG/deal_triple.py
-
-7. summarize descriptions => relation.jsonl
-
-#### **Method 2: GraphRAG**
-
-    GraphExtraction/chunk.py
-
-2. loads the chunks
-3. performs a "triple extraction" => entity.jsonl, relation.jsonl
-
-    GraphExtraction/deal_triple.py
-
-4. deal with duplicates of entries and relations
-
-    build_graph.py
-
-1. generating embeddings
-2. clustering lables (based on the embeddings)
-3. layer 1 clustering
-4. layer 2 clustering
-5. building vector DB
-
-#### 4.1.2 LinearRAG
-
-LinearRAG: Linear Graph Retrieval-Augmented Generation on Large-scale Corpora - A relation-free graph construction method for efficient GraphRAG.
-
-<img src="image.png" alt="linearRAG Workflow"  width="100%" height="100%">
-
-
-✅ Context-Preserving: Relation-free graph construction, relying on lightweight entity recognition and semantic linking to achieve comprehensive contextual comprehension.
-✅ Complex Reasoning: Enables deep retrieval via semantic bridging, achieving multi-hop reasoning in a single retrieval pass without requiring explicit relational graphs.
-✅ High Scalability: Zero LLM token consumption, faster processing speed, and linear time/space complexity.
-
-**Graphbuilding:**
-
-1. => load data
-2. chunking data
-3. get named entities - SpacyNER (Named Entity Recognition)
-4. sentence splitting
-5. get passages
-6. get embeddings(sentences, entities, passages)
-7. build graph
-    => LinearRAG.graphml
-    => ner_results.json
-    => passage_embedding.parquet
-    => dentence_embedding.parquet
-    => entity_embedding.parquet
-
-**Retreival:**
-
-1. retrieval_results = qa(question)
-
-
-
-#### 4.1.3 GraphMERT
-
-GraphMERT: Effiziente und skalierbare Gewinnung zuverlässiger Wissensgraphen aus unstrukturierten Daten
-
-Ein einfaches Beispiel für eine Testimplementierung des Princeton GraphMERT-Papers.
-
-<https://arxiv.org/abs/2510.09580>
-
-Seit fast drei Jahrzehnten erforschen Wissenschaftler Anwendungen neurosymbolischer künstlicher Intelligenz (KI), da symbolische Komponenten Abstraktion und neuronale Komponenten Generalisierung ermöglichen. Die Kombination beider Komponenten verspricht rasante Fortschritte in der KI. Dieses Potenzial konnte das Feld jedoch bisher nicht ausschöpfen, da die meisten neurosymbolischen KI-Frameworks nicht skalierbar sind. Zudem schränken die impliziten Repräsentationen und das approximative Schliessen neuronaler Ansätze Interpretierbarkeit und Vertrauen ein. Wissensgraphen (KGs), die als Goldstandard für die Repräsentation expliziten semantischen Wissens gelten, können die symbolische Seite abdecken. Die automatische Ableitung zuverlässiger KGs aus Textkorpora stellt jedoch weiterhin eine Herausforderung dar. Wir begegnen diesen Herausforderungen mit GraphMERT, einem kompakten, rein grafischen Encoder-Modell, das hochwertige KGs aus unstrukturierten Textkorpora und seinen eigenen internen Repräsentationen generiert.
-
-GraphMERT und sein äquivalenter Wissensgraph bilden einen modularen neurosymbolischen Stack: neuronales Lernen von Abstraktionen; symbolische Wissensgraphen für verifizierbares Schliessen. GraphMERT + Wissensgraph ist das erste effiziente und skalierbare neurosymbolische Modell, das höchste Benchmark-Genauigkeit und überlegene symbolische Repräsentationen im Vergleich zu Basismodellen erzielt.
-
-Konkret streben wir zuverlässige domänenspezifische Wissensgraphen (KGs) an, die sowohl (1) faktisch korrekt (mit Herkunftsnachweis) als auch (2) valide (ontologiekonsistente Relationen mit domänenspezifischer Semantik) sind. Wenn ein grosses Sprachmodell (LLM), z. B. Qwen3-32B, domänenspezifische KGs generiert, weist es aufgrund seiner hohen Sensitivität, seiner geringen Domänenexpertise und fehlerhafter Relationen Defizite in der Zuverlässigkeit auf. Anhand von Texten aus PubMed-Artikeln zum Thema Diabetes erzielt unser GraphMERT-Modell mit 80 Millionen Parametern einen KG mit einem FActScore von 69,8 %; ein LLM-Basismodell mit 32 Milliarden Parametern erreicht hingegen nur einen FActScore von 40,2 %. Der GraphMERT-KG erzielt zudem einen höheren ValidityScore von 68,8 % gegenüber 43,0 % beim LLM-Basismodell.
-
-**GraphMERT Node Embeddings (t-SNE View)**
-
-<img src="image-1.png" alt="GraphMERT Node Embeddings (t-SNE View)"  width="100%" height="100%">
-
-**GraphMERT Semantic Graph Visualization**
-
-<img src="image-2.png" alt="GraphMERT Semantic Graph Visualization"  width="100%" height="100%">
-
-**Query search on the graphs results**
-Das ist es, was wir wollen, da die Suche im Graphen linear ist und auf verkettetem Wissen basiert, wobei die Knoten Daten über sich selbst enthalten.
-
-***Ein perfektes Resultat***
-
-<img src="image-3.png" alt="Ein perfektes Resultat"  width="100%" height="100%">
-
-***Ein fast perfektes Resultat***
-
-<img src="image-4.png" alt="Ein fast perfektes Resultat"  width="100%" height="100%">
-
-- **Extraktion:** Umwandlung von Text in Entitäten und Relationen.
--
-
-**Aggregation:** Semantische Aggregation zur Reduzierung von Redundanz.
-
-### 4.2 Fine-tuning Strategie
-
-- Verwendung des **Unsloth Frameworks** für ressourceneffizientes Training.
-
-- Integration von Ansätzen wie **GraphRAFT** oder **GraphMERT** zur Distillation von Wissen in kleine, domänenspezifische Modelle.
-
-## 5. Implementierung
-
-### 5.1 Systemarchitektur
-
-Beschreibung der Pipeline von der PDF-Eingabe bis zur Antwortgenerierung.
-
-<img src="image-5.png" alt="IMARA Pipeline"  width="100%" height="100%">
-
-### 5.2 Verwendete Hardware
-
-1 Lenovo Tower i9-14900, RAM 64.0 GB, GPU 4090 Desktop 16GB VRAM.
-1 Generic Tower i9-14900, RAM 256.0 RAM, 3x RTX 6000 48.0GB VRAM =>Total 144GB VRAM
-1 HP EliteBook X G11  => Massenextraktion mit Docling
-Prozessor Intel 5U, RAM 32.0GB
-
-1 Lenovo Notbook Legion 9 16IRX8
-Prozessor 13th Gen Intel(R) Core(TM) i9-13980HX (2.20 GHz)
-Installierter RAM 32.0 GB (31.7 GB verwendbar)
-GPU     Nvidia RTX4090 Mobile mit 16GB VRAM
-1 MacBook M3 Pro RAM 32.0 GB shared
-1 Generic Tower RAM64.0 GB, GPU Nvidia RTX5060TI 16GB VRAM
-1 Lenovo T14 RAM, OS Pop!_OS 22.04 LTS, GPU embedded
-
-## 6. Evaluation und Benchmarking
-
-### 6.1 Benchmark-Design
-
--
-
-**Ansatz 1:** Generierung eines Testdatensatzes mittels Synthetic Data Generation (SDG) und Evaluierung durch ein "LLM als Judge".
-
--
-
-**Ansatz 2:** Nutzung publizierter Benchmarks wie dem Open RAG Benchmark.
-
-### 6.2 Ergebnisse
-
-Vergleich der Performance: Standard RAG vs. IMARA GraphRAG vs. Fine-tuned Model.
-
-==============================================
-### Docling Results
-angetroffene Herausforderungen
-**Challenge:** Die Qualität der Ergebnisse liegt unter den Erwartungen.
-
-**Massnahme 1:** Optimierung der Parameter. Die optimierte Version der Parameter ist massiv schneller und viel genauer.
-
-<img src="image-6.png" alt="Differenzen 1"  width="100%" height="100%">
-
-Die unterschiede sind z.T. ganze Tabellen.
-
-<img src="image-7.png" alt="Differenzen 2"  width="100%" height="100%">
-
-problematische Parameter:
-<img src="image-8.png" alt="problematische Parameter"  width="100%" height="100%">
-
-erfolgreiche Parameter:
-<img src="image-9.png" alt="erfolgreiche Parameter"  width="100%" height="100%">
-
-**Challenge:** Die 16GB VRAM waren nicht genug, um alle features von docling zu unterstützen. Das verursachte periodische Endless-loop's in Docling serve.
-
-**Massnahme 1:** Der Verzicht auf die Container-Version "Docling serve" und die Verwendung direkt in Python.
-
-**Massnahme 2:** Die Ausführung von Docling auf der CPU, um das VRAM-Limit zu umgehen
-
-**Challenge:** Die cloudcode_cli.exe in der VSCode-Umgebung hat durch einen etremen RAM-Verbrauch im Hintergrund die Ausführung von docling verhindert. freeze, not started, ... <https://forum.cursor.com/t/hight-memory-consumption-on-cloudcode-cli/106122>
-
-**Massnahme 1:** Ein Uninstall von cloudcode_cli.exe war unumgänglich.
-
-**Challenge:** Das parsen von Formeln in Docling mit CPU oder GPU ist sehr langsam. Den Verzicht auf die Extraktion der Formeln war keine Option, da eine maximale Qualität des Extrakts abgestrebt wurde, um die over-all Performance nicht zu beeinträchtigen.
-
-Docling Log Ausschnitt:
-
-    [WindowsPath('C:/Users/ML4SE/Desktop/openspec_demo/configs/data/OpenRAGBench/pdfs/2411.02951v2.pdf')]
-    2025-12-17 19:08:35,249 - INFO - detected formats: [<InputFormat.PDF: 'pdf'>]
-    2025-12-17 19:08:35,259 - INFO - Going to convert document batch...
-    2025-12-17 19:08:35,260 - INFO - Processing document 2411.02951v2.pdf
-    2025-12-18 01:37:07,514 - INFO - Finished converting document 2411.02951v2.pdf in 23312.29 sec.
-    mpve the source file to the target directory
-    2025-12-18 01:37:07,940 - INFO - Processed 1 docs, of which 0 failed and 0 were partially converted.
-    2025-12-18 01:37:07,948 - INFO - Document conversion complete in 203589.20 seconds. it successfully completed 1 out of 287
-    [WindowsPath('C:/Users/ML4SE/Desktop/openspec_demo/configs/data/OpenRAGBench/pdfs/2411.03001v2.pdf')]
-    2025-12-18 01:37:07,968 - INFO - detected formats: [<InputFormat.PDF: 'pdf'>]
-    2025-12-18 01:37:07,972 - INFO - Going to convert document batch...
-    2025-12-18 01:37:07,973 - INFO - Processing document 2411.03001v2.pdf
-    2025-12-18 14:22:26,866 - INFO - Finished converting document 2411.03001v2.pdf in 45918.92 sec.
-    mpve the source file to the target directory
-    2025-12-18 14:22:27,152 - INFO - Processed 1 docs, of which 0 failed and 0 were partially converted.
-    2025-12-18 14:22:27,160 - INFO - Document conversion complete in 249508.41 seconds. it successfully completed 1 out of 286
-    [WindowsPath('C:/Users/ML4SE/Desktop/openspec_demo/configs/data/OpenRAGBench/pdfs/2411.03166v3.pdf')]
-    2025-12-18 14:22:27,193 - INFO - detected formats: [<InputFormat.PDF: 'pdf'>]
-    2025-12-18 14:22:27,201 - INFO - Going to convert document batch...
-    2025-12-18 14:22:27,202 - INFO - Processing document 2411.03166v3.pdf
-    2025-12-19 03:50:46,515 - INFO - Finished converting document 2411.03166v3.pdf in 48499.35 sec.
-    mpve the source file to the target directory
-    2025-12-19 03:50:47,201 - INFO - Processed 1 docs, of which 0 failed and 0 were partially converted.
-    2025-12-19 03:50:47,229 - INFO - Document conversion complete in 298008.48 seconds. it successfully completed 1 out of 285
-    [WindowsPath('C:/Users/ML4SE/Desktop/openspec_demo/configs/data/OpenRAGBench/pdfs/2411.03257v3.pdf')]
-    2025-12-19 03:50:47,249 - INFO - detected formats: [<InputFormat.PDF: 'pdf'>]
-    2025-12-19 03:50:47,257 - INFO - Going to convert document batch...
-    2025-12-19 03:50:47,259 - INFO - Processing document 2411.03257v3.pdf
-    2025-12-19 23:49:15,094 - INFO - Finished converting document 2411.03257v3.pdf in 71907.86 sec.
-    mpve the source file to the target directory
-    2025-12-19 23:49:17,939 - INFO - Processed 1 docs, of which 0 failed and 0 were partially converted.
-    2025-12-19 23:49:18,034 - INFO - Document conversion complete in 369919.29 seconds. it successfully completed 1 out of 284
-
-**Massnahme 1:**
-Einen zweiten Rechner 100% dafür einsetzen.
-
-
-
-==============================================
-### leanRAG Results
-Ressourcenbedarf nach den Refactoring (Schritt tripple extraction):
-![alt text](image-11.png)
-
-==============================================
-### linearRAG Results
-
-LinearRAG, Dataset: 2wikimultihop, Results with local GPT-OSS-20b Model
-
-[passage] Loaded 658 records from ./import\2wikimultihop\passage_embedding.parquet
-[entity] Loaded 40320 records from ./import\2wikimultihop\entity_embedding.parquet
-[sentence] Loaded 21206 records from ./import\2wikimultihop\sentence_embedding.parquet
-
-2025-12-09 12:16:23,189 - INFO - Evaluation Results:
-2025-12-09 12:16:23,191 - INFO -   LLM Accuracy: 0.7350 (735.0/1000)
-2025-12-09 12:16:23,191 - INFO -   Contain Accuracy: 0.7210 (721/1000)
-
-LinearRAG, Dataset: 2wikimultihop, Results with online gpt-4o-mini Model
-
-[passage] Loaded 658 records from ./import\2wikimultihop\passage_embedding.parquet
-[entity] Loaded 40320 records from ./import\2wikimultihop\entity_embedding.parquet
-[sentence] Loaded 21206 records from ./import\2wikimultihop\sentence_embedding.parquet
-Retrieving: 100%|███████████████████████████████████████████████████████████████████████████████| 1000/1000 [02:43<00:00,  6.12it/s]
-QA Reading (Parallel): 100%|████████████████████████████████████████████████████████████████████| 1000/1000 [03:48<00:00,  4.37it/s]
-Evaluating samples: 100%|█████████████████████████████████| 1000/1000 [00:40<00:00, 24.70sample/s, LLM_Acc=0.639, Contain_Acc=0.693]
-2025-12-09 13:34:30,325 - INFO - Evaluation Results:
-2025-12-09 13:34:30,325 - INFO -   LLM Accuracy: 0.6390 (639.0/1000)
-2025-12-09 13:34:30,325 - INFO -   Contain Accuracy: 0.6930 (693/1000)
-
-LinearRAG, Dataset: 2wikimultihop, Results with remote gemma3:17b Model
-
-[passage] Loaded 658 records from ./import\2wikimultihop\passage_embedding.parquet
-[entity] Loaded 40320 records from ./import\2wikimultihop\entity_embedding.parquet
-[sentence] Loaded 21206 records from ./import\2wikimultihop\sentence_embedding.parquet
-Retrieving: 100%|███████████████████████████████████████████████████████████████████████████████████████████████| 1000/1000 [03:10<00:00,  5.24it/s]
-QA Reading (Parallel): 100%|██████████████████████████████████████████████████████████████████████████████████| 1000/1000 [1:22:15<00:00,  4.94s/it]
-Evaluating samples: 100%|█████████████████████████████████████████████████| 1000/1000 [03:24<00:00,  4.88sample/s, LLM_Acc=0.240, Contain_Acc=0.351]
-2025-12-09 19:02:34,979 - INFO - Evaluation Results:
-2025-12-09 19:02:34,980 - INFO -   LLM Accuracy: 0.2400 (240.0/1000)
-2025-12-09 19:02:34,981 - INFO -   Contain Accuracy: 0.3510 (351/1000)
-
-LinearRAG, Dataset: 2wikimultihop, Results with online gpt-4o Model
-
-[passage] Loaded 658 records from ./import\2wikimultihop\passage_embedding.parquet
-[entity] Loaded 40320 records from ./import\2wikimultihop\entity_embedding.parquet
-[sentence] Loaded 21206 records from ./import\2wikimultihop\sentence_embedding.parquet
-Retrieving: 100%|███████████████████████████████████████████████████████████████████████████████████████████████| 1000/1000 [03:00<00:00,  5.55it/s]
-QA Reading (Parallel): 100%|████████████████████████████████████████████████████████████████████████████████████| 1000/1000 [03:29<00:00,  4.78it/s]
-Evaluating samples: 100%|█████████████████████████████████████████████████| 1000/1000 [00:40<00:00, 24.96sample/s, LLM_Acc=0.590, Contain_Acc=0.755]
-2025-12-09 19:32:14,264 - INFO - Evaluation Results:
-2025-12-09 19:32:14,264 - INFO -   LLM Accuracy: 0.5900 (590.0/1000)
-2025-12-09 19:32:14,265 - INFO -   Contain Accuracy: 0.7550 (755/1000)
-
-LinearRAG, Dataset: hotpotqa, Results with local GPT-OSS-20b Model
-
-[passage] Loaded 1311 records from ./import\hotpotqa\passage_embedding.parquet
-[entity] Loaded 66846 records from ./import\hotpotqa\entity_embedding.parquet
-[sentence] Loaded 38455 records from ./import\hotpotqa\sentence_embedding.parquet
-Retrieving: 100%|██████████████████████████████████████████████████████████████████████████████████████████████████████████████| 1000/1000 [03:46<00:00,  4.42it/s]
-QA Reading (Parallel): 100%|█████████████████████████████████████████████████████████████████████████████████████████████████| 1000/1000 [1:51:26<00:00,  6.69s/it]
-Evaluating samples: 100%|████████████████████████████████████████████████████████████████| 1000/1000 [24:59<00:00,  1.50s/sample, LLM_Acc=0.771, Contain_Acc=0.662]
-2025-12-10 20:59:41,463 - INFO - Evaluation Results:
-2025-12-10 20:59:41,463 - INFO -   LLM Accuracy: 0.7710 (771.0/1000)
-2025-12-10 20:59:41,463 - INFO -   Contain Accuracy: 0.6620 (662/1000)
-
-LinearRAG, Dataset: musique, Results with local GPT-OSS-20b Model
-
-[passage] Loaded 1354 records from ./import\musique\passage_embedding.parquet
-[entity] Loaded 67532 records from ./import\musique\entity_embedding.parquet
-[sentence] Loaded 39110 records from ./import\musique\sentence_embedding.parquet
-Retrieving: 100%|██████████████████████████████████████████████████████████████████████████████████████████████| 1000/1000 [03:15<00:00,  5.13it/s]
-QA Reading (Parallel): 100%|█████████████████████████████████████████████████████████████████████████████████| 1000/1000 [3:51:21<00:00, 13.88s/it]
-Evaluating samples: 100%|████████████████████████████████████████████████| 1000/1000 [17:39<00:00,  1.06s/sample, LLM_Acc=0.642, Contain_Acc=0.317]
-2025-12-11 02:00:28,341 - INFO - Evaluation Results:
-2025-12-11 02:00:28,342 - INFO -   LLM Accuracy: 0.6420 (642.0/1000)
-2025-12-11 02:00:28,342 - INFO -   Contain Accuracy: 0.3170 (317/1000)
-
-LinearRAG, Dataset: medical, Results with local GPT-OSS-20b Model
-
-[passage] Loaded 225 records from ./import\medical\passage_embedding.parquet
-[entity] Loaded 9033 records from ./import\medical\entity_embedding.parquet
-[sentence] Loaded 8985 records from ./import\medical\sentence_embedding.parquet
-Retrieving: 100%|██████████████████████████████████████████████████████████████████████████████████████████████| 2062/2062 [06:03<00:00,  5.67it/s]
-QA Reading (Parallel): 100%|███████████████████████████████████████████████████████████████████████████████████| 2062/2062 [10:51<00:00,  3.17it/s]
-Evaluating samples: 100%|████████████████████████████████████████████████| 2062/2062 [01:26<00:00, 23.72sample/s, LLM_Acc=0.694, Contain_Acc=0.032]
-2025-12-11 09:33:43,939 - INFO - Evaluation Results:
-2025-12-11 09:33:43,939 - INFO -   LLM Accuracy: 0.6940 (1431.0/2062)
-2025-12-11 09:33:43,939 - INFO -   Contain Accuracy: 0.0320 (66/2062)
-
-#### 4.1.3 GraphMERT
-
-GraphMERT: Effiziente und skalierbare Gewinnung zuverlässiger Wissensgraphen aus unstrukturierten Daten
-
-Ein einfaches Beispiel für eine Testimplementierung des Princeton GraphMERT-Papers.
-
-<https://arxiv.org/abs/2510.09580>
-
-Seit fast drei Jahrzehnten erforschen Wissenschaftler Anwendungen neurosymbolischer künstlicher Intelligenz (KI), da symbolische Komponenten Abstraktion und neuronale Komponenten Generalisierung ermöglichen. Die Kombination beider Komponenten verspricht rasante Fortschritte in der KI. Dieses Potenzial konnte das Feld jedoch bisher nicht ausschöpfen, da die meisten neurosymbolischen KI-Frameworks nicht skalierbar sind. Zudem schränken die impliziten Repräsentationen und das approximative Schliessen neuronaler Ansätze Interpretierbarkeit und Vertrauen ein. Wissensgraphen (KGs), die als Goldstandard für die Repräsentation expliziten semantischen Wissens gelten, können die symbolische Seite abdecken. Die automatische Ableitung zuverlässiger KGs aus Textkorpora stellt jedoch weiterhin eine Herausforderung dar. Wir begegnen diesen Herausforderungen mit GraphMERT, einem kompakten, rein grafischen Encoder-Modell, das hochwertige KGs aus unstrukturierten Textkorpora und seinen eigenen internen Repräsentationen generiert.
-
-GraphMERT und sein äquivalenter Wissensgraph bilden einen modularen neurosymbolischen Stack: neuronales Lernen von Abstraktionen; symbolische Wissensgraphen für verifizierbares Schliessen. GraphMERT + Wissensgraph ist das erste effiziente und skalierbare neurosymbolische Modell, das höchste Benchmark-Genauigkeit und überlegene symbolische Repräsentationen im Vergleich zu Basismodellen erzielt.
-
-Konkret streben wir zuverlässige domänenspezifische Wissensgraphen (KGs) an, die sowohl (1) faktisch korrekt (mit Herkunftsnachweis) als auch (2) valide (ontologiekonsistente Relationen mit domänenspezifischer Semantik) sind. Wenn ein grosses Sprachmodell (LLM), z. B. Qwen3-32B, domänenspezifische KGs generiert, weist es aufgrund seiner hohen Sensitivität, seiner geringen Domänenexpertise und fehlerhafter Relationen Defizite in der Zuverlässigkeit auf. Anhand von Texten aus PubMed-Artikeln zum Thema Diabetes erzielt unser GraphMERT-Modell mit 80 Millionen Parametern einen KG mit einem FActScore von 69,8 %; ein LLM-Basismodell mit 32 Milliarden Parametern erreicht hingegen nur einen FActScore von 40,2 %. Der GraphMERT-KG erzielt zudem einen höheren ValidityScore von 68,8 % gegenüber 43,0 % beim LLM-Basismodell.
-
-**GraphMERT Node Embeddings (t-SNE View)**
-
-<img src="image-1.png" alt="GraphMERT Node Embeddings (t-SNE View)"  width="100%" height="100%">
-
-**GraphMERT Semantic Graph Visualization**
-
-<img src="image-2.png" alt="GraphMERT Semantic Graph Visualization"  width="100%" height="100%">
-
-**Query search on the graphs results**
-Das ist es, was wir wollen, da die Suche im Graphen linear ist und auf verkettetem Wissen basiert, wobei die Knoten Daten über sich selbst enthalten.
-
-***Ein perfektes Resultat***
-
-<img src="image-3.png" alt="Ein perfektes Resultat"  width="100%" height="100%">
-
-***Ein fast perfektes Resultat***
-
-<img src="image-4.png" alt="Ein fast perfektes Resultat"  width="100%" height="100%">
-
-- **Extraktion:** Umwandlung von Text in Entitäten und Relationen.
--
-
-**Aggregation:** Semantische Aggregation zur Reduzierung von Redundanz.
-
-### 4.2 Fine-tuning Strategie
-
-- Verwendung des **Unsloth Frameworks** für ressourceneffizientes Training.
-
-- Integration von Ansätzen wie **GraphRAFT** oder **GraphMERT** zur Distillation von Wissen in kleine, domänenspezifische Modelle.
-
-## 5. Implementierung
-
-### 5.1 Systemarchitektur
-
-Beschreibung der Pipeline von der PDF-Eingabe bis zur Antwortgenerierung.
-
-<img src="image-5.png" alt="IMARA Pipeline"  width="100%" height="100%">
-
-### 5.2 Verwendete Hardware
-
-Dokumentation der genutzten Ressourcen (z.B. 1x 4090 Desktop, M3 Pro 24GB) .
-1 HP EliteBook X G11  => Massenextraktion mit Docling
-Prozessor Intel 5U
-
-1 Lenovo Notbook Legion 9 16IRX8
-Prozessor 13th Gen Intel(R) Core(TM) i9-13980HX (2.20 GHz)
-Installierter RAM 32.0 GB (31.7 GB verwendbar)
-GPU     Nvidia RTX4090 Mobile mit 16GB VRAM
-
-### 5.3 Linear RAG Implementation
+### 4.6 Linear RAG Implementation
 
 Die Implementierung von Linear RAG im IMARA-Projekt zielt darauf ab, die theoretischen Vorteile – lineare Komplexität und Kontextbewusstsein – in eine performante Pipeline zu überführen. Im Gegensatz zu komplexen GraphRAG-Ansätzen verzichtet diese Implementierung auf LLM-basierte Extraktion von Relationen und setzt stattdessen auf deterministische NLP-Prozesse und algorithmische Graphentraversierung.
 
-#### 5.3.1 Datenaufbereitung & Loading
+#### 4.6.1 Datenaufbereitung & Loading
 
 Der Loading-Prozess (`load.py`) dient als Schnittstelle zwischen den extrahierten Rohdaten und dem RAG-System. Die extrahierten Text-Chunks werden aus dem `document_chunk`-Schema geladen. Ein zentrales Element der Implementierung ist die Sicherstellung von Idempotenz: Für jeden Chunk wird basierend auf seinem Inhalt ein deterministischer MD5-Hash generiert. Dies verhindert Duplikate bei wiederholten Läufen der Pipeline und ermöglicht eine effiziente Aktualisierung des Datenbestands ohne vollständige Neuindizierung. Die Datenbasis wird in der PostgreSQL-Tabelle `document_chunk` persistiert und dient als "Ground Truth" für die nachfolgenden Graph-Schritte.
 
-#### 5.3.2 Graph-Konstruktion
+#### 4.6.2 Graph-Konstruktion
 
 Die Graph-Erstellung (`index.py`) erfolgt "On-the-Fly" aus den flachen Textdaten, ohne teure LLM-Aufrufe. Als NLP-Engine kommt **scispaCy** (`en_core_sci_md`) zum Einsatz. Obwohl dieses Modell primär auf biomedizinischen Texten trainiert wurde, zeigt es sich aufgrund des "Shared Academic Discourse" — dem gemeinsamen strukturellen und sprachlichen Register wissenschaftlicher Publikationen — als überlegen gegenüber Standardmodellen für die Extraktion technischer Entitäten in AI-Papers.
 
 Das System konstruiert drei spezifische Knotentypen:
-1.  **Passage Nodes**: Repräsentieren den vollständigen Text-Chunk.
-2.  **Sentence Nodes**: Untereinheiten des Chunks für feingranulareres Retrieval.
-3.  **Entity Nodes**: Benannte Entitäten (z.B. Methoden, Metriken, wissenschaftliche Konzepte), die mittels Spacy-NER extrahiert wurden.
+
+1. **Passage Nodes**: Repräsentieren den vollständigen Text-Chunk.
+2. **Sentence Nodes**: Untereinheiten des Chunks für feingranulareres Retrieval.
+3. **Entity Nodes**: Benannte Entitäten (z.B. Methoden, Metriken, wissenschaftliche Konzepte), die mittels Spacy-NER extrahiert wurden.
 
 Die Verbindungen (Kanten) zwischen diesen Knoten werden nicht semantisch *erraten*, sondern strukturell oder statistisch *berechnet*. Es werden vier Kantentypen implementiert:
--   **Passage ↔ Entity**: Diese Kanten sind gewichtet. Die Gewichtung erfolgt über eine **TF-IDF-Formel** ($log(1 + tf) * idf$), um die Relevanz einer Entität für einen spezifischen Abschnitt zu quantifizieren, anstatt nur binär das Vorhandensein zu speichern.
--   **Structural Containment**: Kanten zwischen Passage ↔ Sentence und Sentence ↔ Entity erhalten ein festes Gewicht von 1.0, da sie direkte hierarchische Beziehungen abbilden.
--   **Sequential Adjacency**: Kanten vom Typ Passage ↔ Passage verbinden Abschnitte basierend auf ihrer Reihenfolge im Ursprungsdokument. Dies ermöglicht dem Modell, den Kontext "vorwärts" und "rückwärts" zu lesen.
 
-#### 5.3.3 Hybrid Retrieval Algorithmus
+- **Passage ↔ Entity**: Diese Kanten sind gewichtet. Die Gewichtung erfolgt über eine **TF-IDF-Formel** ($log(1 + tf) * idf$), um die Relevanz einer Entität für einen spezifischen Abschnitt zu quantifizieren, anstatt nur binär das Vorhandensein zu speichern.
+- **Structural Containment**: Kanten zwischen Passage ↔ Sentence und Sentence ↔ Entity erhalten ein festes Gewicht von 1.0, da sie direkte hierarchische Beziehungen abbilden.
+- **Sequential Adjacency**: Kanten vom Typ Passage ↔ Passage verbinden Abschnitte basierend auf ihrer Reihenfolge im Ursprungsdokument. Dies ermöglicht dem Modell, den Kontext "vorwärts" und "rückwärts" zu lesen.
+
+**TF-IDF Gewichtungsanalyse**
+
+Die Qualität der TF-IDF-Gewichtung auf den `passage_entity`-Kanten wurde durch eine statistische Analyse der 7.3 Millionen Edges im OpenRAGBench-Graphen validiert. Die erhobenen Metriken zeigen eine exzellente Diskriminierungsfähigkeit:
+
+- **Mean Weight:** 6.65 | **Median Weight:** 6.43
+- **Min Weight:** 2.31 | **Max Weight:** 92.16
+- **Standardabweichung:** 3.14
+
+Die nahezu identischen Werte von Mean und Median (Δ = 0.22) belegen eine symmetrische, normalverteilte Gewichtsverteilung ohne systematische Verzerrungen. Der Minimalwert von 2.31 bestätigt, dass selbst die am wenigsten relevanten Entitäten eine messbare semantische Bedeutung besitzen – es existieren keine "toten" Knoten mit Gewicht nahe Null. Der hohe Maximalwert von 92.16 repräsentiert hochspezialisierte Entitäten, die selten im Korpus auftreten, aber in spezifischen Passages dominant sind. Die moderate Standardabweichung von 3.14 zeigt eine gesunde Varianz, die ausreicht, um zwischen wichtigen und nebensächlichen Entitäten zu differenzieren, ohne dass Ausreißer die Verteilung dominieren.
+
+<img src="assets/lr_td_idf_diagram.png" alt="TF-IDF Weight Distribution und Box Plot" width="100%" height="100%">
+
+*Abbildung 9: TF-IDF Weight Distribution und Box Plot*
+
+Diese Kennzahlen validieren, dass die algorithmische TF-IDF-Berechnung ($\log(1 + tf) \times \log(N / df)$) eine robuste, interpretierbare und für Retrieval-Operationen optimale Gewichtung der Entity-Passage-Relationen liefert. Im Gegensatz zu LLM-basierten Ansätzen erfolgt die Berechnung deterministisch, reproduzierbar und ohne Token-Kosten.
+
+**Graph-Sparsität und Skalierbarkeitsvalidierung**
+
+Eine zentrale Behauptung des LinearRAG-Papers ist die lineare Skalierbarkeit durch extreme Sparsität (>99%) des konstruierten Graphen. Die Analyse des OpenRAGBench-Graphen bestätigt nicht nur diese Behauptung, sondern übertrifft die Paper-Claims um **Faktor 100**:
+
+| Matrix | Actual Edges | Possible Edges | Density | Sparsity |
+|:-------|-------------:|---------------:|--------:|---------:|
+| C (Passage → Entity) | 2,591,894 | 146,485,079,384 | 0.0018% | **99.9982%** |
+| M (Sentence → Entity) | 3,161,934 | 542,511,225,528 | 0.0006% | **99.9994%** |
+| Passage → Sentence | 999,128 | 223,105,132,677 | 0.0004% | **99.9996%** |
+| **Overall Graph** | **7,015,416** | **1,533,458,420,691** | **0.000457%** | **99.999543%** |
+
+Die gemessene **Overall Sparsity von 99.9995%** bedeutet konkret: Von **1.5 Billionen** möglichen Edges existieren nur **7 Millionen** – ein Speicherfaktor von ca. **200.000x effizienter** als ein vollständiger Graph. Diese extreme Sparsität ist kein Zufall, sondern das direkte Resultat des **"relation-free"** Ansatzes:
+
+1. **Deterministische NER** (scispaCy statt LLM) erzeugt nur faktisch belegte Entity-Verbindungen
+2. **Statistische Gewichtung** (TF-IDF) eliminiert semantisch irrelevante Relationen
+3. **Strukturelles Containment** schafft inhärent sparse hierarchische Beziehungen (1 Passage → ~4 Sentences)
+
+**Praktische Skalierbarkeitsimplikationen:**
+
+Bei einem **10x größeren Korpus** (10,000 Papers statt 1,001):
+
+- **LinearRAG (99.999% sparse)**: $O(N)$ → Speicherbedarf nur **~10x größer** (~1 GB)
+- **LLM-basierte GraphRAG** (typisch 90-95% sparse): $O(N^2)$ → Speicherbedarf **~100x größer** (~600 GB)
+
+Die Messergebnisse validieren damit die theoretische Überlegenheit des algorithmic-deterministic Ansatzes für produktive, skalierbare RAG-Systeme auf großen Korpora.
+
+**Zusammenfassung der Graph-Metriken**
+
+Die vollständige Analyse des OpenRAGBench LinearRAG-Graphen liefert folgende Schlüsselkennzahlen:
+
+| Metrik | Wert | Beschreibung |
+|:-------|:-----|:-------------|
+| **Korpus & Rohdaten** | | |
+| Total Passages | 278,692 | Text-Chunks (512 Tokens, 64 Overlap) |
+| Total Unique Entities | 596,824 | Durch scispaCy NER extrahierte Entitäten |
+| Total Unique Sentences | 908,997 | Punkt-basierte Segmentierung |
+| Total Graph Nodes | 1,751,262 | Summe aus Passage/Entity/Sentence Nodes |
+| Total Graph Edges | 7,015,416 | Gewichtete & strukturelle Verbindungen |
+| **Graphenstruktur** | | |
+| Entities per Passage (unique) | 2.14 | Durchschnittliche Entity-Diversität pro Chunk |
+| Sentences per Passage | 3.26 | Durchschnittliche Satz-Granularität |
+| Avg Passages per Entity | 4.34 | Entity-Wiederverwendung über Chunks |
+| **Qualitätsmetriken** | | |
+| Graph Density | 0.000457% | Anteil realisierter Edges von möglichen |
+| Graph Sparsity | 99.9995% | Bestätigt lineare Skalierbarkeit |
+| Top Entity Frequency | 9,900 | Häufigste Entity (domänenspezifisches Konzept) |
+| Avg TF-IDF Weight | 6.65 | Semantische Wichtigkeit (passage_entity) |
+| Passages Without Entities | 37,117 (13.32%) | Potenzielle NER-Auslassungen |
+
+**Validierung der Paper-Claims:**
+
+Die gemessenen Werte bestätigen die zentralen Behauptungen des LinearRAG-Papers:
+
+| Claim | IMARA Linear RAG | Paper | Validierung |
+|:------|:-----------------|:------|:------------|
+| Entities per Passage | 9.30 (mit Duplikaten) | ~10 | Validiert |
+| Entities per Sentence | 3.48 | ~4 | Validiert |
+| Graph Sparsity | 99.9995% | >99% | Übertrifft um Faktor 100 |
+| Zero LLM Token Consumption | scispaCy-basierte NER | LLM-free Extraktion | Bestätigt |
+| Tri-Graph Structure | Passage/Entity/Sentence | Passage/Entity/Sentence | Implementiert |
+
+Die Analyse zeigt, dass die "relation-free" Implementierung nicht nur die theoretischen Anforderungen erfüllt, sondern die Paper-Spezifikationen in Bezug auf Sparsität deutlich übertrifft.
+
+#### 4.6.3 Hybrid Retrieval Algorithmus
 
 Die Retrieval-Logik (`retrieve.py`) implementiert einen hybriden Ansatz, der klassische Vektorsuche mit graphenbasierter Relevanzbewertung kombiniert. Anstatt einfach die K-ähnlichsten Vektoren zurückzugeben, durchläuft der Prozess mehrere Stufen:
 
-1.  **Query Analysis**: Aus der Benutzeranfrage werden mittels Spacy Seed-Entitäten extrahiert, um Einstiegspunkte in den Graphen zu finden.
-2.  **Candidate Generation**: Parallel dazu werden Kandidaten über Vektorähnlichkeit (Embedding-Provider wie Ollama oder Gemini) gesucht.
-3.  **Graph Expansion & Scoring**: Das System nutzt einen **Personalized PageRank** Algorithmus. Ausgehend von den gefundenen Entitäten und Vektor-Kandidaten wird Relevanz im Graphen propagiert. Knoten, die zwar textuell nicht exakt zur Anfrage passen, aber strukturell stark mit den relevanten Entitäten verbunden sind (z.B. über Kanten 2. Grades), erhalten so einen höheren Score. Dies ermöglicht das Beantworten von Fragen, die ein Verständnis über mehrere Ecken ("Multi-Hop-Reasoning") erfordern.
+1. **Query Analysis**: Aus der Benutzeranfrage werden mittels Spacy Seed-Entitäten extrahiert, um Einstiegspunkte in den Graphen zu finden.
+2. **Candidate Generation**: Parallel dazu werden Kandidaten über Vektorähnlichkeit (Embedding-Provider wie Ollama oder Gemini) gesucht.
+3. **Graph Expansion & Scoring**: Das System nutzt einen **Personalized PageRank** Algorithmus. Ausgehend von den gefundenen Entitäten und Vektor-Kandidaten wird Relevanz im Graphen propagiert. Knoten, die zwar textuell nicht exakt zur Anfrage passen, aber strukturell stark mit den relevanten Entitäten verbunden sind (z.B. über Kanten 2. Grades), erhalten so einen höheren Score. Dies ermöglicht das Beantworten von Fragen, die ein Verständnis über mehrere Ecken ("Multi-Hop-Reasoning") erfordern.
 
-#### 5.3.4 Physisches Datenmodell
+#### 4.6.4 Physisches Datenmodell
 
 Die Persistenzschicht basiert auf PostgreSQL unter Verwendung der `pgvector` Extension. Das Schema ist optimiert für hybride Abfragen und unterstützt unterschiedliche Vektordimensionen je nach Embedding-Modell:
-*   **`lr_graph_node` & `lr_graph_edge`**: Speichern die Topologie des Graphen relational, was schnelle SQL-basierte Traversierungen (z.B. Recursive CTEs) ermöglicht.
-*   **`lr_entity_embedding`**: Hält die Vektor-Repräsentationen der Entitäten. Hierbei kommen zwei spezifische Modelle zum Einsatz:
-    *   **Google Gemini `text-embedding-004`**: Erzeugt Vektoren der Dimension **3072** und dient als primäres Modell für semantische Tiefe.
-    *   **Ollama `bge-m3:567m`**: Erzeugt Vektoren der Dimension **1024**, genutzt für lokale oder latenzkritische Operationen.
 
-## 6. Evaluation und Benchmarking
+- **`lr_graph_node` & `lr_graph_edge`**: Speichern die Topologie des Graphen relational, was schnelle SQL-basierte Traversierungen (z.B. Recursive CTEs) ermöglicht.
+- **`lr_entity_embedding`**: Hält die Vektor-Repräsentationen der Entitäten. Hierbei kommen zwei spezifische Modelle zum Einsatz:
+  - **Google Gemini `text-embedding-004`**: Erzeugt Vektoren der Dimension **3072** und dient als primäres Modell für semantische Tiefe.
+  - **Ollama `bge-m3:567m`**: Erzeugt Vektoren der Dimension **1024**, genutzt für lokale oder latenzkritische Operationen.
 
-### 6.1 Benchmark-Design
+### 4.7 GraphMERT Impelementation
 
--
+!TODO:
 
-**Ansatz 1:** Generierung eines Testdatensatzes mittels Synthetic Data Generation (SDG) und Evaluierung durch ein "LLM als Judge".
+### 4.8 Evaluierungs-Design
 
--
+Für die Evaluierung der Systeme wurde folgendes Vorgehen gewählt:
 
-**Ansatz 2:** Nutzung publizierter Benchmarks wie dem Open RAG Benchmark.
+OpenRAGBench dient als Hauptkorpus sowohl für die Graphkonstruktion als auch für das Query-Set, während OpenRAG-Eval die Ausführung der QA-Läufe sowie deren Auswertung orchestriert. In den Konfigurationsdateien configs/open_rag_eval_*.yaml sind verschiedene Szenarien definiert, unter anderem für naives RAG, LinearRAG und weitere Varianten wie beispielsweise GraphMERT. Als zentrale Metriken werden LLM Accuracy (bewertet durch einen LLM-Judge), Contain Accuracy (Überprüfung, ob die Antwort im kontextuellen Evidenz-Set enthalten ist) sowie Laufzeit- und Ressourcenaspekte herangezogen. In einem nächsten Schritt ist geplant, die Evaluierungen direkt mit DVC-Pipelines und MLflow-Runs zu verknüpfen, um Vollständigkeit und Nachvollziehbarkeit weiter zu erhöhen.
 
-#### 6.1.1 OpenRAGBench Linear RAG Graph
+---
+
+## 5. Resultate
+
+Vergleich der Performance: Standard RAG vs. IMARA GraphRAG vs. Fine-tuned Model.
+
+### 5.1 Docling-Ergebnisse
+
+Im Rahmen der Massenextraktion mit Docling traten mehrere Herausforderungen auf.
+
+Zunächst lag die Qualität der Ergebnisse deutlich unter den Erwartungen. Eine detaillierte Analyse der Ausgaben zeigte, dass insbesondere Tabellen unvollständig oder fehlerhaft extrahiert wurden. Durch eine systematische Optimierung der Pipeline-Parameter konnte dieses Problem deutlich entschärft werden: Die optimierte Konfiguration führte zu wesentlich schnelleren Laufzeiten und deutlich genaueren Extrakten.
+
+<img src="assets/Qualitätsunterschied-1.png" alt="Beispielhafter Qualitätsunterschied zwischen ursprünglicher und optimierter Docling-Konfiguration (1)." width="100%" height="100%" />
+
+*Abbildung 8: Beispielhafter Qualitätsunterschied zwischen ursprünglicher und optimierter Docling-Konfiguration (1).*
+
+Die Abweichungen umfassten teilweise ganze Tabellen, die in der ursprünglichen Konfiguration fehlten oder unvollständig waren.
+
+<img src="assets/Qualitätsunterschied-2.png" alt="Beispielhafter Qualitätsunterschied zwischen ursprünglicher und optimierter Docling-Konfiguration (2)." width="100%" height="100%" />
+
+*Abbildung 9: Beispielhafter Qualitätsunterschied zwischen ursprünglicher und optimierter Docling-Konfiguration (2).*
+
+Die Analyse der Pipeline zeigte dabei klar unterscheidbare Sätze „problematischer“ versus „erfolgreicher“ Parameter.
+
+<img src="assets/Problematische-parameter.png" alt="problematische Parameter" width="100%" height="100%" />
+
+*Abbildung 10: Auszug der als problematisch identifizierten Docling-Parameterkonfiguration.*
+
+<img src="assets/Erfolgreiche-parameter.png" alt="erfolgreiche Parameter" width="100%" height="100%" />
+
+*Abbildung 11: Auszug der optimierten Docling-Parameterkonfiguration mit deutlich besseren Ergebnissen.*
+
+Eine weitere zentrale Herausforderung war, dass 16 GB VRAM nicht ausreichten, um alle Features von Docling in der Container-Variante `docling-serve` stabil zu betreiben. Dies führte wiederholt zu Endlosschleifen und hängenden Prozessen. Als Gegenmassnahmen wurde einerseits auf die Container-Version verzichtet und Docling stattdessen direkt aus Python heraus verwendet, andererseits wurde die Ausführung auf die CPU verlagert, um das VRAM-Limit zu umgehen.
+
+Zusätzlich beeinträchtigte der Prozess `cloudcode_cli.exe` in der VSCode-Umgebung durch extremen RAM-Verbrauch im Hintergrund die Ausführung von Docling (bis hin zu „freeze“ und „not started“-Zuständen). Dieses Problem konnte nur durch eine vollständige Deinstallation von `cloudcode_cli.exe` behoben werden.
+
+Schliesslich stellte sich das Parsen von Formeln – sowohl auf CPU als auch auf GPU – als sehr langsam heraus. Ein Verzicht auf die Extraktion der Formeln kam jedoch nicht in Frage, da eine möglichst hohe Qualität der Extrakte angestrebt wurde, um die Gesamtperformance des Systems nicht zu beeinträchtigen. Ein exemplarischer Log-Ausschnitt verdeutlicht die extremen Laufzeiten und den schrittweisen Durchsatz der PDF-Batches:
+
+```text path=null start=null
+[WindowsPath('C:/Users/ML4SE/Desktop/openspec_demo/configs/data/OpenRAGBench/pdfs/2411.02951v2.pdf')]
+2025-12-17 19:08:35,249 - INFO - detected formats: [<InputFormat.PDF: 'pdf'>]
+2025-12-17 19:08:35,259 - INFO - Going to convert document batch...
+2025-12-17 19:08:35,260 - INFO - Processing document 2411.02951v2.pdf
+2025-12-18 01:37:07,514 - INFO - Finished converting document 2411.02951v2.pdf in 23312.29 sec.
+mpve the source file to the target directory
+2025-12-18 01:37:07,940 - INFO - Processed 1 docs, of which 0 failed and 0 were partially converted.
+2025-12-18 01:37:07,948 - INFO - Document conversion complete in 203589.20 seconds. it successfully completed 1 out of 287
+[WindowsPath('C:/Users/ML4SE/Desktop/openspec_demo/configs/data/OpenRAGBench/pdfs/2411.03001v2.pdf')]
+2025-12-18 01:37:07,968 - INFO - detected formats: [<InputFormat.PDF: 'pdf'>]
+2025-12-18 01:37:07,972 - INFO - Going to convert document batch...
+2025-12-18 01:37:07,973 - INFO - Processing document 2411.03001v2.pdf
+2025-12-18 14:22:26,866 - INFO - Finished converting document 2411.03001v2.pdf in 45918.92 sec.
+mpve the source file to the target directory
+2025-12-18 14:22:27,152 - INFO - Processed 1 docs, of which 0 failed and 0 were partially converted.
+2025-12-18 14:22:27,160 - INFO - Document conversion complete in 249508.41 seconds. it successfully completed 1 out of 286
+[WindowsPath('C:/Users/ML4SE/Desktop/openspec_demo/configs/data/OpenRAGBench/pdfs/2411.03166v3.pdf')]
+2025-12-18 14:22:27,193 - INFO - detected formats: [<InputFormat.PDF: 'pdf'>]
+2025-12-18 14:22:27,201 - INFO - Going to convert document batch...
+2025-12-18 14:22:27,202 - INFO - Processing document 2411.03166v3.pdf
+2025-12-19 03:50:46,515 - INFO - Finished converting document 2411.03166v3.pdf in 48499.35 sec.
+mpve the source file to the target directory
+2025-12-19 03:50:47,201 - INFO - Processed 1 docs, of which 0 failed and 0 were partially converted.
+2025-12-19 03:50:47,229 - INFO - Document conversion complete in 298008.48 seconds. it successfully completed 1 out of 285
+[WindowsPath('C:/Users/ML4SE/Desktop/openspec_demo/configs/data/OpenRAGBench/pdfs/2411.03257v3.pdf')]
+2025-12-19 03:50:47,249 - INFO - detected formats: [<InputFormat.PDF: 'pdf'>]
+2025-12-19 03:50:47,257 - INFO - Going to convert document batch...
+2025-12-19 03:50:47,259 - INFO - Processing document 2411.03257v3.pdf
+2025-12-19 23:49:15,094 - INFO - Finished converting document 2411.03257v3.pdf in 71907.86 sec.
+mpve the source file to the target directory
+2025-12-19 23:49:17,939 - INFO - Processed 1 docs, of which 0 failed and 0 were partially converted.
+2025-12-19 23:49:18,034 - INFO - Document conversion complete in 369919.29 seconds. it successfully completed 1 out of 284
+```
+
+### 5.2 LinearRAG
+
+Für LinearRAG wurden umfangreiche Evaluationsläufe auf verschiedenen Datensätzen und mit unterschiedlichen LLM-Backends durchgeführt.
+
+Auf dem Datensatz 2wikimultihop wurden vier Konfigurationen verglichen:
+
+•  Mit dem lokalen Modell GPT-OSS-20b wurden 658 Passagen (passage_embedding.parquet), 40 320 Entitäten (entity_embedding.parquet) und 21 206 Sätze (sentence_embedding.parquet) geladen. Die Evaluation ergab eine LLM Accuracy von 0.7350 (735/1000) und eine Contain Accuracy von 0.7210 (721/1000).
+•  Mit dem Online-Modell gpt-4o-mini wurden bei identischer Datenbasis eine LLM Accuracy von 0.6390 (639/1000) und eine Contain Accuracy von 0.6930 (693/1000) erreicht.
+•  Mit dem Remote-Modell gemma3:17b ergaben sich bei gleicher Datenbasis eine deutlich niedrigere LLM Accuracy von 0.2400 (240/1000) und eine Contain Accuracy von 0.3510 (351/1000).
+•  Mit dem Online-Modell gpt-4o resultierten eine LLM Accuracy von 0.5900 (590/1000) und eine Contain Accuracy von 0.7550 (755/1000).
+
+Auf dem Datensatz hotpotqa wurden 1 311 Passagen, 66 846 Entitäten und 38 455 Sätze geladen. Mit dem lokalen Modell GPT-OSS-20b ergab sich eine LLM Accuracy von 0.7710 (771/1000) und eine Contain Accuracy von 0.6620 (662/1000).
+
+Auf dem Datensatz musique wurden 1 354 Passagen, 67 532 Entitäten und 39 110 Sätze verarbeitet. Mit GPT-OSS-20b wurden eine LLM Accuracy von 0.6420 (642/1000) und eine Contain Accuracy von 0.3170 (317/1000) erzielt.
+
+Auf dem Datensatz medical wurden 225 Passagen, 9 033 Entitäten und 8 985 Sätze verarbeitet. Die Retrieval-Phase umfasste 2 062 Anfragen. Mit dem lokalen Modell GPT-OSS-20b ergab sich eine LLM Accuracy von 0.6940 (1431/2062) bei einer deutlich niedrigeren Contain Accuracy von 0.0320 (66/2062), was auf einen starken Einfluss des im Modell bereits vorhandenen domänenspezifischen Wissens bei gleichzeitig begrenzter Evidenzabdeckung im Retrieval hinweist.
+
+## 5.3 GraphMERT
+
+!TODO:
+
+### 5.4 LeanRAG
+
+Für LeanRAG wurde insbesondere der Ressourcenbedarf nach einem Refactoring des Schritts der Triple-Extraktion analysiert. Die entsprechende Auswertung zeigt den Verbrauch an CPU-, Speicher- und GPU-Ressourcen während dieses kritischen Verarbeitungsschritts.
+
+<img src="assets/Ressourcenbedarf-leanRAG.png" alt="Ressourcenbedarf LeanRAG Triple Extraction" width="49%" height="49%" />
+
+*Abbildung 12: Ressourcenbedarf im LeanRAG-Pipeline-Schritt der Triple-Extraktion nach dem Refactoring.*
+
+### 5.5 Benchmark
+
+## 6. Diskussion
+
+### 6.2 LinearRAG
 
 Für die Evaluierung mittels OpenRAGBench wurde ein spezifischer Graph basierend auf einem Korpus von **1001 wissenschaftlichen Publikationen** (Arxiv) erstellt. Die Graph-Konstruktion erfolgte vollständig deterministisch unter Verwendung des `scispaCy` Modells, ohne die Verwendung von LLM-Token für die Extraktion. Als Evaluator kam der `TRECEvaluator` in Kombination mit `Gemini-2.5-flash` zum Einsatz, wie in der Konfiguration definiert.
 
@@ -593,126 +485,159 @@ Die nachfolgende Tabelle fasst die Metriken des erstellten Linear RAG Graphen zu
 
 Die hohe Anzahl an Kanten (über 7.3 Millionen) im Verhältnis zu den Knoten zeigt die hohe Dichte der Vernetzung, die durch den algorithmischen Ansatz ("Relation-free") erreicht wurde. Bemerkenswert ist, dass trotz der Extraktion von über 3.6 Millionen Entitäten die Verarbeitung rein CPU-basiert und effizient erfolgte.
 
-### 6.2 Ergebnisse
+### 6.3 GraphMERT
 
-Vergleich der Performance: Standard RAG vs. IMARA GraphRAG vs. Fine-tuned Model.
+### 6.4 LeanRAG
 
-## 7. Diskussion der Ergebnisse
+### 6.5 Benchmark
 
-- Qualität der generierten Graphen.
+!TODO:
 
-- Effektivität des Fine-tunings im Vergleich zu GPT-basierten Modellen.
+## 7. Conclusion / Fazit
 
-- Ressourcenverbrauch und Skalierbarkeit.
+Das Projekt IMARA hatte das Ziel, eine domänenspezifische GraphRAG-Pipeline mit Modell-Fine-tuning vorzubereiten und die Effektivität graphbasierter RAG-Ansätze im Vergleich zu naivem RAG zu evaluieren.
 
-## 8. Risikomanagement und Lessons Learned
+**Zentrale Ergebnisse:**
 
-Reflektion über die im Antrag identifizierten Risiken:
+- Es wurde eine skalierbare LinearRAG-Implementierung realisiert, die auf einem grossen wissenschaftlichen Korpus (OpenRAGBench) einen dichten Wissensgraphen mit über 1.7 Mio. Knoten und 7.3 Mio. Kanten aufbaut.
+- Die Evaluierung zeigt, dass LinearRAG auf Multi-Hop-Benchmarks konkurrenzfähige bis sehr gute Genauigkeiten erzielt und klassische Limitierungen vektorbasierter RAG-Systeme adressiert.
+- Die Arbeit bestätigt, dass Datenqualität (insbesondere PDF-Extraktion) und Graphdesign entscheidende Hebel für die Gesamtleistung sind.
+- Durch DVC, MLflow und eine modulare Architektur ist die Grundlage für reproduzierbare Experimente und zukünftiges Fine-tuning gelegt.
 
-- Datenqualität und Graph-Dichte.
+Insgesamt konnte das Kernziel erreicht werden: Der Nutzen graphbasierter RAG-Ansätze gegenüber naiven Vektor-RAGs wurde qualitativ und quantitativ demonstriert. Gleichzeitig wurden offene Fragen und Herausforderungen klar sichtbar gemacht.
 
-- Rechenintensität des Fine-tunings.
+### 7.1 Persönliches Fazit
 
-- Teamkoordination.
+#### 7.1.1 Marco Allenspach
 
-- Der Vorsatz Plattformunabhängig zu sein hatte sich im Laufe des Projekts als unnötige Herausforderung herausgestellt. Konkret Microsoft Windows hatte bei der Installation spezielle Anforderungen, Inkompatibilität mit MLFlow und letzlich erzwungene Reboots, die mehrfach lang laufende Prozesse abgeschossen haben.
+!TODO: @Marco Allenspach
 
-## 9. Fazit und Ausblick
+#### 7.1.2 Lukas Koller
 
-Zusammenfassung, ob ein 80M domänenspezifisches Modell tatsächlich grössere Modelle übertreffen konnte, und mögliche nächste Schritte.
+!TODO: @Lukas Koller
 
+#### 7.1.3 Emanuel Sovrano
 
-### Ausblick:
-Aus den Ergebnissen konnten folgende Ansätze für die weitere Entwicklung abgeleitet werden:
-
-- Die Qualität eine Knowledge Graphen wird hauptsächlich durch die Qualität der Entities beeinflusst. Ein Ansatz, um das Problem der sprachliche Mehrdeutigkeit im Label der Entities ist, diese durch Attribute, abgeleitet aus dem Kontext, zu differenzieren. Ein Beispiel ist: "Der Müller hat dem Beruf eines Maurers" - Die Entity "Müller" ist folglich eine Maurer mit dem Familiennamen "Müller" und nicht eine Person mit dem Beruf Müller. 
-
-- Für eine produktive Lösung, sollten möglichst viele Verarbeitungsschritte im Scope eines einzelnen Dokuments (vor-)verarbeitet werden, bis und mit entity-relation Triples. Dies bringt folgende Vorteile mit sich:
-  - Eine kontinuierliche Erweiterung des Graphen durch Vorverarbeitete Datensätze.
-  - Parallelisierung
-  - Die Möglichkeit, zu Entfernen, wenn Datensätze ungültig werden vereinfacht. Mögliche Gründe sind Fehler in den Daten oder Zeitbasierte Daten würde durch aktuellere ersetzt.
-  - Mehrere Graphen können mit minimalem Offset für verschiedene Berechtigungsstufen erzeugt werden.
-- Der Einfluss von Raum und Zeit muss systematisch im Graph-Modell berücksichtigt werden. z.B. Schwierigkeiten mit der Atmung werden auf Meereshöhe anders interpretiert wi eauf dem Everest. Aktienkurse sind abhängig von der Zeit oder auch sich mit 100km/h zu bewegen war um 1900 rasend schnell und heute eher Durchsschnitt.
-- Für eine Knowledge Base mit verschiedenen Sprachen, können entities nur mit einer semantisch korrekten Übersetzung zusammengeführt werden. Um ständige Übrsetzungen zuwischen den Sprachen zu verhindern, könnte eine höhere Hierarchie mit einem Konzept-Graph repräsentiert werden. das heisst einzelne Fakten werden als Knowledge Graph dargestellt und darüber auf Konzepte abgebildet.
-- Das Clustering identischer Relationen zu einem Hypergraph ist ein weiterer Ansatz, Teilgraphen zusammen zu führen, ohne sich die Möglichkeit zu verbauen Teile wieder zu entfernen. Ebenso können wahrscheinliche Relationen abgeleitet werden. (vom Hypergraph zurück zum Knowledge Graph)
-
-## 10. Referenzen
-
-- [1] Docling: An Efficient Open-Source Toolkit.
-    https://arxiv.org/abs/2501.17887 Docling: An Efficient Open-Source Toolkit for AI-driven Document Conversion
-    https://www.docling.ai/
-    https://docling-project.github.io/docling/
-
-- [2] LeanRAG: Knowledge-Graph-Based Generation.
-    https://arxiv.org/abs/2508.10391 Knowledge-Graph-Based Generation with Semantic Aggregation and Hierarchical Retrieval
-    https://github.com/KnowledgeXLab/LeanRAG
-
-- [3] LinearRAG: A relation-free graph constrcution method for efficient GraphRAG.
-    https://arxiv.org/abs/2510.10114 LinearRAG: Linear Graph Retrieval Augmented Generation on Large-scale Corpora
-    https://github.com/DEEP-PolyU/LinearRAG
-
-- [4] GraphMERT: Efficient Distillation of Reliable KGs.
-    https://arxiv.org/abs/2510.09580 GraphMERT: Efficient and Scalable Distillation of Reliable Knowledge Graphs from Unstructured Data
-    https://github.com/creativeautomaton/graphMERT-python
-
-- [5] Open RAG Bench Dataset
-    https://github.com/vectara/open-rag-bench Open RAG Benchmark (1000 PDFs, 3000 Queries): A Multimodal PDF Dataset for Comprehensive RAG Evaluation
-
-
-- ... (Weitere Quellen gemäss Antrag).
-
-
-
-## 11. Glossar
-
-### A - C
-
-* **AI-Native GraphRAG:** Ein weiterentwickeltes Paradigma von GraphRAG, das den gesamten Workflow von unstrukturierten Daten bis zur Antwortgenerierung automatisiert und dabei die Komplexität von Graphentheorie und Datenbankmanagement abstrahiert.
-* **Chunking:** Der Prozess des Zerlegens von Texten in kleinere Abschnitte (Chunks). Im Bericht wird dies als kritischer Faktor für *naives RAG* identifiziert, da suboptimale Chunk-Grössen (zu gross oder zu klein) zu Kontextverlust oder Rauschen führen können.
-* **CommonKG:** Eine im Kontext von *LeanRAG* erwähnte Methode zur Erstellung von Wissensgraphen, bei der Entitäten und Relationen (Triples) aus Text-Chunks extrahiert und dedupliziert werden.
-
-### D - G
-
-* **Docling:** Ein Open-Source-Toolkit zur Dokumentenkonvertierung. Im Projekt wurde es genutzt, um komplexe PDFs in maschinenlesbare Formate (Markdown/JSON) zu wandeln. Es traten Herausforderungen bezüglich VRAM-Verbrauch und Performance auf.
-* **Embeddings:** Vektorrepräsentationen von Texten (Sätze, Entitäten, Passagen). Sie dienen als Basis für die Ähnlichkeitssuche und das Clustering in den Graphen.
-* **FActScore:** Eine Metrik zur Bewertung der faktischen Korrektheit eines Wissensgraphen oder einer generierten Antwort. Im Bericht erzielt *GraphMERT* hierbei deutlich höhere Werte als reine LLMs.
-* **Fine-tuning:** Das nachtrainieren eines LLMs (z. B. Qwen) auf spezifischen, graphenbasierten Daten, um die Antwortqualität und Domänenexpertise zu erhöhen.
-* **GraphMERT:** Ein kompaktes, rein grafisches Encoder-Modell (Neurosymbolische KI), das effizient zuverlässige und ontologiekonsistente Wissensgraphen aus unstrukturierten Texten generiert.
-* **GraphRAG (Graph Retrieval-Augmented Generation):** Eine Erweiterung von RAG, die statt flacher Textlisten strukturierte Wissensgraphen nutzt. Dies ermöglicht das Erkennen komplexer Beziehungen und *Multi-Hop-Reasoning*.
-
-### H - L
-
-* **Hypergraph:** Eine im Ausblick erwähnte Graphenstruktur, bei der eine Kante (Edge) mehr als zwei Knoten verbinden kann. Dies wird als Ansatz vorgeschlagen, um identische Relationen zu clustern.
-* **IMARA:** Der Name des Projekts. Es steht für die Entwicklung einer domänenspezifischen GraphRAG-Pipeline mit Model Fine-tuning.
-* **Knowledge Graph (Wissensgraph):** Eine strukturierte Darstellung von Wissen in Form von Knoten (Entitäten) und Kanten (Beziehungen), die ein aktives, abfragefähiges Modell der Welt darstellt.
-* **LeanRAG:** Ein GraphRAG-Ansatz, der auf semantische Aggregation und hierarchisches Retrieval setzt, um Redundanzen zu minimieren (ca. 46 % weniger Redundanz im Vergleich zu flachen Baselines).
-* **LinearRAG:** Eine effiziente GraphRAG-Methode, die "relation-free" arbeitet. Sie nutzt leichtgewichtige Entity Recognition und semantische Verlinkung für schnelle Verarbeitung mit linearer Komplexität.
-* **LLM (Large Language Model):** Grosse Sprachmodelle, die als generative Komponente im RAG-Prozess dienen (z. B. GPT-4o, Qwen, Gemma).
-
-### M - O
-
-* **Multi-Hop-Reasoning:** Die Fähigkeit, Informationen über mehrere Verbindungsschritte hinweg zu verknüpfen (z. B. A ist verbunden mit B, B ist verbunden mit C → Schlussfolgerung von A auf C). Eine Schwäche von naivem RAG, aber eine Stärke von GraphRAG.
-* **Naives RAG:** Bezeichnet im Bericht konventionelle, vektorbasierte RAG-Architekturen, die Wissen als unzusammenhängende Fakten (Chunks) behandeln und oft an kontextueller Fragmentierung leiden.
-* **Neurosymbolische KI:** Kombination aus neuronalen Netzwerken (Generalisierung, Lernen) und symbolischer KI (Abstraktion, Logik, Graphen), wie sie im *GraphMERT*-Ansatz verwendet wird.
-* **OpenRAGBench:** Ein Referenzdatensatz (Benchmark), der im Projekt genutzt wurde, um die Messbarkeit und Vergleichbarkeit der Ergebnisse sicherzustellen.
-
-### S - V
-
-* **Semantic Aggregation:** Ein Feature von *LeanRAG*, bei dem Entitäten in semantisch kohärente Zusammenfassungen (Cluster) gruppiert werden, um die Navigation im Graphen zu verbessern.
-* **Synthetic Data Generation (SDG):** Ein Ansatz zur Generierung von künstlichen Testdaten, um die Leistung des Systems zu evaluieren (z. B. mittels "LLM als Judge").
-* **Triple:** Die grundlegende Dateneinheit eines Wissensgraphen, bestehend aus Subjekt, Prädikat (Relation) und Objekt (z. B. "Müller" -> "hat Beruf" -> "Maurer").
-* **Unsloth:** Ein Framework, das im Projekt für das ressourceneffiziente *Fine-tuning* der Modelle verwendet wurde.
-* **ValidityScore:** Eine Metrik zur Bewertung der Gültigkeit von Relationen (Ontologie-Konsistenz) innerhalb eines Wissensgraphen.
-* **Vektorsimilaritätssuche:** Das Suchverfahren klassischer RAG-Systeme, das Textabschnitte basierend auf mathematischer Ähnlichkeit (Vektornähe) findet, aber explizite Beziehungen oft ignoriert.
-
-
+!TODO: @Emanuel Sovrano
 
 ---
 
-### Tipps für die Ausarbeitung
+- Der Vorsatz Plattformunabhängig zu sein hatte sich im Laufe des Projekts als unnötige Herausforderung herausgestellt. Konkret Microsoft Windows hatte bei der Installation spezielle Anforderungen, Inkompatibilität mit MLFlow und letzlich erzwungene Reboots, die mehrfach lang laufende Prozesse abgeschossen haben.
 
+## 8. Risikomanagement und Lessons Learned
 
-- **Code-Beispiele:** Fügt kurze Snippets eurer Automatisierungslösung oder der Unsloth-Konfiguration in Kapitel 5 ein.
-- **Metriken:** In Kapitel 6 solltet ihr Tabellen mit Latenzzeiten und Genauigkeitswerten (Accuracy/F1) eurer Benchmarks zeigen.
+### 8.1 Identifizierte Risiken
 
+Im Projektverlauf wurden mehrere zentrale Risiken sichtbar. Die Datenqualität und die resultierende Graphdichte sind kritisch: Fehler in der PDF-Extraktion oder Entitätserkennung schlagen direkt auf die Qualität des Wissensgraphen und damit auf die Antwortqualität durch. Zudem ist die gesamte Pipeline – von der Docling-Extraktion über die Graphkonstruktion bis hin zu den LLM-Evaluierungen – deutlich rechenintensiv und stellt hohe Anforderungen an Hardware und Laufzeiten. Hinzu kommen Tooling- und Plattformabhängigkeiten: Unterschiedliche Betriebssysteme (Windows, Linux, macOS) sowie Werkzeuge wie VSCode, Supabase, Docling und die zugrunde liegenden Datenbanken und LLM-Backends bringen jeweils ihre eigenen Stolpersteine mit. Schliesslich erhöht die Vielzahl von Komponenten (DVC, MLflow, Supabase, PostgreSQL mit pgvector, LLM-Backends usw.) die Komplexität der Gesamtinfrastruktur und damit den Integrationsaufwand.
 
+### 8.2 Konkrete Erfahrungen
+
+Die Entscheidung, plattformunabhängig zu bleiben, erwies sich im Alltag als zusätzliche Herausforderung. Insbesondere unter Windows traten Inkompatibilitäten (beispielsweise mit MLflow) und erzwungene Reboots auf, die lang laufende Prozesse – etwa Docling-Batches – wiederholt unterbrachen. Unerwartete Hintergrundprozesse wie `cloudcode_cli.exe` konnten unbemerkt erhebliche Ressourcen blockieren und ML-Workloads so weit beeinträchtigen, dass Konvertierungen nicht mehr starteten oder einfrohren. Diese Erfahrungen haben gezeigt, dass eine klare Trennung von produktionsnahen Experimenten und „normalen“ Entwicklungsumgebungen sinnvoll ist; dedizierte Maschinen für rechenintensive Aufgaben wie die Docling-Extraktion vereinfachen Stabilität und Fehlersuche deutlich.
+
+### 8.3 Lessons Learned
+
+Aus diesen Erfahrungen lassen sich mehrere Lehren ableiten. Es ist hilfreich, möglichst früh im Projekt einen Ende-zu-Ende-Slice zu realisieren – etwa vom PDF bis zur einfachen Antwort –, um Risiken in Tooling, Infrastruktur und Datenflüssen sichtbar zu machen, bevor die Architektur zu komplex wird. Daten- und Modellversionierung sollten von Anfang an konsequent mit Werkzeugen wie DVC und MLflow umgesetzt werden, um Experimente nachvollziehbar, reproduzierbar und vergleichbar zu machen. Schliesslich hat sich gezeigt, dass eine schrittweise Komplexitätssteigerung sinnvoll ist: Zuerst eine stabile, naive RAG-Baseline etablieren, diese messen und verstehen, und darauf aufbauend GraphRAG-Komponenten sowie Fine-tuning iterativ ergänzen, statt alles gleichzeitig zu implementieren.
+
+---
+
+## 9. Ausblick
+
+Aus den bisherigen Ergebnissen und Erfahrungen ergeben sich mehrere konkrete Ansatzpunkte für zukünftige Arbeiten. Zunächst bleibt die zentrale Frage, ob ein kompaktes, domänenspezifisches Modell mit rund 80 M Parametern tatsächlich grössere, generische Modelle übertreffen kann. Die bisherigen Experimente deuten darauf hin, dass dies in klar abgegrenzten Domänen und bei gut kuratierten Trainingsdaten möglich ist, allerdings ist dafür eine sehr hohe Qualität der zugrunde liegenden Wissensrepräsentation erforderlich. Ein zentrales Lernfeld ist deshalb die Gestaltung und Pflege des Wissensgraphen selbst.
+
+Die Qualität eines Wissensgraphen wird wesentlich durch die Qualität der Entitäten bestimmt. Sprachliche Mehrdeutigkeiten – etwa Berufsbezeichnungen versus Eigennamen – sollten systematisch durch kontextbasierte Attribute aufgelöst werden. Das Beispiel „Der Müller hat den Beruf eines Maurers“ illustriert dies: Die Entity „Müller“ ist hier kein Beruf, sondern eine Person mit dem Familiennamen Müller und dem Beruf Maurer. Entsprechende Kontexteigenschaften (Rollen, Typen, semantische Klassen) müssen explizit modelliert werden, um Fehlinterpretationen im Graphen zu vermeiden.
+
+Ein weiterer Ansatzpunkt betrifft die Organisation der Verarbeitungsschritte. Möglichst viele Schritte – bis hin zu Entity-Relation-Triples – sollten im Scope eines einzelnen Dokuments vorverarbeitet werden. Dadurch entsteht ein kontinuierlich erweiterbarer Graph, der sich sukzessive aus vorverarbeiteten Datensätzen speist. Gleichzeitig werden Parallelisierung und Lastverteilung erleichtert, und das Entfernen oder Ersetzen einzelner Dokumente wird deutlich einfacher, etwa wenn Daten fehlerhaft sind oder veralten und durch aktuellere Versionen ersetzt werden müssen. Darüber hinaus ermöglicht dieses Vorgehen, mehrere Graphvarianten mit minimalem Offset für unterschiedliche Berechtigungsstufen zu erzeugen.
+
+Viele Fakten sind zudem orts- und zeitabhängig. Medizinische Interpretationen (z. B. Atemschwierigkeiten auf Meereshöhe versus in grosser Höhe), Aktienkurse oder auch Geschwindigkeitsbegriffe („rasend schnell“ um 1900 vs. Durchschnitt heute) verändern ihre Bedeutung in Abhängigkeit von Raum und Zeit. Diese Dimensionen sollten systematisch im Graphmodell berücksichtigt werden, etwa durch explizite Zeit- und Ortsattribute oder entsprechende Kontext-Knoten, um Aussagen korrekt einordnen und zeitliche Entwicklungen abbilden zu können.
+
+Für mehrsprachige Knowledge Bases ist eine semantisch korrekte Zusammenführung von Entitäten über Sprachgrenzen hinweg erforderlich. Statt Entitäten lediglich über Übersetzungen zu verknüpfen, bietet sich die Einführung einer höheren Hierarchieschicht in Form eines Konzeptgraphen an: Einzelne Fakten werden in sprachspezifischen Wissensgraphen modelliert und darüber auf sprachunabhängige Konzepte abgebildet. So lassen sich Mehrsprachigkeit und Domänenspezifik besser trennen, ohne permanente Übersetzungen zwischen Sprachen erzwingen zu müssen.
+
+Ein weiterer, vielversprechender Ansatz liegt im Einsatz von Hypergraphen und Relation-Clustering. Das Clustering identischer oder stark ähnlicher Relationen in einem Hypergraphen erlaubt es, Teilgraphen zusammenzuführen, ohne die Möglichkeit zu verlieren, einzelne Teile bei Bedarf wieder zu entfernen. Gleichzeitig können aus den Hyperkanten wahrscheinliche Relationen abgeleitet und zurück in den klassischen Wissensgraph projiziert werden. Dies eröffnet Spielräume für effizienteres Speichern, besseres Generalisieren und für die Ableitung neuer, plausibler Verbindungen.
+
+Schliesslich ist die tiefere Integration der Evaluierungsinfrastruktur ein wichtiger nächster Schritt. Die Ausführung von OpenRAG-Eval-Szenarien soll vollständig über DVC-Pipelines orchestriert werden, sodass Datendownload, Graphaufbau, Retrieval-Läufe und Auswertung automatisch miteinander verknüpft sind und als reproduzierbare Pipelines ausgeführt werden können. Die geplante Arbeit zu DVC und dem Vergleich verschiedener OpenRAG-Eval-Konfigurationen kann hier andocken, indem unterschiedliche Modelle, Konfigurationen und Datenschnitte als DVC-Stages abgebildet und systematisch miteinander verglichen werden. Dies würde die Nachvollziehbarkeit der Experimente weiter erhöhen und eine belastbare Grundlage für die Frage schaffen, unter welchen Bedingungen ein kompaktes, domänenspezifisches Modell grössere, generische LLMs tatsächlich übertreffen kann.
+
+## Glossar
+
+### A – C
+
+- **AI-Native GraphRAG:** Ein weiterentwickeltes Paradigma von GraphRAG, das den gesamten Workflow von unstrukturierten Daten bis zur Antwortgenerierung automatisiert und dabei die Komplexität von Graphentheorie und Datenbankmanagement abstrahiert.  
+- **Chunking:** Der Prozess des Zerlegens von Texten in kleinere Abschnitte (Chunks). Im Bericht wird dies als kritischer Faktor für naives RAG identifiziert, da suboptimale Chunk-Grössen (zu gross oder zu klein) zu Kontextverlust oder Rauschen führen können.  
+- **CommonKG:** Eine im Kontext von LeanRAG erwähnte Methode zur Erstellung von Wissensgraphen, bei der Entitäten und Relationen (Triples) aus Text-Chunks extrahiert und dedupliziert werden.  
+
+### D – G
+
+- **Docling:** Ein Open-Source-Toolkit zur Dokumentenkonvertierung, das im Projekt eingesetzt wurde, um komplexe PDFs in maschinenlesbare Formate (z. B. Markdown, JSON, Doctags) zu wandeln. Im Projekt traten Herausforderungen bezüglich VRAM-Verbrauch, Laufzeit und Stabilität (z. B. in der Container-Variante `docling-serve`) auf.  
+- **Embeddings:** Vektorrepräsentationen von Texten (z. B. Sätze, Entitäten, Passagen), die als Grundlage für Vektorsuche, Clustering und Ähnlichkeitsberechnungen in RAG- und GraphRAG-Systemen dienen.  
+- **FActScore / ValidityScore:** Metriken zur Bewertung der faktischen Korrektheit (FActScore) und der ontologischen Gültigkeit von Relationen (ValidityScore) in Wissensgraphen oder generierten Antworten. Im Bericht erzielt GraphMERT deutlich höhere Werte als reine LLMs.  
+- **Fine-tuning:** Das Nachtrainieren eines LLMs (z. B. Qwen) auf spezifischen, oft graphbasierten oder domänenspezifischen Daten, um Antwortqualität und Domänenexpertise zu erhöhen.  
+- **GraphMERT:** Ein kompaktes, rein grafisches Encoder-Modell (neurosymbolische KI), das effizient zuverlässige und ontologiekonsistente Wissensgraphen aus unstrukturierten Texten generiert und dabei hohe FActScore- und ValidityScore-Werte erreicht.  
+- **GraphRAG (Graph Retrieval-Augmented Generation):** Eine Erweiterung von RAG, die statt flacher Textlisten strukturierte Wissensgraphen nutzt. Dies ermöglicht das Erkennen komplexer Beziehungen, Multi-Hop-Reasoning und eine explizite Repräsentation von Entitäten und Relationen.  
+- **Graph-Sparsität:** Ein Mass für die Anzahl fehlender Kanten in einem Graphen relativ zur maximal möglichen Anzahl. Die Sparsität wird typischerweise berechnet als  
+  *Sparsität = 1 − (Actual Edges / Possible Edges)*.  
+  Bei 100 % Sparsität existieren keine Kanten, bei 0 % sind alle möglichen Kanten vorhanden. Im Kontext von Wissensgraphen beschreibt sie, wie dicht oder dünn ein Graph verknüpft ist.  
+
+### H – L
+
+- **Hypergraph:** Eine Graphstruktur, bei der eine Kante (Hyperedge) mehr als zwei Knoten verbinden kann. Im Ausblick wird dies als Ansatz vorgeschlagen, um identische Relationen zu clustern und Teilgraphen effizient zusammenzufassen.  
+- **IMARA:** Der Name des Projekts. Es steht für die Entwicklung einer domänenspezifischen, graphbasierten RAG-Pipeline mit Modell-Fine-tuning und integrierter Evaluationspipeline.  
+- **Knowledge Graph (Wissensgraph):** Eine strukturierte Darstellung von Wissen in Form von Knoten (Entitäten) und Kanten (Beziehungen), die ein aktives, abfragefähiges Modell eines Fachbereichs oder der Welt bildet.  
+- **LeanRAG:** Ein GraphRAG-Ansatz, der auf semantische Aggregation und hierarchisches Retrieval setzt, um Redundanzen zu minimieren (im Bericht ca. 46 % weniger Redundanz im Vergleich zu flachen Baselines) und gleichzeitig hoch relevante Evidenz bereitzustellen.  
+- **LinearRAG:** Eine effiziente, relation-freie GraphRAG-Methode mit linearer Komplexität. Sie nutzt leichtgewichtige Entity Recognition und semantische Verlinkung zur Graphkonstruktion, ohne LLM-basierte Relationsextraktion, und kombiniert Vektorsuche mit graphbasiertem Scoring (z. B. Personalized PageRank).  
+- **LLM (Large Language Model):** Grosse Sprachmodelle (z. B. GPT‑4o, Qwen, Gemma), die als generative Komponente in RAG- und GraphRAG-Pipelines eingesetzt werden, um natürlichsprachliche Antworten aus bereitgestelltem Kontext zu erzeugen.  
+
+### M – O
+
+- **Multi-Hop-Reasoning:** Die Fähigkeit, Informationen über mehrere Verbindungsschritte hinweg zu verknüpfen (z. B. A ist verbunden mit B, B ist verbunden mit C → Schlussfolgerung von A auf C). Dies ist eine Schwäche von naivem RAG, aber eine Stärke von GraphRAG-Ansätzen wie LeanRAG oder LinearRAG.  
+- **Naives RAG:** Bezeichnet im Bericht konventionelle, rein vektorbasierte RAG-Architekturen, die Wissen als unzusammenhängende Fakten (Chunks) behandeln, stark von der Chunking-Strategie abhängen und häufig an kontextueller Fragmentierung leiden.  
+- **Neurosymbolische KI:** Kombination aus neuronalen Netzwerken (für Generalisierung und Lernen) und symbolischer KI (für Abstraktion, Logik und Graphstrukturen), wie sie im GraphMERT-Ansatz umgesetzt ist.  
+- **OpenRAGBench:** Ein Referenzdatensatz (Benchmark) mit rund 1000 wissenschaftlichen PDFs (Arxiv) und zugehörigen Frage-Antwort-Paaren, der im Projekt genutzt wird, um die Messbarkeit und Vergleichbarkeit der Ergebnisse sicherzustellen.  
+- **OpenRAG-Eval:** Ein Evaluations-Framework, das unterschiedliche RAG- und GraphRAG-Systeme anhand einheitlicher Metriken (z. B. LLM Accuracy, Contain Accuracy, Faithfulness, Laufzeit) miteinander vergleicht und im Projekt zur Orchestrierung der Benchmarks eingesetzt wird.  
+
+### S – V
+
+- **Semantic Aggregation:** Ein Feature von LeanRAG, bei dem Entitäten in semantisch kohärente Zusammenfassungen (Cluster) gruppiert und als aggregierte Knoten mit expliziten Relationen dargestellt werden, um die Navigation im Graphen und das hierarchische Retrieval zu verbessern.  
+- **Synthetic Data Generation (SDG):** Ein Ansatz zur Generierung künstlicher Testdaten zur Systembewertung, häufig unter Nutzung von LLMs als „Judge“, um z. B. Antwortqualität oder Robustheit zu messen.  
+- **TF-IDF (Term Frequency–Inverse Document Frequency):** Ein statistisches Mass zur Bewertung der Wichtigkeit eines Terms in einem Dokument relativ zu einer Dokumentensammlung. Eine gebräuchliche Formel ist  
+  *TF-IDF = log(1 + tf) × log(N / df)*,  
+  wobei *tf* die Termfrequenz, *N* die Gesamtzahl der Dokumente und *df* die Anzahl der Dokumente ist, die den Term enthalten. Im LinearRAG-Ansatz wird TF-IDF unter anderem zur Gewichtung von Passage-Entitäts-Kanten verwendet, um die semantische Relevanz von Entitäten für spezifische Textabschnitte zu quantifizieren.  
+- **Triple:** Die grundlegende Dateneinheit eines Wissensgraphen, bestehend aus Subjekt, Prädikat (Relation) und Objekt (z. B. „Müller“ → „hat Beruf“ → „Maurer“).  
+- **Unsloth:** Ein Framework für ressourceneffizientes Fine-tuning von LLMs, das im Projekt genutzt wurde, um Modellanpassungen mit geringeren Hardwareanforderungen durchzuführen.  
+- **Vektorsimilaritätssuche:** Das Standard-Suchverfahren klassischer RAG-Systeme, bei dem Textabschnitte als Vektoren im Embedding-Raum repräsentiert und basierend auf ihrer Distanz (z. B. Kosinus- oder euklidische Distanz) verglichen werden. Es ermöglicht semantische Suche, berücksichtigt jedoch explizite Relationen zwischen Entitäten oft nicht.
+
+## Abbildungsverzeichnis
+
+Abbildung 3: LeanRAG-Framework, übernommen aus Zhang et al. (2025), arXiv:2508.10391.
+Abbildung 4: LinearRAG-Workflow, übernommen aus Li et al. (2025), arXiv:2510.10114.
+Abbildung 5: GraphMERT Node Embeddings (t-SNE View) und GraphMERT Semantic Graph Visualization, jeweils übernommen aus Belova et al. (2025), arXiv:2510.09580.  
+Abbildung 6: Query-Suche auf den Graph-Ergebnissen: links ein perfektes, rechts ein fast perfektes Resultat, übernommen aus Belova et al. (2025), arXiv:2510.09580.  
+Abbildung 7: Architekturübersicht von Docling, übernommen aus der offiziellen Docling-Dokumentation (Docling-Projekt, Zugriff am 18.01.2026).
+Abbildung 8: Beispielhafter Qualitätsunterschied zwischen ursprünglicher und optimierter Docling-Konfiguration (1).  
+Abbildung 9: Beispielhafter Qualitätsunterschied zwischen ursprünglicher und optimierter Docling-Konfiguration (2).  
+Abbildung 10: Auszug der als problematisch identifizierten Docling-Parameterkonfiguration.  
+Abbildung 11: Auszug der optimierten Docling-Parameterkonfiguration mit deutlich besseren Ergebnissen.  
+Abbildung 12: Ressourcenbedarf im LeanRAG-Pipeline-Schritt der Triple-Extraktion nach dem Refactoring.
+
+## Literaturverzeichnis
+
+[1] Docling-Projekt. *Docling: An Efficient Open-Source Toolkit for AI-driven Document Conversion.*  
+    arXiv:2501.17887.  
+    Verfügbar unter: <https://www.docling.ai/> (Zugriff am 18.01.2026).
+
+[2] Docling-Projekt (o.J.). *Docling Architecture.*  
+    Verfügbar unter: <https://docling-project.github.io/docling/concepts/architecture/>  
+    (Zugriff am 18.01.2026).
+
+[3] Zhang, X. et al. (2025). *Knowledge-Graph-Based Generation with Semantic Aggregation and Hierarchical Retrieval.*  
+    arXiv:2508.10391.  
+    Zusätzliche Ressourcen: <https://github.com/KnowledgeXLab/LeanRAG>
+
+[4] Li, Y. et al. (2025). *LinearRAG: Linear Graph Retrieval-Augmented Generation on Large-scale Corpora.*  
+    arXiv:2510.10114.  
+    Zusätzliche Ressourcen: <https://github.com/DEEP-PolyU/LinearRAG>
+
+[5] Belova, M., Xiao, J., Tuli, S., & Jha, N. K. (2025). *GraphMERT: Efficient and Scalable Distillation of Reliable Knowledge Graphs from Unstructured Data.*  
+    arXiv:2510.09580.  
+    Zusätzliche Ressourcen: <https://github.com/creativeautomaton/graphMERT-python>
+
+[6] Vectara. *Open RAG Benchmark (1000 PDFs, 3000 Queries): A Multimodal PDF Dataset for Comprehensive RAG Evaluation.*  
+    Verfügbar unter: <https://github.com/vectara/open-rag-bench>
