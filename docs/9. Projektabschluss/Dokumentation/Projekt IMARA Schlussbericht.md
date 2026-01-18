@@ -6,12 +6,12 @@ author:
   - "Emanuel Sovrano"
 date: "18.01.2026"
 documentclass: article
-fontsize: 11pt
+fontsize: 10pt
 papersize: a4
 geometry: margin=2.5cm
 toc: true
 toc-depth: 4
-indent: true
+indent: false
 lang: de
 header-includes:
   - \renewcommand{\figurename}{Abbildung}
