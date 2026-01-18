@@ -357,9 +357,15 @@ Diese feingranulare Segmentierung erlaubt eine präzise Vektorsuche, führt aber
 
 ### 5.3 LinearRAG
 
-#### 5.3.1 Graphstruktur und Umfang
+#### 5.3.1 Ausgangslage
 
-Der für LinearRAG konstruierte Wissensgraph basiert auf dem OpenRAGBench-Korpus und umfasst insgesamt rund 1.75 Millionen Knoten und etwa 7.0 Millionen Kanten. Die Knoten verteilen sich auf Passage-, Sentence- und Entity-Nodes. Die resultierende Graphstruktur weist eine sehr geringe Dichte auf, was auf eine hohe Sparsität hindeutet. Wissens bei gleichzeitig begrenzter Evidenzabdeckung im Retrieval hinweist.
+Die Ausgangslage bilden die 1001 wissenschaftlichen Publikationen aus dem in Abschnitt 4.2 beschriebenen Datensatz. Alle nachfolgenden Vergleiche beziehen sich auf das ursprüngliche LinearRAG-Paper [4].
+
+Im Folgenden wird der konstruierte Graph charakterisiert und gegen die im Referenzpaper definierten Qualitätsmetriken verglichen.
+
+#### 5.3.2 Graphstruktur und Umfang
+
+Der für LinearRAG konstruierte Wissensgraph basiert auf dem OpenRAGBench-Korpus und umfasst insgesamt rund 1.75 Millionen Knoten und etwa 7.0 Millionen Kanten. Die Knoten verteilen sich auf Passage-, Sentence- und Entity-Nodes. Die resultierende Graphstruktur weist eine sehr geringe Dichte auf, was auf eine hohe Sparsität des Wissens bei gleichzeitig begrenzter Evidenzabdeckung im Retrieval hinweist.
 
 | Metrik | Wert |
 |-------|------:|
@@ -369,9 +375,9 @@ Der für LinearRAG konstruierte Wissensgraph basiert auf dem OpenRAGBench-Korpus
 | Total Graph Nodes | 1,751,262 |
 | Total Graph Edges | 7,015,416 |
 
-#### 5.3.2 TF-IDF-Gewichtung
+#### 5.3.3 TF-IDF-Gewichtung
 
-Die Analyse der TF-IDF-Gewichte der Passage–Entity-Kanten zeigt eine symmetrische Verteilung mit ähnlichen Werten für Mittelwert und Median. Die Gewichte decken einen breiten Wertebereich ab und erlauben eine differenzierte Quantifizierung der semantischen Relevanz von Entitäten innerhalb einzelner Passagen.
+Die Auswertung bescheinigt der Verteilung eine exzellente Qualität mit starker Trennschärfe und symmetrischer Struktur, wodurch Entitäten effektiv nach ihrer Wichtigkeit unterschieden werden. Der breite Dynamikbereich ohne Nullwerte deckt dabei sowohl allgemeine als auch hochspezialisierte Konzepte zuverlässig ab und gilt als optimal für den Einsatz in LinearRAG. der TF-IDF-Gewichte der Passage–Entity-Kanten zeigt eine symmetrische Verteilung mit ähnlichen Werten für Mittelwert und Median. Die Gewichte decken einen breiten Wertebereich ab und erlauben eine differenzierte Quantifizierung der semantischen Relevanz von Entitäten innerhalb einzelner Passagen.
 
 | Kennzahl | Wert |
 |--------|-----:|
@@ -381,9 +387,13 @@ Die Analyse der TF-IDF-Gewichte der Passage–Entity-Kanten zeigt eine symmetris
 | Maximum | 92.16 |
 | Standardabweichung | 3.14 |
 
-#### 5.3.3 Graph-Sparsität
 
-Die Untersuchung der Graphstruktur zeigt eine extrem hohe Sparsität. Von mehreren Billionen theoretisch möglichen Kanten sind nur wenige Millionen tatsächlich realisiert. Dies resultiert in einer sehr geringen Graphdichte und bestätigt die inhärente Sparsität des relation-freien Ansatzes.
+<img src="assets/lr_td_idf_diagram.png" width="100%" height="100%" />
+*Abbildung 12: TF-IDF Gewichtung Verteilung. Erstellt mit Seaborn.*
+
+#### 5.3.4 Graph-Sparsität
+
+Die Untersuchung der Graphstruktur zeigt eine extrem hohe Sparsität. Von mehreren Billionen theoretisch möglichen Kanten sind nur wenige Millionen tatsächlich realisiert. Dies resultiert in einer sehr geringen Graphdichte und bestätigt die inhärente Sparsität des relation-freien Ansatzes. Die gemessene Gesamtsparsität von 99.9995% übertrifft die Anforderungen des Referenzpapers deutlich und belegt eine Hyper-Effizienz, die weit über dem geforderten Minimum liegt. Diese Werte validieren den relation-freien Ansatz, da trotz TF-IDF-Gewichtung nur semantisch relevante Verbindungen bestehen bleiben und somit die lineare Skalierbarkeit des Systems bewiesen wird.
 
 | Kennzahl | Wert |
 |--------|-----:|
@@ -392,7 +402,7 @@ Die Untersuchung der Graphstruktur zeigt eine extrem hohe Sparsität. Von mehrer
 | Graphdichte | 0.000457 % |
 | Graph-Sparsität | 99.9995 % |
 
-#### 5.3.4 Zusammenfassung zentraler Graphmetriken
+#### 5.3.5 Zusammenfassung zentraler Graphmetriken
 
 Die aggregierten Graphmetriken verdeutlichen den Umfang und die strukturellen Eigenschaften des LinearRAG-Graphen. Neben der hohen Sparsität zeigen sich stabile Durchschnittswerte hinsichtlich der Anzahl von Entitäten pro Passage sowie der Wiederverwendung von Entitäten über mehrere Textabschnitte hinweg
 
@@ -488,7 +498,11 @@ Mein Fazit ist deshalb: lieber mit wenig Daten und klar begrenztem Scope einen s
 
 #### 7.1.3 Emanuel Sovrano
 
-!TODO: @Emanuel Sovrano
+Die strategische Entscheidung, für Training und Evaluation auf existierende Datensätze zurückzugreifen, erwies sich als essentiell. Ohne die Grundlage von OpenRAG Bench und OpenRAG Eval wäre eine valide Auswertung kaum möglich gewesen.
+
+Technisch zeigte sich ein deutlicher Gegensatz: Während die einmalige Generierung des Graphen verhältnismässig geradlinig verlief, stellt die Entwicklung hin zu einem voll produktiven und wartbaren System eine erhebliche Hürde dar. Insbesondere die Anforderung, einzelne Dokumente dynamisch hinzuzufügen oder zu entfernen, würde schätzungsweise ein weiteres Personenjahr an Entwicklungszeit beanspruchen.
+
+Auch infrastrukturell wurden Grenzen sichtbar. Trotz des grossen Aufwands, der in die lokale AI-Infrastruktur floss, blieb die Skalierbarkeit eine Herausforderung. Der Verzicht auf externe „AI Studios“ und Cloud-Anbieter machte die Generierung der Embeddings für den gesamten Korpus (1001 Dokumente) zu einem zeitkritischen Faktor, für dessen vollständige Optimierung letztlich die Ressourcen fehlten.
 
 ## 8. Risikomanagement und Lessons Learned
 
