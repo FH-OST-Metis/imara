@@ -275,7 +275,17 @@ Zusätzlich wurde für rechenintensive Extraktionsläufe ein dedizierter Rechner
 
 ### 4.5 Naives RAG (Baseline)
 
-!TODO: @Lukas
+Das naive RAG dient im Projekt IMARA als Referenzbaseline, anhand derer die graphbasierten Ansätze (LinearRAG, LeanRAG, GraphMERT) eingeordnet werden. Die Implementierung folgt bewusst einem klassischen, vektorbasierten RAG-Paradigma: Dokumente werden in Text-Chunks zerlegt, gespeichert, eingebettet und ausschliesslich über Vektorsuche wieder abgerufen.
+
+#### 4.5.1 Chunking und Datenpersistierung
+
+In der ersten Phase (`naiverag/chunk.py`) werden die von Docling erzeugten JSON-Dokumente (`DoclingDocument`) mit dem `HierarchicalChunker` aus `docling_core` in semantisch sinnvolle Textsegmente zerlegt. Die Chunking-Parameter – insbesondere Chunk-Grösse, Überlappung und Split-Kriterium – werden zur Laufzeit aus der zentralen Konfiguration (`params.yaml`, Sektion `chunk`) geladen und als MLflow-Parameter protokolliert. Falls zu einem Dokument ein Artefaktverzeichnis mit exportierten Bildern (`<titel>_artifacts/image_*.png`) existiert, werden die relativen Bildpfade ermittelt und zusammen mit dem Chunktest abgelegt: Chunks, die Bildinhalte referenzieren, enthalten am Ende einen `[IMAGES]`‑Block mit den zugehörigen Bildpfaden. Die resultierenden Chunks werden als einfache `.txt`‑Dateien im angegebenen Ausgabeverzeichnis gespeichert und bilden die Grundlage für die weitere Verarbeitung.
+
+#### 4.5.2 Embedding, Retrieval und Baseline-Charakter
+
+In der zweiten Phase (`naiverag/embed.py`) werden diese Text-Chunks zusammen mit ihren Metadaten in die relationale Datenbank überführt. Das Skript liest alle `.txt`‑Dateien aus dem Chunk-Verzeichnis, leitet aus dem Dateinamen den Dokumenttitel und eine Seitenreferenz (`page_ref`) ab und rekonstruiert die Verweise auf Bildartefakte, indem es nach einem passenden `<titel>_artifacts`‑Verzeichnis sucht. Die gefundenen Bildpfade werden als JSON‑kodierte Liste im Feld `pic_ref` abgelegt. Für jeden Chunk werden MLflow-Metriken wie `content_size_bytes`, ein Flag für vorhandene Seitenreferenzen und ein Flag für Bildreferenzen geloggt. Anschliessend werden Titel, Seitenreferenz, Bildreferenzen und der eigentliche Chunktest in die Tabelle `document_chunk` einer PostgreSQL-Datenbank geschrieben. Diese Tabelle dient als zentrale, normalisierte Textbasis für das naive RAG ebenso wie für die graphbasierten Pipelines.
+
+Aufbauend auf dieser Speicherung wird das eigentliche RAG-Verhalten durch einen separaten Embedding‑ und Retrieval‑Schritt realisiert: Die Inhalte aus `document_chunk` werden mit einem ausgewählten Embedding‑Modell in Vektoren überführt und in pgvector‑Feldern persistiert. Anfragen werden eingebettet, per Vektorsuche (k‑nächste Nachbarn) gegen diese Chunks gematcht und die Top‑k‑Kontexte an ein LLM zur Antwortgenerierung übergeben. Der naive RAG‑Pfad verzichtet dabei vollständig auf Graphkonstruktion und setzt ausschliesslich auf Vektorsimilaritätssuche über Text-Chunks, womit er als klare, interpretierbare Baseline für die Bewertung der Mehrwerte der GraphRAG‑Ansätze dient.
 
 ### 4.6 LinearRAG
 
@@ -355,13 +365,21 @@ Darüber hinaus zeigte sich, dass das Parsen mathematischer Formeln sowohl auf C
 
 ### 5.2 Naives RAG
 
-!TODO: Lukas
+Für die Baseline wurden die mit Docling extrahierten Dokumente in kurze Text-Chunks zerlegt und in der Tabelle `document_chunk` persistiert. Typische Chunks umfassen ein bis wenige Sätze, z. B. eine einzelne Empfehlung aus einem Paper („Recommendation 2.4: Ethics is a topic that, given the nature of data science, students should learn and practice throughout their education.“), Schlagwortzeilen wie „Index Terms – self-supervised learning, self-labeling, knowledge distillation, noisy label modeling, speaker recognition“ oder isolierte Formeln („$$R + \\frac{\\mu}{\\theta \\sigma^2} < A - \\frac{1}{\\cosh \\kappa T - 1} \\cdot (x_0 - A).$$“). In Fällen, in denen Docling Bilder extrahiert hat, enthalten die Chunks zusätzlich einen `[IMAGES]`‑Block mit relativen Bildpfaden.
+
+Diese feingranulare Segmentierung erlaubt eine präzise Vektorsuche, führt aber auch zu Kontextfragmentierung: Viele Fragen erfordern Informationen, die über mehrere solcher Kurz-Chunks verteilt sind. In den OpenRAG-Eval-Läufen zeigte sich deshalb, dass das naive RAG bei lokal verankerten Faktenfragen brauchbare Antworten liefert, bei Multi-Hop-Fragen jedoch häufiger entweder unvollständigen Kontext zurückliefert oder relevante Teile über mehrere Chunks verstreut bleiben. Damit bestätigt die Baseline die theoretisch erwarteten Grenzen rein vektorbasierter RAG-Systeme und dient als Referenzpunkt für die graphbasierten Ansätze.
 
 ### 5.3 LinearRAG
 
-#### 5.3.1 Graphstruktur und Umfang
+#### 5.3.1 Ausgangslage
 
-Der für LinearRAG konstruierte Wissensgraph basiert auf dem OpenRAGBench-Korpus und umfasst insgesamt rund 1.75 Millionen Knoten und etwa 7.0 Millionen Kanten. Die Knoten verteilen sich auf Passage-, Sentence- und Entity-Nodes. Die resultierende Graphstruktur weist eine sehr geringe Dichte auf, was auf eine hohe Sparsität hindeutet. Wissens bei gleichzeitig begrenzter Evidenzabdeckung im Retrieval hinweist.
+Die Ausgangslage bilden die 1001 wissenschaftlichen Publikationen aus dem in Abschnitt 4.2 beschriebenen Datensatz. Alle nachfolgenden Vergleiche beziehen sich auf das ursprüngliche LinearRAG-Paper [4].
+
+Im Folgenden wird der konstruierte Graph charakterisiert und gegen die im Referenzpaper definierten Qualitätsmetriken verglichen.
+
+#### 5.3.2 Graphstruktur und Umfang
+
+Der für LinearRAG konstruierte Wissensgraph basiert auf dem OpenRAGBench-Korpus und umfasst insgesamt rund 1.75 Millionen Knoten und etwa 7.0 Millionen Kanten. Die Knoten verteilen sich auf Passage-, Sentence- und Entity-Nodes. Die resultierende Graphstruktur weist eine sehr geringe Dichte auf, was auf eine hohe Sparsität des Wissens bei gleichzeitig begrenzter Evidenzabdeckung im Retrieval hinweist.
 
 | Metrik | Wert |
 |-------|------:|
@@ -371,9 +389,9 @@ Der für LinearRAG konstruierte Wissensgraph basiert auf dem OpenRAGBench-Korpus
 | Total Graph Nodes | 1,751,262 |
 | Total Graph Edges | 7,015,416 |
 
-#### 5.3.2 TF-IDF-Gewichtung
+#### 5.3.3 TF-IDF-Gewichtung
 
-Die Analyse der TF-IDF-Gewichte der Passage–Entity-Kanten zeigt eine symmetrische Verteilung mit ähnlichen Werten für Mittelwert und Median. Die Gewichte decken einen breiten Wertebereich ab und erlauben eine differenzierte Quantifizierung der semantischen Relevanz von Entitäten innerhalb einzelner Passagen.
+Die Auswertung bescheinigt der Verteilung eine exzellente Qualität mit starker Trennschärfe und symmetrischer Struktur, wodurch Entitäten effektiv nach ihrer Wichtigkeit unterschieden werden. Der breite Dynamikbereich ohne Nullwerte deckt dabei sowohl allgemeine als auch hochspezialisierte Konzepte zuverlässig ab und gilt als optimal für den Einsatz in LinearRAG. der TF-IDF-Gewichte der Passage–Entity-Kanten zeigt eine symmetrische Verteilung mit ähnlichen Werten für Mittelwert und Median. Die Gewichte decken einen breiten Wertebereich ab und erlauben eine differenzierte Quantifizierung der semantischen Relevanz von Entitäten innerhalb einzelner Passagen.
 
 | Kennzahl | Wert |
 |--------|-----:|
@@ -383,9 +401,13 @@ Die Analyse der TF-IDF-Gewichte der Passage–Entity-Kanten zeigt eine symmetris
 | Maximum | 92.16 |
 | Standardabweichung | 3.14 |
 
-#### 5.3.3 Graph-Sparsität
 
-Die Untersuchung der Graphstruktur zeigt eine extrem hohe Sparsität. Von mehreren Billionen theoretisch möglichen Kanten sind nur wenige Millionen tatsächlich realisiert. Dies resultiert in einer sehr geringen Graphdichte und bestätigt die inhärente Sparsität des relation-freien Ansatzes.
+<img src="assets/lr_td_idf_diagram.png" width="100%" height="100%" />
+*Abbildung 12: TF-IDF Gewichtung Verteilung. Erstellt mit Seaborn.*
+
+#### 5.3.4 Graph-Sparsität
+
+Die Untersuchung der Graphstruktur zeigt eine extrem hohe Sparsität. Von mehreren Billionen theoretisch möglichen Kanten sind nur wenige Millionen tatsächlich realisiert. Dies resultiert in einer sehr geringen Graphdichte und bestätigt die inhärente Sparsität des relation-freien Ansatzes. Die gemessene Gesamtsparsität von 99.9995% übertrifft die Anforderungen des Referenzpapers deutlich und belegt eine Hyper-Effizienz, die weit über dem geforderten Minimum liegt. Diese Werte validieren den relation-freien Ansatz, da trotz TF-IDF-Gewichtung nur semantisch relevante Verbindungen bestehen bleiben und somit die lineare Skalierbarkeit des Systems bewiesen wird.
 
 | Kennzahl | Wert |
 |--------|-----:|
@@ -394,7 +416,7 @@ Die Untersuchung der Graphstruktur zeigt eine extrem hohe Sparsität. Von mehrer
 | Graphdichte | 0.000457 % |
 | Graph-Sparsität | 99.9995 % |
 
-#### 5.3.4 Zusammenfassung zentraler Graphmetriken
+#### 5.3.5 Zusammenfassung zentraler Graphmetriken
 
 Die aggregierten Graphmetriken verdeutlichen den Umfang und die strukturellen Eigenschaften des LinearRAG-Graphen. Neben der hohen Sparsität zeigen sich stabile Durchschnittswerte hinsichtlich der Anzahl von Entitäten pro Passage sowie der Wiederverwendung von Entitäten über mehrere Textabschnitte hinweg
 
@@ -427,7 +449,7 @@ Ein Verzicht auf die Extraktion mathematischer Formeln kam im Projekt nicht in B
 
 ### 6.2 naives RAG
 
-!TODO: Lukas
+Die Ergebnisse des naiven RAG bestätigen die in Kapitel 3.1 beschriebenen Limitierungen vektorbasierter Ansätze. Die sehr kurz gehaltenen Chunks – von einzelnen Empfehlungen über Schlagwortlisten bis hin zu isolierten Formeln – funktionieren gut für einfache, lokal verankerte Faktenfragen, liefern aber bei komplexeren Multi-Hop-Fragen häufig nur Teilkontext. In den OpenRAG-Eval-Läufen zeigte sich, dass das LLM in solchen Fällen zwar gelegentlich korrekte Antworten generiert, diese jedoch nicht immer sauber auf im Kontext vorhandene Evidenz zurückgeführt werden können, was sich in einer im Vergleich zu LinearRAG niedrigeren Contain Accuracy widerspiegelt. Gleichzeitig ist die naive Pipeline klar einfacher und ressourcenschonender: Es entfallen Graphkonstruktion und graphbasierte Traversierungen, Online-Kosten beschränken sich auf Vektorsuche und Generierung. Insgesamt eignet sich das naive RAG damit gut als schnelle, interpretierbare Baseline, ist aber für die im Projekt betrachteten, wissensintensiven Multi-Hop-Szenarien nur bedingt ausreichend und macht den Mehrwert expliziter Graphstrukturen deutlich sichtbar.
 
 ### 6.3 LinearRAG
 
@@ -453,7 +475,11 @@ Durch den Verzicht auf LLM-basierte Relationsextraktion erreicht LinearRAG eine 
 
 ### 6.4 GraphMERT
 
+!TODO: @Marco
+
 ### 6.5 LeanRAG
+
+!TODO: @Marco
 
 ### 6.6 Benchmark
 
@@ -480,11 +506,17 @@ Insgesamt konnte das Kernziel erreicht werden: Der Nutzen graphbasierter RAG-Ans
 
 #### 7.1.2 Lukas Koller
 
-!TODO: @Lukas Koller
+Für mich war eines der stärksten Learnings in diesem Projekt, wie schnell die Komplexität explodiert, sobald mehrere Komponenten – insbesondere LLMs – im Spiel sind. Schon kleine Designentscheidungen (z. B. welche Tools, welcher Datenpfad, welche Konfigurationsquelle) multiplizieren sich sehr schnell mit der Anzahl Daten, Pipelines und Modelle. In Kombination mit grossen Datenmengen führt das leicht dazu, dass man mehr Zeit mit Debugging, Infrastruktur und „Glue Code“ verbringt als mit der eigentlichen inhaltlichen Fragestellung.
+
+Mein Fazit ist deshalb: lieber mit wenig Daten und klar begrenztem Scope einen stabilen End-to-End-Prozess etablieren, diesen messen und verstehen – und erst danach schrittweise mehr Daten, mehr Komplexität und weitere Modelle hinzufügen. In einer LLM-getriebenen Umgebung ist dieser iterative Ansatz aus meiner Sicht die einzige realistische Chance, die technische und kognitive Komplexität im Griff zu behalten.
 
 #### 7.1.3 Emanuel Sovrano
 
-!TODO: @Emanuel Sovrano
+Die strategische Entscheidung, für Training und Evaluation auf existierende Datensätze zurückzugreifen, erwies sich als essentiell. Ohne die Grundlage von OpenRAG Bench und OpenRAG Eval wäre eine valide Auswertung kaum möglich gewesen.
+
+Technisch zeigte sich ein deutlicher Gegensatz: Während die einmalige Generierung des Graphen verhältnismässig geradlinig verlief, stellt die Entwicklung hin zu einem voll produktiven und wartbaren System eine erhebliche Hürde dar. Insbesondere die Anforderung, einzelne Dokumente dynamisch hinzuzufügen oder zu entfernen, würde schätzungsweise ein weiteres Personenjahr an Entwicklungszeit beanspruchen.
+
+Auch infrastrukturell wurden Grenzen sichtbar. Trotz des grossen Aufwands, der in die lokale AI-Infrastruktur floss, blieb die Skalierbarkeit eine Herausforderung. Der Verzicht auf externe „AI Studios“ und Cloud-Anbieter machte die Generierung der Embeddings für den gesamten Korpus (1001 Dokumente) zu einem zeitkritischen Faktor, für dessen vollständige Optimierung letztlich die Ressourcen fehlten.
 
 ## 8. Risikomanagement und Lessons Learned
 
