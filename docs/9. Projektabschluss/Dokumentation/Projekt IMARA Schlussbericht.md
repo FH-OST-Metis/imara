@@ -1,12 +1,26 @@
-# Projektbericht: IMARA
+---
+title: "Projektbericht: IMARA"
+author:
+  - "Marco Allenspach"
+  - "Lukas Koller"
+  - "Emanuel Sovrano"
+date: "18.01.2026"
+documentclass: article
+fontsize: 11pt
+papersize: a4
+geometry: margin=2.5cm
+toc: true
+toc-depth: 4
+indent: true
+lang: de
+header-includes:
+  - \renewcommand{\figurename}{Abbildung}
+  - |
+    \usepackage{etoolbox}
+    \pretocmd{\tableofcontents}{\clearpage}{}{}
+---
 
-**Modul:** Abschlussarbeit CAS Machine Learning for Software Engineers (ML4SE)
-
-**Datum:** 18.01.2026
-
-**Autoren:** Marco Allenspach, Lukas Koller, Emanuel Sovrano
-
-<div style="page-break-after: always;"></div>
+\newpage
 
 ## Abstract
 
@@ -14,67 +28,7 @@ Retrieval-Augmented Generation (RAG) erweitert grosse Sprachmodelle um externes 
 
 Diese Arbeit untersucht graphbasierte RAG-Architekturen anhand des Projekts IMARA. Auf Basis wissenschaftlicher PDFs wird eine End-to-End-Pipeline von der Dokumentenextraktion über die Graphkonstruktion bis zur Evaluation aufgebaut. Klassisches RAG wird mit mehreren GraphRAG-Varianten verglichen. Die Evaluation erfolgt reproduzierbar mit OpenRAGBench und OpenRAG-Eval.
 
-<div style="page-break-after: always;"></div>
-
-## Inhaltsverzeichnis
-
-- [1. Einleitung](#1-einleitung)  
-  - [1.1 Problemstellung](#11-problemstellung)  
-  - [1.2 Projektziele](#12-projektziele)
-
-- [2. Stand der Technik](#2-stand-der-technik)  
-  - [2.1 LeanRAG](#21-leanrag)  
-  - [2.2 LinearRAG](#22-linearrag)  
-  - [2.3 GraphMERT](#23-graphmert)  
-  - [2.4 OpenRAGBench und OpenRAG-Eval](#24-openragbench-und-openrag-eval)
-
-- [3. Hintergrund / Background](#3-hintergrund--background)  
-  - [3.1 Grenzen vektorbasierten (naiven) RAGs](#31-grenzen-vektorbasierten-naiven-rags)  
-  - [3.2 Das AI-Native GraphRAG-Paradigma](#32-das-ai-native-graphrag-paradigma)
-
-- [4. Methodik / Umsetzung](#4-methodik--umsetzung)  
-  - [4.1 Hardware](#41-hardware)  
-  - [4.2 Datenbasis](#42-datenbasis)  
-  - [4.3 Systemarchitektur](#43-systemarchitektur)  
-  - [4.4 PDF-Extraktion (Docling)](#44-pdf-extraktion-docling)  
-  - [4.5 Naives RAG (Baseline)](#45-naives-rag-baseline)  
-  - [4.6 LinearRAG](#46-linearrag)  
-  - [4.7 GraphMERT](#47-graphmert)  
-  - [4.8 Evaluierungs-Design](#48-evaluierungs-design)
-
-- [5. Resultate](#5-resultate)  
-  - [5.1 PDF-Extraktion mit Docling](#51-pdf-extraktion-mit-docling)  
-  - [5.2 Naives RAG](#52-naives-rag)  
-  - [5.3 LinearRAG](#53-linearrag)  
-  - [5.4 GraphMERT](#54-graphmert)  
-  - [5.5 LeanRAG](#55-leanrag)  
-  - [5.5 Benchmark](#55-benchmark)
-
-- [6. Diskussion](#6-diskussion)  
-  - [6.1 Docling](#61-docling)  
-  - [6.2 Naives RAG](#62-naives-rag)  
-  - [6.3 LinearRAG](#63-linearrag)  
-  - [6.4 GraphMERT](#64-graphmert)  
-  - [6.5 LeanRAG](#65-leanrag)  
-  - [6.6 Benchmark](#66-benchmark)
-
-- [7. Conclusion / Fazit](#7-conclusion--fazit)  
-  - [7.1 Persönliches Fazit](#71-persönliches-fazit)
-
-- [8. Risikomanagement und Lessons Learned](#8-risikomanagement-und-lessons-learned)  
-  - [8.1 Identifizierte Risiken](#81-identifizierte-risiken)  
-  - [8.2 Konkrete Erfahrungen](#82-konkrete-erfahrungen)  
-  - [8.3 Lessons Learned](#83-lessons-learned)
-
-- [9. Ausblick](#9-ausblick)
-
-- [Glossar](#glossar)
-
-- [Abbildungsverzeichnis](#abbildungsverzeichnis)
-
-- [Literaturverzeichnis](#literaturverzeichnis)
-
-<div style="page-break-after: always;"></div>
+\newpage
 
 ## 1. Einleitung
 
@@ -103,6 +57,8 @@ Aus dieser Problemstellung leiten sich die Ziele von IMARA ab:
 1. Entwicklung einer flexiblen, wiederholbaren Pipeline vom PDF bis zur Evaluation, inklusive Datenversionierung (DVC), Orchestrierung und MLflow-gestützter Nachvollziehbarkeit.
 1. Nutzung von OpenRAGBench/OpenRAG-Eval zur objektiven, reproduzierbaren Bewertung unterschiedlicher Varianten.
 
+\newpage
+
 ## 2. Stand der Technik
 
 Dieses Kapitel beschreibt relevante Arbeiten und Konzepte im Bereich RAG und GraphRAG.
@@ -111,51 +67,33 @@ Dieses Kapitel beschreibt relevante Arbeiten und Konzepte im Bereich RAG und Gra
 
 LeanRAG ist ein graphbasierter RAG-Ansatz, bei dem Entitäten zu semantisch kohärenten Clustern mit explizit modellierten Relationen zusammengefasst werden. Diese Cluster bilden aggregierte Knoten, die als hierarchische Navigationsschicht über dem feingranularen Detailgraphen fungieren. Anfragen werden zunächst auf Entitätsebene verankert und anschliessend über aggregierte Ebenen hinweg erweitert, um relevante Evidenz effizient zu sammeln. Durch diese hierarchische Struktur lässt sich die Redundanz im Retrieval deutlich reduzieren; die Autoren berichten in ihren Benchmarks von einer Reduktion um etwa 46 % gegenüber flachen Baseline-Ansätzen. Der Ansatz wurde von Zhang et al. (2025) vorgestellt und dient im Projekt IMARA als Referenz für einen explizit relationenbasierten GraphRAG-Ansatz mit semantischer Aggregation.
 
-<img src="assets/LeanRAG-framework.png" alt="LeanRAG-Framework (übernommen aus Zhang et al., 2025)"  width="100%" height="100%">
-
-*Abbildung 3: LeanRAG-Framework, übernommen aus Zhang et al. (2025), arXiv:2508.10391.*
+![LeanRAG-Framework (übernommen aus Zhang et al., 2025)](assets/LeanRAG-framework.png){width=100%}
 
 ### 2.2 LinearRAG
 
 LinearRAG („Linear Graph Retrieval-Augmented Generation on Large-scale Corpora“) verfolgt einen abweichenden Ansatz, bei dem ein relation-freier Graph konstruiert wird, der vollständig ohne LLM-basierte Relationsextraktion auskommt. Entitäten sowie ihre Ko-Vorkommensstrukturen werden stattdessen algorithmisch bestimmt. Die Graphkonstruktion bleibt kontext­erhaltend, da leichtgewichtige Entity Recognition und semantische Verlinkung eingesetzt werden, um Zusammenhänge über Passagen- und Satzgrenzen hinweg zu bewahren. Multi-Hop-Reasoning wird über semantische Brücken im Graphen ermöglicht, ohne dass explizite Relationen modelliert werden müssen. Der Ansatz verursacht keine LLM-Tokenkosten und skaliert linear hinsichtlich Laufzeit und Speicherbedarf. LinearRAG wurde von Li et al. (2025) vorgestellt und bildet im Projekt IMARA den primären GraphRAG-Ansatz, der vollständig implementiert und empirisch evaluiert wurde.
 
-<img src="assets/LinearRAG-workflow.png" alt="LinearRAG-Workflow (übernommen aus Li et al., 2025)" width="100%" height="100%">
-
-*Abbildung 4: LinearRAG-Workflow, übernommen aus Li et al. (2025), arXiv:2510.10114.*
+![LinearRAG-Workflow (übernommen aus Li et al., 2025)](assets/LinearRAG-workflow.png){width=100%}
 
 ### 2.3 GraphMERT
 
 GraphMERT adressiert die Skalierbarkeitsprobleme klassischer neurosymbolischer Frameworks und wurde von Belova et al. (2025) vorgeschlagen. Es handelt sich um ein kompaktes, graphbasiertes Encoder-Modell, das aus unstrukturierten Textkorpora hochwertige Wissensgraphen generiert. Dabei werden neuronale Netze zur Erlernung abstrakter Repräsentationen mit symbolischen Strukturen in Form eines Wissensgraphen kombiniert, um nachvollziehbares und verifizierbares Schliessen zu ermöglichen. Ziel ist eine effiziente und skalierbare neurosymbolische Architektur mit hoher faktischer Korrektheit, beispielsweise gemessen mittels FActScore, sowie konsistenten Relationen, bewertet über den ValidityScore.
 
-<p align="center">
-  <img src="assets/GraphMERT-node-embeddings.png"
-       alt="GraphMERT Node Embeddings t-SNE View (übernommen aus Belova et al., 2025)"
-       width="49%" />
-  <img src="assets/GraphMERT-semantic-graph-visualization.png"
-       alt="GraphMERT Semantic Graph Visualization (übernommen aus Belova et al., 2025)"
-       width="49%" />
-</p>
-
-*Abbildung 5: Links GraphMERT Node Embeddings (t-SNE View), rechts GraphMERT Semantic Graph Visualization, jeweils übernommen aus Belova et al. (2025).*
+![GraphMERT Node Embeddings t-SNE View (übernommen aus Belova et al., 2025)](assets/GraphMERT-node-embeddings.png){width=49%}
+![GraphMERT Semantic Graph Visualization (übernommen aus Belova et al., 2025)](assets/GraphMERT-semantic-graph-visualization.png){width=49%}
 
 Die Abfrage erfolgt direkt auf dem Wissensgraphen und nutzt dessen explizite Struktur. Anstatt isolierte Textsegmente über Vektorähnlichkeit zu vergleichen, traversiert der Suchprozess semantisch angereicherte, verkettete Knoten und unterstützt so linear skalierbares Multi-Hop-Reasoning.
 
-<p align="center">
-  <img src="assets/GraphMERT-perfektes-resultat.png"
-       alt="Ein perfektes Resultat"
-       width="49%" />
-  <img src="assets/GraphMERT-fast-perfektes-resultat.png"
-       alt="Ein fast perfektes Resultat"
-       width="49%" />
-</p>
-
-*Abbildung 6: Query-Suche auf den Graph-Ergebnissen: links ein perfektes, rechts ein fast perfektes Resultat, jeweils übernommen aus Belova et al. (2025).*
+![Ein perfektes Resultat (übernommen aus Belova et al., 2025)](assets/GraphMERT-perfektes-resultat.png){width=49%}
+![Ein fast perfektes Resultat (übernommen aus Belova et al., 2025)](assets/GraphMERT-fast-perfektes-resultat.png){width=49%}
 
 In der vorgelagerten Extraktion wird unstrukturierter Text in Entitäten und Relationen überführt und anschliessend semantisch aggregiert. Dadurch werden redundante Strukturen reduziert, die Graphkomplexität verringert und die Effizienz des Retrievals erhöht. Im Projekt IMARA dient GraphMERT als Referenzkonzept, das anhand prototypischer Implementierungen und Visualisierungen qualitativ analysiert wurde.
 
 ### 2.4 OpenRAGBench und OpenRAG-Eval
 
 OpenRAGBench stellt einen umfangreichen Datensatz aus wissenschaftlichen PDFs (arXiv) mit zugehörigen Frage-Antwort-Paaren bereit und bildet die Grundlage für reproduzierbare Benchmarks im Bereich Retrieval-Augmented Generation. OpenRAG-Eval ist ein darauf aufbauendes Evaluations-Framework, das unterschiedliche RAG-Systeme anhand einheitlicher Metriken wie Accuracy, Contain Accuracy und Faithfulness vergleichbar macht. Im Projekt IMARA wird OpenRAG-Eval eingesetzt, um naives RAG, LinearRAG und weitere GraphRAG-Varianten konsistent und reproduzierbar zu bewerten.
+
+\newpage
 
 ## 3. Hintergrund / Background
 
@@ -193,6 +131,8 @@ Ein Wissensgraph transformiert eine passive Dokumentensammlung in ein aktives, a
 
 Anschaulich formuliert stellt vektorbasiertes RAG isolierte Informationseinheiten bereit, vergleichbar mit einem Stapel einzelner Karteikarten. GraphRAG hingegen entspricht einer dynamischen Mindmap, in der Zusammenhänge sichtbar, nachvollziehbar und gezielt traversierbar sind.
 
+\newpage
+
 ## 4. Methodik / Umsetzung
 
 Dieses Kapitel beschreibt das konkrete Vorgehen im Projekt IMARA – von den Datenquellen über die PDF-Extraktion bis zur Implementierung des LinearRAG-Graphs und der Evaluationspipeline.
@@ -217,9 +157,7 @@ Die IMARA-Architektur ist als modulare End-to-End-Pipeline umgesetzt. Die zentra
 
 !TODO @Marco: Kommt das what6.md von dir? falls ja kannast du noch kurz Beschreiben woher das kommt?
 
-<img src="assets/Systemarchitektur.png" alt="IMARA Systemarchitektur" width="100%" height="100%">
-
-*Abbildung 8: IMARA Systemarchitektur*
+![IMARA Systemarchitektur](assets/Systemarchitektur.png){width=100%}
 
 Ausgangspunkt der Pipeline ist die Data Ingestion. Wissenschaftliche PDFs aus OpenRAGBench werden mithilfe von Docling in maschinenlesbare Artefakte überführt, typischerweise in Form von Markdown-, JSON- und Doctags-Ausgaben. Für jedes Quelldokument wird ein eigener Verzeichnisbaum mit sämtlichen Zwischenständen erzeugt, wodurch der Verarbeitungsworkflow – etwa alternative Chunking- oder Embedding-Strategien – flexibel angepasst und reproduzierbar variiert werden kann.
 
@@ -233,9 +171,7 @@ Die Ausführung der einzelnen Verarbeitungsschritte wird durch eine Orchestrieru
 
 Für die Konvertierung der PDFs in maschinenlesbare Formate (Markdown, JSON, Doctags) wird das Docling Toolkit eingesetzt. Die Extraktion ist der erste kritische Schritt der Pipeline, da hier die spätere Qualitätsobergrenze des gesamten Systems definiert wird.
 
-<img src="assets/Docling-architecture.png" alt="Architekturübersicht von Docling, übernommen aus der offiziellen Docling-Dokumentation (Docling-Projekt, Zugriff am 18.01.2026)." width="100%" height="100%">
-
-*Abbildung 7: Architekturübersicht von Docling, übernommen aus der offiziellen Docling-Dokumentation (Docling-Projekt, Zugriff am 18.01.2026).*
+![Architekturübersicht von Docling, übernommen aus der offiziellen Docling-Dokumentation (Docling-Projekt, Zugriff am 18.01.2026).](assets/Docling-architecture.png){width=100%}
 
 #### 4.4.1 Konfiguration und Parameter
 
@@ -317,6 +253,8 @@ Für die Evaluierung der Systeme wurde folgendes Vorgehen gewählt:
 
 OpenRAGBench dient als Hauptkorpus sowohl für die Graphkonstruktion als auch für das Query-Set, während OpenRAG-Eval die Ausführung der QA-Läufe sowie deren Auswertung orchestriert. In den Konfigurationsdateien `configs/open_rag_eval_*.yaml` sind verschiedene Szenarien definiert, unter anderem für naives RAG, LinearRAG und weitere Varianten wie beispielsweise GraphMERT. Als zentrale Metriken werden LLM Accuracy (bewertet durch einen LLM-Judge), Contain Accuracy (Überprüfung, ob die Antwort im kontextuellen Evidenz-Set enthalten ist) sowie Laufzeit- und Ressourcenaspekte herangezogen. In einem nächsten Schritt ist geplant, die Evaluierungen direkt mit DVC-Pipelines und MLflow-Runs zu verknüpfen, um Vollständigkeit und Nachvollziehbarkeit weiter zu erhöhen.
 
+\newpage
+
 ## 5. Resultate
 
 Vergleich der Performance: Standard RAG vs. IMARA GraphRAG vs. Fine-tuned Model.
@@ -325,25 +263,17 @@ Vergleich der Performance: Standard RAG vs. IMARA GraphRAG vs. Fine-tuned Model.
 
 Die initiale Konfiguration der Docling-Extraktion führte zu unvollständigen Tabellen und fehlerhaften strukturellen Ausgaben, insbesondere bei komplex formatierten wissenschaftlichen PDFs. Durch den Vergleich und die iterative Anpassung unterschiedlicher Parameter-Sets konnte die Extraktionsqualität deutlich verbessert werden. Die optimierte Konfiguration resultierte in vollständigeren Tabellenstrukturen und konsistenteren Textrepräsentationen.
 
-<img src="assets/Qualitätsunterschied-1.png" alt="Beispielhafter Qualitätsunterschied zwischen ursprünglicher und optimierter Docling-Konfiguration (1)." width="100%" height="100%" />
-
-*Abbildung 8: Beispielhafter Qualitätsunterschied zwischen ursprünglicher und optimierter Docling-Konfiguration (1).*
+![Beispielhafter Qualitätsunterschied zwischen ursprünglicher und optimierter Docling-Konfiguration (1).](assets/Qualitätsunterschied-1.png){width=100%}
 
 Die Abweichungen umfassten teilweise ganze Tabellen, die in der ursprünglichen Konfiguration fehlten oder unvollständig waren.
 
-<img src="assets/Qualitätsunterschied-2.png" alt="Beispielhafter Qualitätsunterschied zwischen ursprünglicher und optimierter Docling-Konfiguration (2)." width="100%" height="100%" />
-
-*Abbildung 9: Beispielhafter Qualitätsunterschied zwischen ursprünglicher und optimierter Docling-Konfiguration (2).*
+![Beispielhafter Qualitätsunterschied zwischen ursprünglicher und optimierter Docling-Konfiguration (2).](assets/Qualitätsunterschied-2.png){width=100%}
 
 Die Analyse der Pipeline zeigte dabei klar unterscheidbare Sätze „problematischer“ versus „erfolgreicher“ Parameter.
 
-<img src="assets/Problematische-parameter.png" alt="problematische Parameter" width="100%" height="100%" />
+![Problematische Docling-Parameter](assets/Problematische-parameter.png){width=100%}
 
-*Abbildung 10: Auszug der als problematisch identifizierten Docling-Parameterkonfiguration.*
-
-<img src="assets/Erfolgreiche-parameter.png" alt="erfolgreiche Parameter" width="100%" height="100%" />
-
-*Abbildung 11: Auszug der optimierten Docling-Parameterkonfiguration mit deutlich besseren Ergebnissen.*
+![Erfolgreiche Docling-Parameter](assets/Erfolgreiche-parameter.png){width=100%}
 
 Gleichzeitig zeigte sich ein erheblicher Ressourcenbedarf: Einzelne Dokumente benötigten mehrere Stunden für die vollständige Extraktion, insbesondere beim Parsing von Formeln. Zudem reichten 16 GB GPU-VRAM nicht aus, um alle Extraktionsfeatures stabil zu betreiben. In der Entwicklungsumgebung verursachten zusätzliche Hintergrundprozesse zeitweise hohen RAM-Verbrauch, was zu blockierten oder abgebrochenen Extraktionsläufen führte.
 
@@ -387,9 +317,7 @@ Die Auswertung bescheinigt der Verteilung eine exzellente Qualität mit starker 
 | Maximum | 92.16 |
 | Standardabweichung | 3.14 |
 
-
-<img src="assets/lr_td_idf_diagram.png" width="100%" height="100%" />
-*Abbildung 12: TF-IDF Gewichtung Verteilung. Erstellt mit Seaborn.*
+![LinearRAG TF-IDF Diagramm](assets/lr_td_idf_diagram.png){width=100%}
 
 #### 5.3.4 Graph-Sparsität
 
@@ -421,11 +349,11 @@ Die aggregierten Graphmetriken verdeutlichen den Umfang und die strukturellen Ei
 
 Für LeanRAG wurde insbesondere der Ressourcenbedarf nach einem Refactoring des Schritts der Triple-Extraktion analysiert. Die entsprechende Auswertung zeigt den Verbrauch an CPU-, Speicher- und GPU-Ressourcen während dieses kritischen Verarbeitungsschritts.
 
-<img src="assets/Ressourcenbedarf-leanRAG.png" alt="Ressourcenbedarf LeanRAG Triple Extraction" width="49%" height="49%" />
-
-*Abbildung 12: Ressourcenbedarf im LeanRAG-Pipeline-Schritt der Triple-Extraktion nach dem Refactoring.*
+![Ressourcenbedarf LeanRAG Triple Extraction](assets/Ressourcenbedarf-leanRAG.png){width=49%}
 
 ### 5.5 Benchmark
+
+\newpage
 
 ## 6. Diskussion
 
@@ -471,6 +399,8 @@ Durch den Verzicht auf LLM-basierte Relationsextraktion erreicht LinearRAG eine 
 
 !TODO:
 
+\newpage
+
 ## 7. Conclusion / Fazit
 
 Das Projekt IMARA hatte das Ziel, eine domänenspezifische GraphRAG-Pipeline mit Modell-Fine-tuning vorzubereiten und die Effektivität graphbasierter RAG-Ansätze im Vergleich zu naivem RAG zu evaluieren.
@@ -504,6 +434,8 @@ Technisch zeigte sich ein deutlicher Gegensatz: Während die einmalige Generieru
 
 Auch infrastrukturell wurden Grenzen sichtbar. Trotz des grossen Aufwands, der in die lokale AI-Infrastruktur floss, blieb die Skalierbarkeit eine Herausforderung. Der Verzicht auf externe „AI Studios“ und Cloud-Anbieter machte die Generierung der Embeddings für den gesamten Korpus (1001 Dokumente) zu einem zeitkritischen Faktor, für dessen vollständige Optimierung letztlich die Ressourcen fehlten.
 
+\newpage
+
 ## 8. Risikomanagement und Lessons Learned
 
 ### 8.1 Identifizierte Risiken
@@ -517,6 +449,8 @@ Die Entscheidung, plattformunabhängig zu bleiben, erwies sich im Alltag als zus
 ### 8.3 Lessons Learned
 
 Aus diesen Erfahrungen lassen sich mehrere Lehren ableiten. Es ist hilfreich, möglichst früh im Projekt einen Ende-zu-Ende-Slice zu realisieren – etwa vom PDF bis zur einfachen Antwort –, um Risiken in Tooling, Infrastruktur und Datenflüssen sichtbar zu machen, bevor die Architektur zu komplex wird. Daten- und Modellversionierung sollten von Anfang an konsequent mit Werkzeugen wie DVC und MLflow umgesetzt werden, um Experimente nachvollziehbar, reproduzierbar und vergleichbar zu machen. Schliesslich hat sich gezeigt, dass eine schrittweise Komplexitätssteigerung sinnvoll ist: Zuerst eine stabile, naive RAG-Baseline etablieren, diese messen und verstehen, und darauf aufbauend GraphRAG-Komponenten sowie Fine-tuning iterativ ergänzen, statt alles gleichzeitig zu implementieren.
+
+\newpage
 
 ## 9. Ausblick
 
@@ -534,7 +468,7 @@ Ein weiterer, vielversprechender Ansatz liegt im Einsatz von Hypergraphen und Re
 
 Schliesslich ist die tiefere Integration der Evaluierungsinfrastruktur ein wichtiger nächster Schritt. Die Ausführung von OpenRAG-Eval-Szenarien soll vollständig über DVC-Pipelines orchestriert werden, sodass Datendownload, Graphaufbau, Retrieval-Läufe und Auswertung automatisch miteinander verknüpft sind und als reproduzierbare Pipelines ausgeführt werden können. Die geplante Arbeit zu DVC und dem Vergleich verschiedener OpenRAG-Eval-Konfigurationen kann hier andocken, indem unterschiedliche Modelle, Konfigurationen und Datenschnitte als DVC-Stages abgebildet und systematisch miteinander verglichen werden. Dies würde die Nachvollziehbarkeit der Experimente weiter erhöhen und eine belastbare Grundlage für die Frage schaffen, unter welchen Bedingungen ein kompaktes, domänenspezifisches Modell grössere, generische LLMs tatsächlich übertreffen kann.
 
-<div style="page-break-after: always;"></div>
+\newpage
 
 ## Glossar
 
@@ -584,22 +518,12 @@ Schliesslich ist die tiefere Integration der Evaluierungsinfrastruktur ein wicht
 - **Unsloth:** Ein Framework für ressourceneffizientes Fine-tuning von LLMs, das im Projekt genutzt wurde, um Modellanpassungen mit geringeren Hardwareanforderungen durchzuführen.  
 - **Vektorsimilaritätssuche:** Das Standard-Suchverfahren klassischer RAG-Systeme, bei dem Textabschnitte als Vektoren im Embedding-Raum repräsentiert und basierend auf ihrer Distanz (z. B. Kosinus- oder euklidische Distanz) verglichen werden. Es ermöglicht semantische Suche, berücksichtigt jedoch explizite Relationen zwischen Entitäten oft nicht.
 
-<div style="page-break-after: always;"></div>
+\newpage
 
-## Abbildungsverzeichnis
+\clearpage
+\listoffigures
 
-Abbildung 3: LeanRAG-Framework, übernommen aus Zhang et al. (2025), arXiv:2508.10391.
-Abbildung 4: LinearRAG-Workflow, übernommen aus Li et al. (2025), arXiv:2510.10114.
-Abbildung 5: GraphMERT Node Embeddings (t-SNE View) und GraphMERT Semantic Graph Visualization, jeweils übernommen aus Belova et al. (2025), arXiv:2510.09580.  
-Abbildung 6: Query-Suche auf den Graph-Ergebnissen: links ein perfektes, rechts ein fast perfektes Resultat, übernommen aus Belova et al. (2025), arXiv:2510.09580.  
-Abbildung 7: Architekturübersicht von Docling, übernommen aus der offiziellen Docling-Dokumentation (Docling-Projekt, Zugriff am 18.01.2026).
-Abbildung 8: Beispielhafter Qualitätsunterschied zwischen ursprünglicher und optimierter Docling-Konfiguration (1).  
-Abbildung 9: Beispielhafter Qualitätsunterschied zwischen ursprünglicher und optimierter Docling-Konfiguration (2).  
-Abbildung 10: Auszug der als problematisch identifizierten Docling-Parameterkonfiguration.  
-Abbildung 11: Auszug der optimierten Docling-Parameterkonfiguration mit deutlich besseren Ergebnissen.  
-Abbildung 12: Ressourcenbedarf im LeanRAG-Pipeline-Schritt der Triple-Extraktion nach dem Refactoring.
-
-<div style="page-break-after: always;"></div>
+\newpage
 
 ## Literaturverzeichnis
 
