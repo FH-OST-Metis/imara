@@ -438,8 +438,6 @@ Für LeanRAG wurde insbesondere der Ressourcenbedarf nach einem Refactoring des 
 
 ![Ressourcenbedarf LeanRAG Triple Extraction](assets/Ressourcenbedarf-leanRAG.png){width=49%}
 
-### 5.5 Benchmark
-
 \newpage
 
 ## 6. Diskussion
@@ -484,17 +482,33 @@ Hinweis: Aus Ressourcengründen wurde der Graph mit vollständigen Embeddings ex
 
 ### 6.4 GraphMERT
 
-!TODO: @Marco
+Zu diesem Zeitpunkt sind keine belastbaren Ergebnisse verfügbar.
+
+**Einzelne Abfragen** sehen wie folgt aus:
+Der Score spiegelt vor allem das Resultat des Vectorstores wieder. Jedoch har das Resultat des Graphen, die Verbindung "Head => Tail" oder hier "methods -> >" oder "which -> 8" keinen Einfluss auf das Ergebnis.
+
+--- Processing Query: 'What specific computational issue of the 'two-stage iterative framework' does the proposed 'Self-supervised Reflective Learning' (SSRL) aim to eliminate?' ---´
+[RAG] Retrieved Context (Score: 0.8202): "methods < / section *header* level *1 > < text > < loc* 255 > < loc *315 > < loc* 460 > < loc _ 374 > this section introduces the self - supervised reflective learning ( ssrl ) approach, which improves the two - stage iterative framework ["
+
+Result: ['methods -> > (Retrieved)', 'which -> 8 (Retrieved)']
+
+#### Einschränkungen
+
+1. **Abhängigkeit von der Qualität der Tripel:** „Garbage in, garbage out“. Die Fähigkeit des Modells, Strukturen zu lernen, hängt vollständig von der Qualität der Tripel ab, die während der Vorverarbeitung bereitgestellt werden. Der enthaltene spaCy/Regex-Extraktor ist grundlegend. Für den Produktionseinsatz ist eine robuste Information-Extraction-Pipeline erforderlich.
+2. **Overhead durch starre Struktur:** Das strikte Layout „128 Wurzeln, 7 Blätter pro Wurzel“ ist für effizientes Batching notwendig, aber unflexibel. Kurze Sätze verschwenden Platz durch Padding; lange Sätze oder Entitäten mit vielen Beziehungen werden abgeschnitten.
+3. **Komplexität der Vorverarbeitung:** Im Vergleich zum Standard-LLM-Training ist der Vorverarbeitungsschritt zum Erstellen von Distanzmatrizen und zum Zuordnen von Wurzel-/Blattindizes deutlich komplexer und zeitaufwendiger.
+4. **Rechenaufwand:** Die H-GAT-Schicht und die grössere Eingabesequenzlänge (aufgrund der hinzugefügten Blätter) machen Training und Inferenz langsamer und speicherintensiver als bei einem Standard-BERT-Basismodell.
+
+**Fazit**
+Zu viele Restriktionen und Limitierungen machen GraphMERT zu einem Exoten. Die Idee muss noch weiter entwickelt werden, um eine Chance zu haben.
 
 ### 6.5 LeanRAG
 
-!TODO: @Marco
+LeanRAG hat im Gegensatz zu GraphMERT das Potential für einen sehr grossen Corpus an Daten gut und effizient zu arbeiten.
 
-### 6.6 Benchmark
+Durch Anpassungen an den Abläufen, kann mehr der rechenintensiven Schritte in ein vorgelagertes Preprocessing verlegt werden. Vorteile davon sind eine mogliche massive Parallelisierung und die Generierung von Graph-Varianten nach Domäne oder Zugriffsberechtigung, etc.
 
-!TODO:
-
-\newpage
+Auf der negativen Seite ist die hohe Last auf den Sprachmodellen zu erwähnen. Damit verbunden ist die sehr langsame Verarbeitung und die API-Kosten.
 
 ## 7. Conclusion / Fazit
 
