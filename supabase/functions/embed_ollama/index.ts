@@ -43,7 +43,7 @@ type Row = {
   content: unknown
 }
 
-const QUEUE_NAME = 'embedding_jobs'
+const QUEUE_NAME = 'embedding_jobs_ollama'
 
 // Listen for HTTP requests
 Deno.serve(async (req) => {

@@ -16,6 +16,7 @@ import sys
 sys.path.append(str(Path(__file__).resolve().parents[1]))  # adds src/app
 
 from utils.params_helper import load_params
+from utils.device_helper import get_device
 from embedder import EmbeddingModel, EmbeddingConfig
 from graphmert.corpus import get_corpus_from_chunks
 from graphmert.train_model import GraphMERTEncoder
@@ -142,9 +143,11 @@ def _load_graphmert_model() -> GraphMERTEncoder:
             "Run the graphmert_train_model DVC stage first."
         )
 
+    device = torch.device(get_device())
     model = GraphMERTEncoder(input_dim, embed_dim, num_layers, num_heads)
-    state = torch.load(weights_path, map_location="cpu")
+    state = torch.load(weights_path, map_location=device)
     model.load_state_dict(state)
+    model.to(device)
     model.eval()
     return model
 
